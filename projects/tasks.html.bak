@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Tasks - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="glass-medium glow-purple-soft mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" style="color: #fff; font-weight: 700;">
+                                <i class="fas fa-tasks mr-2" style="color: #667eea;"></i>
+                                Tasks
+                            </h1>
+                            <p class="mb-0" style="color: rgba(255,255,255,0.6);">
+                                Manage and track all your tasks across projects
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary" onclick="TasksPage.newTask()">
+                                <i class="fas fa-plus mr-2"></i>New Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #6c757d;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">TO DO</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-todo">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #50b5ff;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">IN PROGRESS</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-in_progress">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ffc107;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">REVIEW</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-review">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3dd598;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">DONE</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-done">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tasks-table-container"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const TasksPage = {
+            table: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadStats();
+                this.loadTable();
+            },
+
+            loadStats: function() {
+                const tasks = DB.getAll(DB.COLLECTIONS.TASKS);
+                const stats = {
+                    todo: tasks.filter(t => t.status === 'todo').length,
+                    in_progress: tasks.filter(t => t.status === 'in_progress').length,
+                    review: tasks.filter(t => t.status === 'review').length,
+                    done: tasks.filter(t => t.status === 'done' || t.completed).length
+                };
+
+                $('#stat-todo').text(stats.todo);
+                $('#stat-in_progress').text(stats.in_progress);
+                $('#stat-review').text(stats.review);
+                $('#stat-done').text(stats.done);
+            },
+
+            loadTable: function() {
+                const tasks = DB.getAll(DB.COLLECTIONS.TASKS);
+
+                this.table = DataTable.create('tasks-table-container', {
+                    title: 'All Tasks',
+                    icon: 'fas fa-list-check',
+                    data: tasks,
+                    columns: [
+                        {
+                            field: 'completed',
+                            label: '',
+                            width: '40px',
+                            render: (value, row) => `
+                                <input type="checkbox" class="task-checkbox" data-id="${row.id}" ${value ? 'checked' : ''}
+                                    style="width: 18px; height: 18px; cursor: pointer;">
+                            `
+                        },
+                        {
+                            field: 'title',
+                            label: 'Task',
+                            sortable: true,
+                            render: (value, row) => {
+                                const project = row.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, row.project_id) : null;
+                                return `
+                                    <div>
+                                        <div style="color: ${row.completed ? 'rgba(255,255,255,0.5)' : 'white'}; font-weight: 500; ${row.completed ? 'text-decoration: line-through;' : ''}">${value}</div>
+                                        ${project ? `<div style="color: rgba(255,255,255,0.4); font-size: 12px;"><i class="fas fa-folder mr-1"></i>${project.name}</div>` : ''}
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'status',
+                            label: 'Status',
+                            sortable: true,
+                            render: (value) => {
+                                const statuses = {
+                                    todo: { label: 'To Do', color: '#6c757d' },
+                                    in_progress: { label: 'In Progress', color: '#50b5ff' },
+                                    review: { label: 'Review', color: '#ffc107' },
+                                    done: { label: 'Done', color: '#3dd598' }
+                                };
+                                const status = statuses[value] || statuses.todo;
+                                return `<span class="cell-badge" style="background: ${status.color}20; color: ${status.color};">${status.label}</span>`;
+                            }
+                        },
+                        {
+                            field: 'priority',
+                            label: 'Priority',
+                            sortable: true,
+                            render: (value) => {
+                                const priorities = {
+                                    low: { label: 'Low', color: '#6c757d', icon: 'fa-arrow-down' },
+                                    medium: { label: 'Medium', color: '#50b5ff', icon: 'fa-minus' },
+                                    high: { label: 'High', color: '#ffc107', icon: 'fa-arrow-up' },
+                                    urgent: { label: 'Urgent', color: '#fc5a5a', icon: 'fa-exclamation' }
+                                };
+                                const priority = priorities[value] || priorities.medium;
+                                return `<span class="cell-badge" style="background: ${priority.color}20; color: ${priority.color};"><i class="fas ${priority.icon} mr-1"></i>${priority.label}</span>`;
+                            }
+                        },
+                        {
+                            field: 'due_date',
+                            label: 'Due Date',
+                            sortable: true,
+                            render: (value) => {
+                                if (!value) return '-';
+                                const isOverdue = !Utils.isPast(value) && Utils.isPast(value);
+                                const dueDate = new Date(value);
+                                const now = new Date();
+                                const isToday = Utils.isToday(dueDate);
+                                const isPast = dueDate < now && !isToday;
+
+                                let color = 'rgba(255,255,255,0.8)';
+                                let badge = '';
+
+                                if (isPast) {
+                                    color = '#fc5a5a';
+                                    badge = '<span class="cell-badge" style="background: rgba(252, 90, 90, 0.2); color: #fc5a5a; margin-left: 8px;">OVERDUE</span>';
+                                } else if (isToday) {
+                                    color = '#ffc107';
+                                    badge = '<span class="cell-badge" style="background: rgba(255, 193, 7, 0.2); color: #ffc107; margin-left: 8px;">TODAY</span>';
+                                }
+
+                                return `<span style="color: ${color};">${Utils.formatDate(value)}</span>${badge}`;
+                            }
+                        },
+                        {
+                            field: 'created_at',
+                            label: 'Created',
+                            sortable: true,
+                            render: (value) => Utils.formatRelativeTime(value)
+                        },
+                        {
+                            field: 'id',
+                            label: 'Actions',
+                            width: '180px',
+                            render: (value) => `
+                                <div class="cell-actions">
+                                    <button class="btn btn-sm btn-secondary" onclick="TasksPage.editTask('${value}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="TasksPage.deleteTask('${value}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `
+                        }
+                    ],
+                    searchable: true,
+                    pagination: true,
+                    perPage: 15,
+                    emptyMessage: 'No tasks found. Click "New Task" to create your first task.',
+                    onRowClick: (row) => this.editTask(row.id)
+                });
+
+                // Bind checkbox events
+                setTimeout(() => {
+                    $('.task-checkbox').off('click').on('click', function(e) {
+                        e.stopPropagation();
+                        const id = $(this).data('id');
+                        const completed = $(this).is(':checked');
+                        TasksPage.toggleTask(id, completed);
+                    });
+                }, 100);
+            },
+
+            newTask: function() {
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'New Task',
+                    icon: 'fas fa-plus-square',
+                    size: 'lg',
+                    fields: [
+                        { name: 'title', label: 'Task Title', type: 'text', required: true, placeholder: 'Complete homepage design' },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 3, placeholder: 'Design the new homepage layout with modern UI elements' },
+                        { name: 'project_id', label: 'Project', type: 'select', options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'status', label: 'Status', type: 'select', required: true, value: 'todo', options: [
+                            { value: 'todo', label: 'To Do' },
+                            { value: 'in_progress', label: 'In Progress' },
+                            { value: 'review', label: 'Review' },
+                            { value: 'done', label: 'Done' }
+                        ]},
+                        { name: 'priority', label: 'Priority', type: 'select', required: true, value: 'medium', options: [
+                            { value: 'low', label: 'Low' },
+                            { value: 'medium', label: 'Medium' },
+                            { value: 'high', label: 'High' },
+                            { value: 'urgent', label: 'Urgent' }
+                        ]},
+                        { name: 'due_date', label: 'Due Date', type: 'date' }
+                    ],
+                    submitText: 'Create Task'
+                }).then(data => {
+                    data.completed = data.status === 'done';
+                    DB.create(DB.COLLECTIONS.TASKS, data);
+                    Utils.showToast('Task created successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }).catch(() => {});
+            },
+
+            editTask: function(id) {
+                const task = DB.get(DB.COLLECTIONS.TASKS, id);
+                if (!task) return;
+
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'Edit Task',
+                    icon: 'fas fa-edit',
+                    size: 'lg',
+                    fields: [
+                        { name: 'title', label: 'Task Title', type: 'text', required: true, value: task.title },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 3, value: task.description },
+                        { name: 'project_id', label: 'Project', type: 'select', value: task.project_id, options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'status', label: 'Status', type: 'select', required: true, value: task.status, options: [
+                            { value: 'todo', label: 'To Do' },
+                            { value: 'in_progress', label: 'In Progress' },
+                            { value: 'review', label: 'Review' },
+                            { value: 'done', label: 'Done' }
+                        ]},
+                        { name: 'priority', label: 'Priority', type: 'select', required: true, value: task.priority, options: [
+                            { value: 'low', label: 'Low' },
+                            { value: 'medium', label: 'Medium' },
+                            { value: 'high', label: 'High' },
+                            { value: 'urgent', label: 'Urgent' }
+                        ]},
+                        { name: 'due_date', label: 'Due Date', type: 'date', value: task.due_date }
+                    ],
+                    submitText: 'Update Task'
+                }).then(data => {
+                    data.completed = data.status === 'done';
+                    DB.update(DB.COLLECTIONS.TASKS, id, data);
+                    Utils.showToast('Task updated successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }).catch(() => {});
+            },
+
+            toggleTask: function(id, completed) {
+                const updates = {
+                    completed: completed,
+                    status: completed ? 'done' : 'todo',
+                    completed_at: completed ? new Date().toISOString() : null
+                };
+
+                DB.update(DB.COLLECTIONS.TASKS, id, updates);
+                Utils.showToast(completed ? 'Task marked as complete!' : 'Task marked as incomplete', 'success');
+                this.loadStats();
+                this.loadTable();
+            },
+
+            deleteTask: async function(id) {
+                const task = DB.get(DB.COLLECTIONS.TASKS, id);
+                if (!task) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete task "${task.title}"?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.TASKS, id);
+                    Utils.showToast('Task deleted successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }
+            }
+        };
+
+        $(document).ready(() => TasksPage.init());
+    </script>
+</body>
+</html>

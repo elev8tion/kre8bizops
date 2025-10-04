@@ -1,0 +1,322 @@
+/* ================================
+   COSMIC DESIGN SYSTEM
+   ================================ */
+
+:root {
+    /* === COSMIC COLOR PALETTE === */
+
+    /* Base Colors - Deep Space */
+    --cosmic-black: #0f0e17;
+    --cosmic-dark: #1a1b26;
+    --cosmic-void: #000000;
+
+    /* Accent Colors - Nebula Glow */
+    --cosmic-purple: #a78bfa;      /* Soft purple */
+    --cosmic-blue: #60a5fa;        /* Sky blue */
+    --cosmic-cyan: #22d3ee;        /* Bright cyan */
+    --cosmic-pink: #f472b6;        /* Neon pink */
+    --cosmic-indigo: #818cf8;      /* Light indigo */
+
+    /* Neutral Colors - Stardust */
+    --cosmic-white: #ffffff;
+    --cosmic-light: rgba(255, 255, 255, 0.9);
+    --cosmic-muted: rgba(255, 255, 255, 0.6);
+    --cosmic-faint: rgba(255, 255, 255, 0.3);
+    --cosmic-ghost: rgba(255, 255, 255, 0.1);
+
+    /* Glow Effects */
+    --cosmic-glow-purple: rgba(167, 139, 250, 0.2);
+    --cosmic-glow-blue: rgba(96, 165, 250, 0.2);
+    --cosmic-glow-cyan: rgba(34, 211, 238, 0.2);
+
+    /* === TYPOGRAPHY === */
+    --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: "SF Mono", "Monaco", "Consolas", monospace;
+
+    /* Font Sizes */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.125rem;     /* 18px */
+    --text-xl: 1.25rem;      /* 20px */
+    --text-2xl: 1.5rem;      /* 24px */
+    --text-3xl: 1.875rem;    /* 30px */
+    --text-4xl: 2.25rem;     /* 36px */
+    --text-5xl: 3rem;        /* 48px */
+
+    /* Font Weights */
+    --weight-light: 300;
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* === SPACING === */
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-8: 2rem;      /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+
+    /* === BORDER RADIUS === */
+    --radius-sm: 0.375rem;   /* 6px */
+    --radius-md: 0.5rem;     /* 8px */
+    --radius-lg: 0.75rem;    /* 12px */
+    --radius-xl: 1rem;       /* 16px */
+    --radius-2xl: 1.5rem;    /* 24px */
+    --radius-full: 9999px;   /* Pill shape */
+
+    /* === SHADOWS === */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 20px var(--cosmic-glow-purple), 0 0 40px var(--cosmic-glow-blue);
+
+    /* === TRANSITIONS === */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================
+   COSMIC BACKGROUND
+   ================================ */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-primary);
+    color: var(--cosmic-light);
+    background: var(--cosmic-void);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Cosmic Noise Background */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%),
+        linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%);
+    pointer-events: none;
+}
+
+/* Content Layer */
+main {
+    position: relative;
+    z-index: 1;
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+/* Glass Morphism */
+.glass {
+    background: rgba(26, 27, 38, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+    background: rgba(26, 27, 38, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Glow Effects */
+.glow-purple {
+    box-shadow: 0 0 20px var(--cosmic-glow-purple);
+}
+
+.glow-blue {
+    box-shadow: 0 0 20px var(--cosmic-glow-blue);
+}
+
+.glow-cyan {
+    box-shadow: 0 0 20px var(--cosmic-glow-cyan);
+}
+
+/* Text Gradients */
+.text-gradient-purple {
+    background: linear-gradient(135deg, var(--cosmic-purple) 0%, var(--cosmic-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-blue {
+    background: linear-gradient(135deg, var(--cosmic-blue) 0%, var(--cosmic-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ================================
+   COSMIC COMPONENTS
+   ================================ */
+
+/* Cosmic Button */
+.btn-cosmic {
+    background: linear-gradient(135deg, var(--cosmic-purple) 0%, var(--cosmic-pink) 100%);
+    color: var(--cosmic-white);
+    border: none;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-lg);
+    font-weight: var(--weight-semibold);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cosmic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--cosmic-pink) 0%, var(--cosmic-purple) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.btn-cosmic:hover::before {
+    opacity: 1;
+}
+
+.btn-cosmic:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-cosmic span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Cosmic Input */
+.input-cosmic {
+    background: rgba(26, 27, 38, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    color: var(--cosmic-light);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.input-cosmic:focus {
+    outline: none;
+    border-color: var(--cosmic-purple);
+    box-shadow: 0 0 0 3px var(--cosmic-glow-purple);
+}
+
+.input-cosmic::placeholder {
+    color: var(--cosmic-muted);
+}
+
+/* Cosmic Card */
+.card-cosmic {
+    background: rgba(26, 27, 38, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition: all var(--transition-base);
+}
+
+.card-cosmic:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* ================================
+   FORM OVERRIDES
+   ================================ */
+
+.form-control {
+    background: rgba(26, 27, 38, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--cosmic-light) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.form-control:focus {
+    background: rgba(26, 27, 38, 0.8) !important;
+    border-color: var(--cosmic-purple) !important;
+    box-shadow: 0 0 0 3px var(--cosmic-glow-purple) !important;
+    color: var(--cosmic-white) !important;
+}
+
+.form-control::placeholder {
+    color: var(--cosmic-muted) !important;
+}
+
+/* ================================
+   TEXT UTILITIES
+   ================================ */
+
+.text-cosmic-light { color: var(--cosmic-light); }
+.text-cosmic-muted { color: var(--cosmic-muted); }
+.text-cosmic-faint { color: var(--cosmic-faint); }
+.text-cosmic-purple { color: var(--cosmic-purple); }
+.text-cosmic-blue { color: var(--cosmic-blue); }
+.text-cosmic-cyan { color: var(--cosmic-cyan); }
+.text-cosmic-pink { color: var(--cosmic-pink); }
+
+/* ================================
+   ANIMATIONS
+   ================================ */
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+
+@media (max-width: 768px) {
+    :root {
+        --text-3xl: 1.5rem;
+        --text-4xl: 1.875rem;
+        --text-5xl: 2.25rem;
+    }
+}

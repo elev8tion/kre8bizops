@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Dashboard - ELEV8TION Business Hub</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Cosmic Design System CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="css/cosmic-fix.css" rel="stylesheet"/>
+
+    <!-- Modern Card Styles -->
+    <link href="css/modern-cards.css" rel="stylesheet"/>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <!-- Enhanced Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Cosmic Background -->
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <!-- Sidebar will be injected here by navigation.js -->
+
+        <!-- Main Content -->
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <!-- Page Header -->
+                <div class="modern-card mb-4" style="padding: 2rem; border-radius: 24px; cursor: default;">
+                    <div class="modern-card-shine"></div>
+                    <div class="modern-card-glow"></div>
+                    <div class="modern-card-content">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h1 class="h2 mb-2 modern-card-title" style="font-size: 1.75rem;">
+                                    <i class="fas fa-home mr-2" style="color: #667eea;"></i>
+                                    Dashboard
+                                </h1>
+                                <p class="mb-0 modern-card-subtitle" id="welcome-message">
+                                    Welcome back! Here's what's happening with your business today.
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <div class="modern-card-subtitle">
+                                    <i class="far fa-calendar-alt mr-2"></i>
+                                    <span id="current-date"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards Row -->
+                <div class="row mb-4" id="stats-cards">
+                    <!-- Stats will be dynamically generated -->
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="modern-card" style="padding: 1.5rem; border-radius: 16px; cursor: default;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <h5 class="modern-card-title mb-3">
+                                    <i class="fas fa-bolt mr-2" style="color: #ffc107;"></i>
+                                    Quick Actions
+                                </h5>
+                            <div class="d-flex flex-wrap gap-2" style="gap: 12px;">
+                                <button class="btn btn-primary" onclick="QuickActions.newContact()">
+                                    <i class="fas fa-user-plus mr-2"></i>New Contact
+                                </button>
+                                <button class="btn btn-primary" onclick="QuickActions.newProject()">
+                                    <i class="fas fa-project-diagram mr-2"></i>New Project
+                                </button>
+                                <button class="btn btn-primary" onclick="QuickActions.newTask()">
+                                    <i class="fas fa-tasks mr-2"></i>New Task
+                                </button>
+                                <button class="btn btn-primary" onclick="QuickActions.newInvoice()">
+                                    <i class="fas fa-file-invoice-dollar mr-2"></i>New Invoice
+                                </button>
+                                <button class="btn btn-primary" onclick="QuickActions.logExpense()">
+                                    <i class="fas fa-receipt mr-2"></i>Log Expense
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts & Activity Row -->
+                <div class="row mb-4">
+                    <!-- Revenue Chart -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px; height: 100%;">
+                            <h5 style="color: white; margin-bottom: 1.5rem; font-weight: 600;">
+                                <i class="fas fa-chart-line mr-2" style="color: #3dd598;"></i>
+                                Revenue Overview
+                            </h5>
+                            <canvas id="revenue-chart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px; height: 100%;">
+                            <h5 style="color: white; margin-bottom: 1.5rem; font-weight: 600;">
+                                <i class="fas fa-history mr-2" style="color: #50b5ff;"></i>
+                                Recent Activity
+                            </h5>
+                            <div id="recent-activity" style="max-height: 300px; overflow-y: auto;">
+                                <!-- Activity items will be generated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Tasks & Upcoming Events -->
+                <div class="row mb-4">
+                    <!-- Pending Tasks -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 style="color: white; margin: 0; font-weight: 600;">
+                                    <i class="fas fa-tasks mr-2" style="color: #ffc107;"></i>
+                                    Pending Tasks
+                                </h5>
+                                <a href="projects/tasks.html" style="color: #667eea; font-size: 14px;">View All</a>
+                            </div>
+                            <div id="pending-tasks">
+                                <!-- Tasks will be generated -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Events -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 style="color: white; margin: 0; font-weight: 600;">
+                                    <i class="fas fa-calendar-alt mr-2" style="color: #50b5ff;"></i>
+                                    Upcoming Events
+                                </h5>
+                                <a href="calendar.html" style="color: #667eea; font-size: 14px;">View Calendar</a>
+                            </div>
+                            <div id="upcoming-events">
+                                <!-- Events will be generated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div id="activity-timeline-container"></div>
+                    </div>
+                </div>
+
+                <!-- Recent Items & Storage Widget -->
+                <div class="row mb-4">
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-clock mr-2" style="color: #667eea;"></i>
+                                Recent Items
+                            </h5>
+                            <div id="recent-items-widget"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-database mr-2" style="color: #667eea;"></i>
+                                Storage Usage
+                            </h5>
+                            <div id="storage-usage-widget"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/custom.js"></script>
+
+    <!-- Core Data & Components -->
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+
+    <!-- Insert Mock Data (runs once on first load) -->
+    <script src="js/insert-mock-data.js"></script>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/components/modals.js"></script>
+    <script src="js/components/tables.js"></script>
+    <script src="js/components/forms.js"></script>
+
+    <!-- Enhancement Modules -->
+    <script src="js/enhancements.js"></script>
+    <script src="js/validation.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="js/gradient-button-wrapper.js"></script>
+
+    <!-- Dashboard Script -->
+    <script src="js/dashboard.js"></script>
+
+    <!-- Load Enhanced Components -->
+    <script>
+        $(document).ready(function() {
+            // Load enhanced navbar
+            $('#navbar-container').load('components/enhanced-navbar.html');
+
+            // Load activity timeline
+            $('#activity-timeline-container').load('components/activity-timeline.html');
+
+            // Load recent items widget
+            $('#recent-items-widget').html(Enhancements.getRecentItemsWidget());
+
+            // Load storage usage widget
+            $('#storage-usage-widget').html(Enhancements.displayStorageUsage());
+        });
+    </script>
+
+    <style>
+        .gap-2 {
+            gap: 0.5rem !important;
+        }
+
+        #recent-activity::-webkit-scrollbar,
+        #pending-tasks::-webkit-scrollbar,
+        #upcoming-events::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #recent-activity::-webkit-scrollbar-track,
+        #pending-tasks::-webkit-scrollbar-track,
+        #upcoming-events::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        #recent-activity::-webkit-scrollbar-thumb,
+        #pending-tasks::-webkit-scrollbar-thumb,
+        #upcoming-events::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 3px;
+        }
+
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .event-item {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #667eea;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            background: rgba(26, 27, 38, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin: 0.5rem 0 0.25rem 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            margin-top: 0.5rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .stat-trend.up {
+            background: rgba(61, 213, 152, 0.15);
+            color: #3dd598;
+        }
+
+        .stat-trend.down {
+            background: rgba(252, 90, 90, 0.15);
+            color: #fc5a5a;
+        }
+    </style>
+</body>
+</html>

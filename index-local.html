@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="csrf-token" content="YOUR_CSRF_TOKEN_HERE"/>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="robots" content="noindex"/>
+
+    <!-- Cosmic Design System CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="css/cosmic-fix.css" rel="stylesheet"/>
+
+    <link href="favicon.svg" rel="shortcut icon"/>
+    <title>Login - ELEV8TION</title>
+
+    <script>
+        var skin = localStorage.getItem('skin') || 'default';
+        var isCompact = JSON.parse(localStorage.getItem('hasCompactMenu'));
+
+        // Theme switching logic
+        if (skin === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+        }
+
+        if (isCompact == true) {
+            document.querySelector('html').classList.add('preparing-compact-menu');
+        }
+    </script>
+</head>
+<body>
+    <!-- Cosmic Background -->
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <!-- Main Content -->
+        <main class="position-relative" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+            <!-- Login Form Card -->
+            <div class="glass-medium glow-purple-soft" style="max-width: 480px; width: 100%; padding: 3rem; border-radius: 24px;">
+                <form action="/api/login" class="auth-form" id="loginform" method="POST">
+                    <input autocomplete="off" name="_token" type="hidden" value="YOUR_CSRF_TOKEN_HERE"/>
+
+                    <!-- Logo & Title -->
+                    <div class="mb-4 text-center">
+                        <div class="mb-4 login-logo-background d-flex justify-content-center">
+                            <img class="rounded" height="80" src="images/logo.svg" alt="ELEV8TION Logo" style="filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));"/>
+                        </div>
+                        <h1 class="h2 cosmic-gradient-text mb-2">Welcome Back</h1>
+                        <p class="text-cosmic-muted">Sign in to continue your journey</p>
+                    </div>
+
+                    <p class="text-center mb-4">
+                        <span class="text-cosmic-muted">Don't have an account?</span>
+                        <a href="signup.html" class="cosmic-link ml-1">Create One</a>
+                    </p>
+
+                    <!-- Email Input with Cosmic Floating Label -->
+                    <div class="cosmic-input-group mb-4">
+                        <input
+                            autofocus
+                            class="cosmic-input"
+                            id="email"
+                            name="email"
+                            required
+                            type="email"
+                            value=""
+                            placeholder=" "
+                        />
+                        <label class="cosmic-label" for="email">Email Address</label>
+                        <div class="cosmic-input-border"></div>
+                    </div>
+
+                    <!-- Password Input with Cosmic Floating Label -->
+                    <div class="cosmic-input-group mb-4">
+                        <input
+                            class="cosmic-input"
+                            id="password"
+                            name="password"
+                            required
+                            type="password"
+                            placeholder=" "
+                        />
+                        <label class="cosmic-label" for="password">Password</label>
+                        <div class="cosmic-input-border"></div>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="form-group mb-4 d-flex align-items-center justify-content-between">
+                        <div class="custom-control custom-control-inline custom-checkbox">
+                            <input class="custom-control-input" id="remember-me" name="remember" type="checkbox"/>
+                            <label class="custom-control-label text-cosmic-muted" for="remember-me">
+                                <small>Remember Me</small>
+                            </label>
+                        </div>
+                        <a class="cosmic-link" href="password-reset.html" style="font-size: 0.875rem;">Forgot Password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group mb-4">
+                        <button class="cosmic-btn-primary w-100" id="save-form" type="submit" style="padding: 14px; font-size: 1rem; font-weight: 600;">
+                            <span>Sign In</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+
+                    <!-- Footer -->
+                    <footer class="auth-footer text-center mt-4">
+                        <p class="mb-0 text-cosmic-muted" style="font-size: 0.875rem;">
+                            <span id="current-year"></span> &copy; ELEV8TION
+                            <span class="mx-2">·</span>
+                            <a href="privacy.html" class="cosmic-link">Privacy</a>
+                            <span class="mx-2">·</span>
+                            <a href="terms.html" class="cosmic-link">Terms</a>
+                        </p>
+                    </footer>
+                </form>
+            </div>
+
+            <!-- Cosmic Announcement Panel -->
+            <div class="auth-announcement position-relative overflow-hidden" id="announcement" style="border-radius: 24px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);">
+                <div class="absolute inset-0" style="background-image: url(images/background.svg); opacity: 0.3; background-size: cover; background-position: center;"></div>
+
+                <div class="announcement-body position-relative z-10 text-center" style="padding: 4rem 2rem;">
+                    <div class="mb-4">
+                        <div class="cosmic-badge inline-flex items-center px-4 py-2 rounded-full" style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.3);">
+                            <span class="animate-pulse-dot mr-2" style="width: 8px; height: 8px; background: #a78bfa; border-radius: 50%;"></span>
+                            <span class="text-cosmic-purple" style="font-size: 0.875rem; font-weight: 600;">NEW PLATFORM</span>
+                        </div>
+                    </div>
+
+                    <h2 class="announcement-title mb-3" style="font-size: 2rem; font-weight: 700; color: #fff; text-shadow: 0 2px 20px rgba(139, 92, 246, 0.4);">
+                        Start Managing Your<br/>Business Smartly
+                    </h2>
+
+                    <p class="text-cosmic-muted mb-4" style="font-size: 1rem; max-width: 400px; margin: 0 auto;">
+                        Join thousands of businesses elevating their operations with our intelligent platform
+                    </p>
+
+                    <a class="cosmic-btn-secondary" href="signup.html" style="padding: 12px 32px; font-weight: 600;">
+                        <i class="fa fa-fw fa-rocket mr-2"></i>
+                        Start Free Trial
+                    </a>
+                </div>
+
+                <!-- Animated Cosmic Particles -->
+                <div class="cosmic-particles">
+                    <div class="particle" style="--delay: 0s; --duration: 20s;"></div>
+                    <div class="particle" style="--delay: 3s; --duration: 25s;"></div>
+                    <div class="particle" style="--delay: 6s; --duration: 30s;"></div>
+                    <div class="particle" style="--delay: 9s; --duration: 22s;"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript (maintain exact load order for jQuery bindings) -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/custom.js?v=5"></script>
+    <script src="js/db.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="js/gradient-button-wrapper.js"></script>
+
+    <script>
+        // Set current year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Login functionality
+        $(document).ready(function() {
+            // Check if already logged in
+            if (localStorage.getItem('isLoggedIn')) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Handle login form submission
+            $('#loginform').on('submit', function(e) {
+                e.preventDefault();
+
+                const email = $('#email').val().trim();
+                const password = $('#password').val();
+
+                if (!email || !password) {
+                    alert('Please enter both email and password');
+                    return;
+                }
+
+                // Store login state
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+
+                // Initialize user profile if doesn't exist
+                const profile = DB.getUserProfile();
+                if (!profile.business_name) {
+                    DB.updateUserProfile({
+                        email: email,
+                        business_name: 'ELEV8TION'
+                    });
+                }
+
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            });
+        });
+    </script>
+
+    <!-- Cosmic Particle Animation Styles -->
+    <style>
+        .cosmic-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.8), transparent);
+            border-radius: 50%;
+            animation: float-particle var(--duration) infinite ease-in-out;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        .particle:nth-child(1) { left: 20%; }
+        .particle:nth-child(2) { left: 40%; }
+        .particle:nth-child(3) { left: 60%; }
+        .particle:nth-child(4) { left: 80%; }
+
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Cosmic Link Styling */
+        .cosmic-link {
+            color: #a78bfa;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .cosmic-link:hover {
+            color: #c4b5fd;
+            text-decoration: none;
+        }
+
+        .cosmic-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #a78bfa, #60a5fa);
+            transition: width 0.3s ease;
+        }
+
+        .cosmic-link:hover::after {
+            width: 100%;
+        }
+
+        /* Cosmic Gradient Text */
+        .cosmic-gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* Text Cosmic Muted */
+        .text-cosmic-muted {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .text-cosmic-purple {
+            color: #a78bfa;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .auth-announcement {
+                margin-top: 2rem;
+            }
+
+            .announcement-body {
+                padding: 2rem 1rem !important;
+            }
+
+            .announcement-title {
+                font-size: 1.5rem !important;
+            }
+        }
+
+        /* Glass Card Enhancement */
+        .glass-medium {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .glow-purple-soft {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 60px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Utility Classes */
+        .min-h-screen {
+            min-height: 100vh;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .w-100 {
+            width: 100% !important;
+        }
+
+        .bg-black {
+            background-color: #000;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
+        .inset-0 {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .z-0 {
+            z-index: 0;
+        }
+
+        .z-10 {
+            z-index: 10;
+        }
+
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+        .inline-flex {
+            display: inline-flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        /* Animate Pulse Glow */
+        @keyframes pulse-glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
+            }
+            50% {
+                filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.9));
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        /* Animate Pulse Dot */
+        @keyframes pulse-dot {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        .animate-pulse-dot {
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,62 @@
+# Configuration
+config.json
+*.local.json
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Images (add your own)
+images/*.png
+images/*.jpg
+images/*.jpeg
+images/*.gif
+images/*.svg
+!images/.gitkeep
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+*.map
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# User data
+uploads/
+storage/
+
+# Cache
+.cache/
+*.cache
+
+# Testing
+coverage/
+.nyc_output/
+
+# OS
+Thumbs.db
+.DS_Store

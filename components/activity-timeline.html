@@ -1,0 +1,353 @@
+<!-- Visual Activity Timeline Widget -->
+<div class="activity-timeline-widget glass-medium" style="padding: 1.5rem; border-radius: 16px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 style="color: white; font-weight: 600; margin: 0;">
+            <i class="fas fa-history mr-2" style="color: #667eea;"></i>
+            Recent Activity
+        </h5>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="ActivityTimeline.filter('all')" id="filter-all">All</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="ActivityTimeline.filter('today')" id="filter-today">Today</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="ActivityTimeline.filter('week')" id="filter-week">Week</button>
+        </div>
+    </div>
+
+    <div id="activity-timeline-content" style="max-height: 600px; overflow-y: auto;">
+        <!-- Timeline items loaded dynamically -->
+    </div>
+</div>
+
+<script>
+const ActivityTimeline = (function() {
+    'use strict';
+
+    let currentFilter = 'all';
+
+    /**
+     * Initialize activity timeline
+     */
+    function init() {
+        render();
+    }
+
+    /**
+     * Set filter
+     */
+    function filter(type) {
+        currentFilter = type;
+
+        // Update button states
+        $('#filter-all, #filter-today, #filter-week').removeClass('btn-secondary').addClass('btn-outline-secondary');
+        $(`#filter-${type}`).removeClass('btn-outline-secondary').addClass('btn-secondary');
+
+        render();
+    }
+
+    /**
+     * Get all activities
+     */
+    function getActivities() {
+        const activities = [];
+
+        // Contacts
+        const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+        contacts.forEach(item => {
+            activities.push({
+                type: 'contact_created',
+                icon: 'fa-user-plus',
+                color: '#667eea',
+                title: 'Contact Added',
+                description: `${item.name} was added to contacts`,
+                link: 'crm/contacts.html',
+                timestamp: item.created_at,
+                data: item
+            });
+        });
+
+        // Projects
+        const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+        projects.forEach(item => {
+            activities.push({
+                type: 'project_created',
+                icon: 'fa-project-diagram',
+                color: '#50b5ff',
+                title: 'Project Created',
+                description: `Project "${item.name}" was created`,
+                link: 'projects/list.html',
+                timestamp: item.created_at,
+                data: item
+            });
+
+            if (item.updated_at !== item.created_at) {
+                activities.push({
+                    type: 'project_updated',
+                    icon: 'fa-edit',
+                    color: '#ffc107',
+                    title: 'Project Updated',
+                    description: `Project "${item.name}" was updated`,
+                    link: 'projects/list.html',
+                    timestamp: item.updated_at,
+                    data: item
+                });
+            }
+        });
+
+        // Tasks
+        const tasks = DB.getAll(DB.COLLECTIONS.TASKS);
+        tasks.forEach(item => {
+            activities.push({
+                type: item.completed ? 'task_completed' : 'task_created',
+                icon: item.completed ? 'fa-check-circle' : 'fa-tasks',
+                color: item.completed ? '#3dd598' : '#ffc107',
+                title: item.completed ? 'Task Completed' : 'Task Created',
+                description: item.title,
+                link: 'projects/tasks.html',
+                timestamp: item.completed ? item.updated_at : item.created_at,
+                data: item
+            });
+        });
+
+        // Invoices
+        const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+        invoices.forEach(item => {
+            activities.push({
+                type: `invoice_${item.status}`,
+                icon: 'fa-file-invoice-dollar',
+                color: getInvoiceColor(item.status),
+                title: `Invoice ${Utils.capitalize(item.status)}`,
+                description: `Invoice ${item.invoice_number}`,
+                link: 'finance/invoices.html',
+                timestamp: item.updated_at,
+                data: item
+            });
+        });
+
+        // Deals
+        const deals = DB.getAll(DB.COLLECTIONS.DEALS);
+        deals.forEach(item => {
+            activities.push({
+                type: 'deal_created',
+                icon: 'fa-handshake',
+                color: '#764ba2',
+                title: 'Deal Added',
+                description: item.title,
+                link: 'crm/deals.html',
+                timestamp: item.created_at,
+                data: item
+            });
+        });
+
+        // Expenses
+        const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+        expenses.forEach(item => {
+            activities.push({
+                type: 'expense_logged',
+                icon: 'fa-receipt',
+                color: '#fc5a5a',
+                title: 'Expense Logged',
+                description: `${item.description} - ${Utils.formatCurrency(item.amount)}`,
+                link: 'finance/expenses.html',
+                timestamp: item.created_at,
+                data: item
+            });
+        });
+
+        // Sort by timestamp descending
+        activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        return filterActivities(activities);
+    }
+
+    /**
+     * Filter activities by time period
+     */
+    function filterActivities(activities) {
+        if (currentFilter === 'all') {
+            return activities;
+        }
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+        return activities.filter(activity => {
+            const activityDate = new Date(activity.timestamp);
+
+            if (currentFilter === 'today') {
+                return activityDate >= today;
+            } else if (currentFilter === 'week') {
+                return activityDate >= weekAgo;
+            }
+
+            return true;
+        });
+    }
+
+    /**
+     * Get color for invoice status
+     */
+    function getInvoiceColor(status) {
+        const colors = {
+            'draft': '#6c757d',
+            'sent': '#50b5ff',
+            'paid': '#3dd598',
+            'overdue': '#fc5a5a'
+        };
+        return colors[status] || '#667eea';
+    }
+
+    /**
+     * Render timeline
+     */
+    function render() {
+        const activities = getActivities();
+        const $container = $('#activity-timeline-content');
+
+        if (activities.length === 0) {
+            $container.html(`
+                <div style="text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.5);">
+                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                    <p style="margin: 0;">No activity found</p>
+                </div>
+            `);
+            return;
+        }
+
+        let html = '<div class="timeline">';
+        let lastDate = null;
+
+        activities.forEach((activity, index) => {
+            const activityDate = new Date(activity.timestamp);
+            const dateStr = Utils.formatDate(activityDate, 'YYYY-MM-DD');
+
+            // Add date divider
+            if (dateStr !== lastDate) {
+                const isToday = Utils.isToday(activityDate);
+                const displayDate = isToday ? 'Today' : Utils.formatDate(activityDate, 'MMM DD, YYYY');
+
+                html += `
+                    <div class="timeline-date" style="
+                        position: relative;
+                        text-align: center;
+                        margin: ${index === 0 ? '0' : '30px'} 0 20px 0;
+                    ">
+                        <span style="
+                            background: rgba(15, 14, 23, 0.8);
+                            color: rgba(255,255,255,0.6);
+                            padding: 5px 15px;
+                            border-radius: 15px;
+                            font-size: 12px;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            border: 1px solid rgba(255,255,255,0.1);
+                        ">${displayDate}</span>
+                    </div>
+                `;
+
+                lastDate = dateStr;
+            }
+
+            // Add timeline item
+            html += `
+                <div class="timeline-item" style="
+                    position: relative;
+                    padding-left: 60px;
+                    padding-bottom: 25px;
+                    border-left: 2px solid rgba(255,255,255,0.05);
+                    margin-left: 20px;
+                " onclick="window.location.href='${activity.link}'">
+                    <!-- Icon -->
+                    <div style="
+                        position: absolute;
+                        left: -21px;
+                        top: 0;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        background: ${activity.color}15;
+                        border: 3px solid rgba(15, 14, 23, 0.95);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 0 20px ${activity.color}30;
+                    ">
+                        <i class="fas ${activity.icon}" style="color: ${activity.color}; font-size: 14px;"></i>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="glass-light" style="
+                        padding: 15px;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        border-left: 3px solid ${activity.color};
+                    " onmouseover="this.style.background='rgba(255,255,255,0.08)'; this.style.transform='translateX(5px)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.transform='translateX(0)';">
+                        <div style="color: rgba(255,255,255,0.9); font-weight: 600; margin-bottom: 4px; font-size: 14px;">
+                            ${activity.title}
+                        </div>
+                        <div style="color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 6px;">
+                            ${activity.description}
+                        </div>
+                        <div style="color: rgba(255,255,255,0.4); font-size: 11px;">
+                            <i class="far fa-clock mr-1"></i>${Utils.formatRelativeTime(activity.timestamp)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += '</div>';
+
+        $container.html(html);
+    }
+
+    // Public API
+    return {
+        init: init,
+        filter: filter,
+        render: render
+    };
+})();
+
+// Auto-initialize if element exists
+$(document).ready(function() {
+    if ($('#activity-timeline-content').length) {
+        ActivityTimeline.init();
+    }
+});
+
+// Add timeline styles
+$('<style>')
+    .text(`
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            border-left-color: transparent !important;
+        }
+
+        .glass-light {
+            background: rgba(255,255,255,0.03);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-item {
+                padding-left: 50px !important;
+                margin-left: 15px !important;
+            }
+
+            .timeline-item > div:first-child {
+                width: 32px !important;
+                height: 32px !important;
+                left: -17px !important;
+            }
+
+            .timeline-item > div:first-child i {
+                font-size: 12px !important;
+            }
+        }
+    `)
+    .appendTo('head');
+</script>

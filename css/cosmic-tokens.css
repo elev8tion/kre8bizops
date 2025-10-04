@@ -1,0 +1,515 @@
+/* ================================
+   COSMIC COLOR TOKENS
+   Extracted from 17 React Components
+   ================================ */
+
+:root {
+  /* === BACKGROUND COLORS === */
+  /* From: battery-widget-wrapper.txt, checkbox.txt, btn.txt, bookmarkbtn.txt, card.txt */
+  --cosmic-bg-black: #000000;
+  --cosmic-bg-dark-1: #0a0b0b;
+  --cosmic-bg-dark-2: #0b0b0b;
+  --cosmic-bg-dark-3: #0c0c0c;
+  --cosmic-bg-dark-4: #0d0d11;
+  --cosmic-bg-dark-5: #0f0e17;
+  --cosmic-bg-dark-6: #111114;
+  --cosmic-bg-dark-7: #121319;
+  --cosmic-bg-dark-8: #141414;
+  --cosmic-bg-dark-9: #15161a;
+  --cosmic-bg-dark-10: #1a1b26;
+  --cosmic-bg-dark-11: #202226;
+
+  /* From: card.txt */
+  --cosmic-bg-gray-dark: #222222;
+  --cosmic-bg-gray-medium: #27272a;
+  --cosmic-bg-gray-light: #323444;
+
+  /* From: card2.txt, card3.txt */
+  --cosmic-bg-gradient-dark: rgba(113, 113, 113, 0.6);
+  --cosmic-bg-glass-1: rgba(255, 255, 255, 0);
+  --cosmic-bg-glass-2: rgba(128, 128, 128, 0.211);
+  --cosmic-bg-glass-3: rgba(0, 0, 0, 0.5);
+
+  /* From: container_chat_bot.txt, ai-chat-input.txt */
+  --cosmic-bg-chat-dark: rgba(0, 0, 0, 0.5);
+  --cosmic-bg-chat-controls: rgba(39, 39, 42, 0.4);
+  --cosmic-bg-chat-container: rgba(39, 39, 42, 0.8);
+  --cosmic-bg-chat-overlay: rgba(9, 9, 11, 0.9);
+
+  /* From: container-btn-swipe.txt */
+  --cosmic-bg-swipe-light-1: #ebebeb;
+  --cosmic-bg-swipe-light-2: #c3c2c2;
+  --cosmic-bg-swipe-light-3: #ffffff;
+  --cosmic-bg-swipe-light-4: #cbcbcb;
+  --cosmic-bg-swipe-medium: #dedede;
+
+  /* From: bookmarkbtn.txt */
+  --cosmic-bg-button-dark: rgb(12, 12, 12);
+
+  /* From: button2.txt, btn.txt */
+  --cosmic-bg-button-darkest: rgb(20, 20, 20);
+
+  /* From: card4.txt, area.txt */
+  --cosmic-bg-blue-dark: #061628;
+  --cosmic-bg-blue-gradient: #01160a;
+
+  /* From: card3.txt */
+  --cosmic-bg-ivory: #fafafa;
+
+  /* From: input-group.txt */
+  --cosmic-bg-input-dark: #212121;
+
+  /* From: checkbox.txt */
+  --cosmic-bg-switch-gray: rgb(99, 99, 99);
+  --cosmic-bg-switch-purple: rgb(152, 107, 172);
+
+  /* === BORDER COLORS === */
+  /* From: battery-widget-wrapper.txt, card.txt, card3.txt */
+  --cosmic-border-white: #ffffff;
+  --cosmic-border-white-light: #fff;
+
+  /* From: battery-widget-wrapper.txt */
+  --cosmic-border-green: #4caf50;
+
+  /* From: card.txt */
+  --cosmic-border-dark-1: #313131;
+  --cosmic-border-dark-2: #444444;
+
+  /* From: bookmarkbtn.txt */
+  --cosmic-border-white-alpha: rgba(255, 255, 255, 0.349);
+
+  /* From: input-group.txt */
+  --cosmic-border-gray: #9e9e9e;
+  --cosmic-border-blue: #1a73e8;
+
+  /* From: glass-radio-group-vertical.txt */
+  --cosmic-border-glass: rgb(255, 255, 255, 0);
+  --cosmic-border-silver: #c0c0c0;
+  --cosmic-border-gold: #ffbb00;
+  --cosmic-border-cyan: #57d5ff;
+
+  /* From: container-btn-swipe.txt */
+  --cosmic-border-light-gray: #e8e8e870;
+
+  /* From: ai-chat-input.txt */
+  --cosmic-border-zinc: rgba(113, 113, 122, 0.5);
+  --cosmic-border-control: rgba(63, 63, 70, 0.5);
+  --cosmic-border-control-light: rgba(63, 63, 70, 0.3);
+  --cosmic-border-key: #3f3f46;
+  --cosmic-border-pro: rgba(59, 130, 246, 0.2);
+
+  /* From: container-card.txt */
+  --cosmic-border-yellow: #ffbd44;
+
+  /* === TEXT COLORS === */
+  /* From: battery-widget-wrapper.txt, card.txt */
+  --cosmic-text-white: #ffffff;
+
+  /* From: battery-widget-wrapper.txt */
+  --cosmic-text-green: #4caf50;
+
+  /* From: button2.txt, btn.txt */
+  --cosmic-text-white-bright: white;
+
+  /* From: btn.txt */
+  --cosmic-text-red: rgb(255, 65, 65);
+
+  /* From: card.txt */
+  --cosmic-text-light-gray: #e9e9e9;
+  --cosmic-text-red-muted: #e3616a;
+
+  /* From: card2.txt */
+  --cosmic-text-dark-1: #0f0c29;
+  --cosmic-text-aliceblue: aliceblue;
+
+  /* From: input-group.txt */
+  --cosmic-text-input-light: #f5f5f5;
+  --cosmic-text-label: #e8e8e8;
+  --cosmic-text-focus: #2196f3;
+
+  /* From: glass-radio-group-vertical.txt */
+  --cosmic-text-disabled: #ccc;
+  --cosmic-text-enabled: white;
+
+  /* From: container_chat_bot.txt, ai-chat-input.txt */
+  --cosmic-text-chat-white: #ffffff;
+  --cosmic-text-chat-placeholder: #f3f6fd;
+  --cosmic-text-chat-placeholder-focus: #363636;
+
+  /* From: container-btn-swipe.txt */
+  --cosmic-text-swipe-gray: #aaaaaa;
+  --cosmic-text-swipe-light: #bbbbbb;
+  --cosmic-text-swipe-medium: #cbcbcb;
+  --cosmic-text-swipe-dark: #777777;
+
+  /* From: container-card.txt */
+  --cosmic-text-card-gray: #9d9d9d;
+  --cosmic-text-card-white: #ffffff;
+
+  /* From: card3.txt */
+  --cosmic-text-cosmic-dark: hsla(0, 0%, 0%, 0.3);
+  --cosmic-text-cosmic-muted: #afafaf;
+  --cosmic-text-cosmic-light: #e0fff8;
+  --cosmic-text-cosmic-item: rgba(0, 0, 0, 0.6);
+
+  /* From: button3.txt */
+  --cosmic-text-button-glow: #e8e8e8;
+
+  /* From: ai-chat-input.txt */
+  --cosmic-text-zinc-400: #a1a1aa;
+  --cosmic-text-zinc-500: #71717a;
+  --cosmic-text-zinc-300: #d4d4d8;
+  --cosmic-text-zinc-200: #f4f4f5;
+  --cosmic-text-blue: #60a5fa;
+  --cosmic-text-green: #22c55e;
+
+  /* From: checkbox.txt */
+  --cosmic-text-dark-gray: rgb(37, 37, 37);
+
+  /* === GRADIENT COLORS === */
+  /* From: battery-widget-wrapper.txt */
+  --cosmic-gradient-dark-start: rgba(0, 0, 0, 0.6);
+  --cosmic-gradient-dark-mid-1: rgba(0, 0, 0, 0.8);
+  --cosmic-gradient-dark-mid-2: rgba(0, 0, 0, 0.9);
+  --cosmic-gradient-dark-end: rgba(0, 0, 0, 0.8);
+
+  /* From: bookmarkbtn.txt */
+  --cosmic-gradient-pink: rgb(255, 136, 255);
+  --cosmic-gradient-purple: rgb(172, 70, 255);
+
+  /* From: card2.txt */
+  --cosmic-gradient-purple-start: #0f0c29;
+  --cosmic-gradient-purple-mid: #302b63;
+  --cosmic-gradient-purple-end: #24243e;
+
+  /* From: card4.txt, container-card.txt */
+  --cosmic-gradient-red-start: #ff4141;
+  --cosmic-gradient-red-end: #fc0000;
+  --cosmic-gradient-yellow-start: #ffbe4e;
+  --cosmic-gradient-yellow-end: #ffbd44;
+
+  /* From: glass-radio-group-vertical.txt */
+  --cosmic-gradient-silver-start: #00000050;
+  --cosmic-gradient-silver-end: #d1d1d1cc;
+  --cosmic-gradient-gold: #ffbb00;
+  --cosmic-gradient-cyan: #57d5ff;
+
+  /* From: container-card.txt */
+  --cosmic-gradient-bg-start: #121319;
+  --cosmic-gradient-bg-end: #323444;
+
+  /* From: card3.txt */
+  --cosmic-gradient-teal-start: #12a597;
+  --cosmic-gradient-teal-mid: #5ef8e9;
+  --cosmic-gradient-teal-end: #4fd1c4;
+  --cosmic-gradient-teal-active: #57e9db;
+  --cosmic-gradient-teal-shadow-1: #48beb3;
+  --cosmic-gradient-teal-shadow-2: #68ffff;
+  --cosmic-gradient-teal-shadow-3: #47bfb4;
+  --cosmic-gradient-teal-shadow-4: #67ffff;
+
+  /* From: button3.txt */
+  --cosmic-gradient-button-bg: #e8e8e810;
+
+  /* From: ai-chat-input.txt */
+  --cosmic-gradient-send-start: #2563eb;
+  --cosmic-gradient-send-mid: #3b82f6;
+  --cosmic-gradient-send-end: #60a5fa;
+
+  /* From: area.txt */
+  --cosmic-gradient-area-start: rgba(255, 255, 255, 0.01);
+  --cosmic-gradient-area-mid-1: rgba(255, 255, 255, 0.04);
+  --cosmic-gradient-area-mid-2: rgba(255, 255, 255, 0.02);
+  --cosmic-gradient-area-end: rgba(255, 255, 255, 0);
+
+  /* === SHADOW & GLOW COLORS === */
+  /* From: checkbox.txt */
+  --glow-purple-primary: rgb(222, 151, 255);
+  --glow-purple-shadow: rgba(222, 151, 255, 0.3);
+
+  /* From: battery-widget-wrapper.txt */
+  --shadow-green: #4caf50;
+  --shadow-black: rgba(0, 0, 0, 0.164);
+
+  /* From: button2.txt */
+  --shadow-red: rgb(255, 69, 69);
+
+  /* From: card.txt */
+  --shadow-light: rgba(0, 0, 0, 0.199);
+  --shadow-dark: rgba(0, 0, 0, 0.15);
+
+  /* From: card2.txt */
+  --shadow-card-blue-1: hsla(218, 87%, 88%, 0.3);
+  --shadow-card-cyan-1: hsla(171, 80%, 73%, 0.3);
+  --shadow-card-cyan-2: hsla(171, 100%, 93%, 0.3);
+  --shadow-card-cyan-3: hsla(171, 95%, 83%, 0.3);
+  --shadow-card-cyan-4: hsla(171, 100%, 80%, 0.3);
+
+  /* From: glass-radio-group-vertical.txt */
+  --shadow-glass-dark: #00000077;
+  --shadow-silver-1: #858585aa;
+  --shadow-silver-2: #6b6b6baa;
+  --shadow-gold-1: #9c7300d3;
+  --shadow-gold-2: #695a00aa;
+  --shadow-cyan-1: #0095ff5b;
+  --shadow-cyan-2: #0095ff57;
+
+  /* From: container_chat_bot.txt */
+  --shadow-chat-button: #ffffff;
+
+  /* From: container-btn-swipe.txt */
+  --shadow-swipe-overlay: rgba(0, 0, 0, 0.15);
+
+  /* From: container-card.txt */
+  --shadow-card-backdrop: #44475c;
+  --shadow-red-glow-1: rgb(255, 65, 65, 0.2);
+  --shadow-red-glow-2: rgb(255, 65, 65, 0.6);
+
+  /* From: card3.txt */
+  --shadow-card-light-1: hsla(0, 0%, 84%, 0.447);
+  --shadow-card-light-2: rgba(255, 255, 255, 0.3843137255);
+  --shadow-teal-text-1: #48beb3;
+  --shadow-teal-text-2: #68ffff;
+  --shadow-teal-inset-1: #47bfb4;
+  --shadow-teal-inset-2: #67ffff;
+  --shadow-card-glass-1: #d5d5d5;
+  --shadow-card-glass-2: #ffffff;
+
+  /* From: button3.txt */
+  --glow-blue-primary: #4073ff;
+  --glow-blue-shadow: rgba(64, 115, 255, 0.3);
+
+  /* From: ai-chat-input.txt */
+  --shadow-send-button: rgba(59, 130, 246, 0.25);
+  --shadow-key-outer: rgba(0, 0, 0, 0.3);
+  --shadow-key-inner: rgba(255, 255, 255, 0.1);
+
+  /* From: area.txt */
+  --shadow-area-button: rgba(0, 0, 0, 0.1);
+
+  /* === ACCENT COLORS === */
+  /* From: battery-widget-wrapper.txt */
+  --accent-green-primary: #4caf50;
+  --accent-green-fill: rgb(106, 99, 99);
+
+  /* From: checkbox.txt */
+  --accent-purple-active: rgb(152, 107, 172);
+  --accent-gray-border: rgb(126, 126, 126);
+  --accent-shadow-dark: rgb(2, 2, 2);
+
+  /* From: btn.txt */
+  --accent-red-hover: rgb(255, 65, 65);
+
+  /* From: card.txt */
+  --accent-red-hover-bg: #6b2c2b;
+  --accent-red-delete: #89302d;
+  --accent-gray-icon-bg: #565656;
+  --accent-gray-icon-hover: #757575;
+
+  /* From: glass-radio-group-vertical.txt */
+  --accent-indicator-gray: #999;
+  --accent-silver: #c0c0c0;
+  --accent-gold: #ffc400;
+  --accent-platinum: #75c5ff;
+
+  /* From: container_chat_bot.txt */
+  --accent-chat-icon-gray: #8b8b8b;
+  --accent-chat-border-1: #7e7e7e;
+  --accent-chat-border-2: #363636;
+  --accent-chat-tag-bg: #1b1b1b;
+  --accent-chat-tag-border: #363636;
+
+  /* From: container-btn-swipe.txt */
+  --accent-swipe-emerald: #00000000;
+
+  /* From: container-card.txt */
+  --accent-card-icons: #888;
+  --accent-card-icons-hover: #555;
+
+  /* From: card2.txt */
+  --accent-facebook: blue;
+  --accent-twitter: rgb(25, 173, 206);
+  --accent-linkedin: rgb(30, 48, 131);
+
+  /* From: card3.txt */
+  --accent-cosmic-orange: hsl(19, 78%, 65%);
+
+  /* From: button3.txt */
+  --accent-button-glow: #4073ff;
+
+  /* From: ai-chat-input.txt */
+  --accent-ai-blue-hover: #60a5fa;
+  --accent-ai-green-hover: #4ade80;
+  --accent-ai-purple-hover: #a78bfa;
+  --accent-ai-red-hover: #f87171;
+  --accent-ai-bg-blue: rgba(59, 130, 246, 0.1);
+  --accent-ai-bg-green: rgba(34, 197, 94, 0.1);
+  --accent-ai-bg-purple: rgba(147, 51, 234, 0.1);
+  --accent-ai-bg-red: rgba(239, 68, 68, 0.1);
+  --accent-ai-bg-control: rgba(63, 63, 70, 0.5);
+  --accent-ai-bg-badge: rgba(39, 39, 42, 0.6);
+  --accent-ai-bg-overlay: rgba(39, 39, 42, 0.05);
+
+  /* From: area.txt */
+  --accent-area-blue: #00daff;
+  --accent-area-green: #92ff98;
+  --accent-area-cyan: #51ffe2;
+  --accent-area-emerald: #5aff4e;
+  --accent-area-orange: #ffad51;
+
+  /* === SPECIAL EFFECT COLORS === */
+  /* From: container-card.txt (heart icon gradients) */
+  --effect-heart-orange-1: #ffbd44;
+  --effect-heart-orange-2: #fc0000;
+  --effect-heart-pink: #ffbce6;
+
+  /* From: card2.txt (instagram gradient) */
+  --effect-instagram-start: #8a2387;
+  --effect-instagram-mid: #e94057;
+  --effect-instagram-end: #f27121;
+
+  /* From: card3.txt (circular gradient) */
+  --effect-circular-brown: #ac3d00;
+  --effect-circular-orange: hsl(25, 83%, 49%);
+  --effect-circular-yellow: #ffce78;
+
+  /* From: area.txt (glow effects) */
+  --effect-glow-cyan-1: rgba(40, 248, 255, 0.3);
+  --effect-glow-cyan-2: rgba(0, 122, 152, 0.4);
+  --effect-glow-green-1: rgba(60, 188, 0, 0.6);
+  --effect-glow-green-2: rgba(3, 152, 0, 0.6);
+  --effect-glow-orange-1: rgba(188, 38, 0, 0.7);
+  --effect-glow-orange-2: rgba(152, 80, 0, 0.4);
+
+  /* === TRANSPARENCY OVERLAYS === */
+  /* From: ai-chat-input.txt */
+  --overlay-gradient-blue-start: rgba(59, 130, 246, 0.05);
+  --overlay-gradient-purple-end: rgba(147, 51, 234, 0.05);
+  --overlay-gradient-top: rgba(39, 39, 42, 0.05);
+
+  /* From: card.txt */
+  --overlay-separator: rgba(0, 0, 0, 0.1);
+
+  /* From: container_chat_bot.txt */
+  --overlay-radial-white-1: #ffffff;
+  --overlay-radial-white-2: rgba(255, 255, 255, 0.3);
+  --overlay-radial-white-3: rgba(255, 255, 255, 0.1);
+  --overlay-radial-transparent: rgba(0, 0, 0, 0);
+
+  /* From: container-btn-swipe.txt */
+  --overlay-white-gradient-1: rgba(255, 255, 255, 0.1);
+  --overlay-white-gradient-2: rgba(255, 255, 255, 0.6);
+  --overlay-white-gradient-3: rgba(255, 255, 255, 1);
+  --overlay-white-gradient-4: rgba(255, 255, 255, 0.3);
+
+  /* From: container-card.txt */
+  --overlay-card-white: rgb(255, 255, 255, 0.1);
+
+  /* From: area.txt */
+  --overlay-button-dark-1: rgba(18, 19, 25, 0.5);
+  --overlay-button-dark-2: rgba(18, 19, 25, 0.6);
+  --overlay-button-dark-3: rgb(255, 65, 65, 0.9);
+  --overlay-button-glow: rgba(0, 255, 13, 0.25);
+  --overlay-button-blue: rgba(0, 128, 255, 0.45);
+}
+
+/* ================================
+   COMPONENT-SPECIFIC PALETTES
+   ================================ */
+
+/* Battery Widget Theme */
+.theme-battery {
+  --primary: var(--accent-green-primary);
+  --bg-dark: var(--cosmic-bg-dark-7);
+  --text: var(--cosmic-text-white);
+  --border: var(--cosmic-border-white);
+  --shadow: var(--shadow-green);
+}
+
+/* Checkbox/Switch Theme */
+.theme-switch {
+  --primary: var(--accent-purple-active);
+  --glow: var(--glow-purple-primary);
+  --bg-inactive: var(--cosmic-bg-switch-gray);
+  --text-dark: var(--cosmic-text-dark-gray);
+}
+
+/* Glass Radio Theme */
+.theme-glass-radio {
+  --silver: var(--accent-silver);
+  --gold: var(--accent-gold);
+  --platinum: var(--accent-platinum);
+  --bg-glass: var(--cosmic-bg-glass-1);
+  --border-glass: var(--cosmic-border-glass);
+}
+
+/* Chat Bot Theme */
+.theme-chat {
+  --bg-primary: var(--cosmic-bg-chat-dark);
+  --bg-controls: var(--cosmic-bg-chat-controls);
+  --text: var(--cosmic-text-chat-white);
+  --placeholder: var(--cosmic-text-chat-placeholder);
+  --icon: var(--accent-chat-icon-gray);
+}
+
+/* AI Input Theme */
+.theme-ai-input {
+  --bg-container: var(--cosmic-bg-chat-container);
+  --bg-overlay: var(--cosmic-bg-chat-overlay);
+  --text-primary: var(--cosmic-text-zinc-200);
+  --text-secondary: var(--cosmic-text-zinc-500);
+  --border: var(--cosmic-border-zinc);
+  --accent-blue: var(--accent-ai-blue-hover);
+  --accent-green: var(--accent-ai-green-hover);
+  --accent-purple: var(--accent-ai-purple-hover);
+  --accent-red: var(--accent-ai-red-hover);
+  --send-gradient-start: var(--cosmic-gradient-send-start);
+  --send-gradient-end: var(--cosmic-gradient-send-end);
+}
+
+/* Swipe Button Theme */
+.theme-swipe {
+  --bg-light: var(--cosmic-bg-swipe-light-1);
+  --bg-medium: var(--cosmic-bg-swipe-medium);
+  --text: var(--cosmic-text-swipe-gray);
+  --shadow: var(--shadow-swipe-overlay);
+}
+
+/* Card Theme */
+.theme-card {
+  --bg-dark: var(--cosmic-bg-gray-dark);
+  --border-dark: var(--cosmic-border-dark-1);
+  --separator: var(--cosmic-border-dark-2);
+  --text: var(--cosmic-text-light-gray);
+  --accent-red: var(--cosmic-text-red-muted);
+  --hover-bg: var(--accent-red-hover-bg);
+}
+
+/* Cosmic Theme (card3.txt) */
+.theme-cosmic {
+  --bg: var(--cosmic-bg-ivory);
+  --text-dark: var(--cosmic-text-cosmic-dark);
+  --text-muted: var(--cosmic-text-cosmic-muted);
+  --accent-teal-start: var(--cosmic-gradient-teal-start);
+  --accent-teal-end: var(--cosmic-gradient-teal-end);
+  --shadow-light: var(--shadow-card-light-1);
+  --shadow-teal: var(--shadow-teal-text-1);
+}
+
+/* Button Glow Theme */
+.theme-button-glow {
+  --bg: var(--cosmic-gradient-button-bg);
+  --text: var(--cosmic-text-button-glow);
+  --glow: var(--glow-blue-primary);
+  --border: var(--cosmic-border-light-gray);
+}
+
+/* Area/Control Theme */
+.theme-area {
+  --bg-dark: var(--cosmic-bg-dark-11);
+  --bg-button: var(--cosmic-bg-blue-dark);
+  --accent-blue: var(--accent-area-blue);
+  --accent-green: var(--accent-area-green);
+  --accent-cyan: var(--accent-area-cyan);
+  --shadow: var(--shadow-area-button);
+}

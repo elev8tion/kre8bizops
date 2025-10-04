@@ -1,0 +1,1124 @@
+/* ============================================
+   COSMIC CARDS - Pure CSS Card Components
+   Converted from React/styled-components
+   ============================================ */
+
+/* === SHARED VARIABLES === */
+:root {
+  --card-glass-bg: rgba(113, 113, 113, 0.6);
+  --card-dark-bg: #222222;
+  --card-border-dark: #313131;
+  --card-border-light: #fff;
+  --card-separator: #444444;
+  --card-hover-bg: #333333;
+  --card-text-light: #e9e9e9;
+  --card-text-white: #ffffff;
+  --card-delete-color: #e3616a;
+  --card-delete-hover: #6b2c2b;
+  --card-delete-active: #89302d;
+  --card-gradient-blue: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  --card-gradient-cyan: linear-gradient(145deg, #5ef8e9, #4fd1c4);
+  --card-gradient-instagram: linear-gradient(to right, #8a2387, #e94057, #f27121);
+  --card-primary-green: #4caf50;
+  --card-social-facebook: blue;
+  --card-social-twitter: rgb(25, 173, 206);
+  --card-social-linkedin: rgb(30, 48, 131);
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* =============================================
+   CARD 1: GLASS ACTION CARD
+   Features: Rename, Favorite, Actions, Delete
+   ============================================= */
+
+.cosmic-card {
+  background: var(--card-dark-bg);
+  width: 260px;
+  border: 2px solid var(--card-border-dark);
+  border-radius: 10px;
+  padding: 3px 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.cosmic-card-separator {
+  width: 100%;
+  border: 1px solid var(--card-separator);
+  border-radius: 10px;
+  margin: 5px 0px;
+}
+
+.cosmic-card-list {
+  color: var(--card-text-light);
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0;
+  margin: 0;
+}
+
+.cosmic-card-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-medium);
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.cosmic-card-item svg {
+  z-index: 1;
+  transition: all var(--transition-medium);
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cosmic-card-item:hover {
+  background: var(--card-hover-bg);
+}
+
+.cosmic-card-item .label {
+  font-weight: 400;
+  transition: all var(--transition-fast);
+}
+
+/* Favorite Item Styles */
+.cosmic-card-item.favorite .fav-label {
+  position: absolute;
+  transform: translateY(-100%) translateX(-15px) scale(0.8);
+  opacity: 0;
+  transition: all var(--transition-medium);
+}
+
+.cosmic-card-item.favorite .input {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  appearance: none;
+  cursor: pointer;
+  z-index: 100;
+  margin: 0;
+}
+
+.cosmic-card-item.favorite .input:checked ~ .fav-label {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.cosmic-card-item.favorite .input:checked ~ .label:not(.fav-label) {
+  transform: translateY(110%) translateX(-6px) scale(0.8);
+  opacity: 0;
+}
+
+.cosmic-card-item.favorite .input:checked ~ svg {
+  fill: var(--card-text-white);
+}
+
+/* Delete Item Styles */
+.cosmic-card-item.delete {
+  color: var(--card-delete-color);
+  position: relative;
+}
+
+.cosmic-card-item.delete:hover {
+  background: var(--card-delete-hover);
+}
+
+.cosmic-card-item.delete .label {
+  transform: translateY(0);
+  transition: all var(--transition-medium);
+}
+
+.cosmic-card-item.delete:active .label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100%) translateX(-15px) scale(0.8);
+}
+
+.cosmic-card-item.delete:active .action {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.cosmic-card-item.delete:active::before {
+  animation: delete 2.5s ease-in-out forwards 0.2s;
+}
+
+.cosmic-card-item.delete .action {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%) translateX(-15px) scale(0.8);
+  transition: all var(--transition-medium);
+}
+
+.cosmic-card-item.delete::before {
+  content: "";
+  position: absolute;
+  background-color: var(--card-delete-active);
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+}
+
+@keyframes delete {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Rename Item Styles */
+.cosmic-card-item.rename:has(.toogler:checked) {
+  background-color: var(--card-hover-bg);
+  overflow: hidden;
+}
+
+.cosmic-card-item.rename:has(.toogler:checked) .label {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.cosmic-card-item.rename:has(.toogler:checked) > svg {
+  transform: translateY(130%);
+}
+
+.cosmic-card-item.rename:has(.toogler:checked) .input-container {
+  transform: translateY(0);
+}
+
+.cosmic-card-item.rename:has(.toogler:checked) .input-container .icons {
+  top: 50%;
+}
+
+.cosmic-card-item.rename .toogler {
+  position: absolute;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  margin: 0;
+  z-index: 50;
+}
+
+.cosmic-card-item.rename .input-container {
+  transform: translateY(-100%);
+  width: 100%;
+  position: absolute;
+  left: 0;
+  transition: all var(--transition-medium);
+}
+
+.cosmic-card-item.rename .input-container .input {
+  width: 75%;
+  background: transparent;
+  border: none;
+  outline: none;
+  height: 100%;
+  color: var(--card-text-white);
+  padding: 8px 8px;
+  font-size: 17px;
+  z-index: 100;
+}
+
+.cosmic-card-item.rename .input-container .icons {
+  position: absolute;
+  top: -50%;
+  right: 0%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all var(--transition-medium);
+  gap: 8px;
+}
+
+.cosmic-card-item.rename .input-container .icons svg {
+  background-color: #565656;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-medium);
+  padding: 2px;
+}
+
+.cosmic-card-item.rename .input-container .icons svg:hover {
+  background-color: #757575;
+}
+
+/* HTML Example for Card 1:
+<div class="cosmic-card">
+  <ul class="cosmic-card-list">
+    <li class="cosmic-card-item favorite">
+      <input type="checkbox" class="input" />
+      <span class="label">Add favorite</span>
+      <span class="label fav-label">Remove from favorite</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    </li>
+    <li class="cosmic-card-item rename">
+      <span class="label">Edit Name</span>
+      <input class="toogler" type="checkbox" />
+      <label class="input-container">
+        <input class="input" type="text" />
+        <div class="icons">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </div>
+      </label>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+        <path d="m15 5 4 4" />
+      </svg>
+    </li>
+  </ul>
+  <div class="cosmic-card-separator"></div>
+  <ul class="cosmic-card-list">
+    <li class="cosmic-card-item">
+      <span class="label">New Deployment</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 13v8l-4-4" />
+        <path d="m12 21 4-4" />
+        <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284" />
+      </svg>
+    </li>
+  </ul>
+  <div class="cosmic-card-separator"></div>
+  <ul class="cosmic-card-list">
+    <li class="cosmic-card-item delete">
+      <span class="label">Delete Project</span>
+      <span class="label action">Hold to Confirm</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M3 6h18" />
+        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+        <line x1="10" x2="10" y1="11" y2="17" />
+        <line x1="14" x2="14" y1="11" y2="17" />
+      </svg>
+    </li>
+  </ul>
+</div>
+*/
+
+
+/* =============================================
+   CARD 2: PROFILE CARD WITH SOCIAL HOVER
+   Features: Hover reveal, social links
+   ============================================= */
+
+.cosmic-profile-card {
+  width: 300px;
+  height: 400px;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background-color: var(--card-glass-bg);
+  backdrop-filter: blur(20px);
+  text-align: center;
+  border: 1px solid var(--card-border-light);
+  --rotate-animation: rotate(45deg);
+  --scale-animation: scale(0);
+  --bg-facebook: var(--card-social-facebook);
+  --bg-instagram: var(--card-gradient-instagram);
+  --bg-twitter: var(--card-social-twitter);
+  --bg-linkedin: var(--card-social-linkedin);
+}
+
+.cosmic-profile-card::before {
+  content: '';
+  height: 110%;
+  width: 110%;
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  z-index: -1;
+  background: var(--card-gradient-blue);
+  filter: blur(30px);
+  border-radius: 10px;
+}
+
+.cosmic-profile-card__hover {
+  color: var(--card-text-white);
+  width: 100%;
+  margin: 0;
+  font-size: 40px;
+  font-weight: 600;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  text-align: center;
+  letter-spacing: 2px;
+  pointer-events: none;
+  transform: scale(1) translateY(-50%);
+  transition: transform 500ms;
+}
+
+.cosmic-profile-card:hover .cosmic-profile-card__hover {
+  transform: scale(0);
+}
+
+.cosmic-profile-card__figure {
+  width: 100%;
+  height: 65%;
+  border-radius: 10px;
+  overflow: hidden;
+  transform: var(--rotate-animation) var(--scale-animation);
+  transition: transform 600ms ease 100ms;
+}
+
+.cosmic-profile-card:hover .cosmic-profile-card__figure {
+  --rotate-animation: rotate(0);
+  --scale-animation: scale(1);
+}
+
+.cosmic-profile-card__figure svg {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 0 2px #0f0c29);
+}
+
+.cosmic-profile-card__info {
+  display: flex;
+  flex-direction: column;
+  transform: var(--scale-animation);
+  transition: transform 600ms ease 100ms;
+}
+
+.cosmic-profile-card:hover .cosmic-profile-card__info {
+  --scale-animation: scale(1);
+}
+
+.cosmic-profile-card__name {
+  color: var(--card-text-white);
+  font-size: 28px;
+  letter-spacing: 1px;
+  margin: 10px 0 5px 0;
+}
+
+.cosmic-profile-card__ocupation {
+  color: aliceblue;
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 2px;
+  display: block;
+  margin-top: 5px;
+}
+
+.cosmic-profile-card__links {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  --transform-animation: translateY(-10px);
+}
+
+.cosmic-profile-card__links svg {
+  height: 55px;
+  width: 55px;
+  padding: 10px;
+  background-color: rgba(128, 128, 128, 0.211);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  fill: rgba(255, 255, 255, 1);
+}
+
+.cosmic-profile-card__links svg:hover {
+  transform: var(--transform-animation);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.cosmic-profile-card__links svg:nth-child(1):hover {
+  background: var(--bg-facebook);
+}
+
+.cosmic-profile-card__links svg:nth-child(2):hover {
+  background: var(--bg-instagram);
+}
+
+.cosmic-profile-card__links svg:nth-child(3):hover {
+  background: var(--bg-twitter);
+}
+
+.cosmic-profile-card__links svg:nth-child(4):hover {
+  background: var(--bg-linkedin);
+}
+
+/* HTML Example for Card 2:
+<div class="cosmic-profile-card">
+  <span class="cosmic-profile-card__hover">Hover Here!</span>
+  <figure class="cosmic-profile-card__figure">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8 0-1.168.258-2.275.709-3.276.154.09.308.182.456.276.396.25.791.5 1.286.688.494.187 1.088.312 1.879.312.792 0 1.386-.125 1.881-.313s.891-.437 1.287-.687.792-.5 1.287-.688c.494-.187 1.088-.312 1.88-.312s1.386.125 1.88.313c.495.187.891.437 1.287.687s.792.5 1.287.688c.178.067.374.122.581.171.191.682.3 1.398.3 2.141 0 4.411-3.589 8-8 8z" />
+      <circle cx="8.5" cy="12.5" r="1.5" />
+      <circle cx="15.5" cy="12.5" r="1.5" />
+    </svg>
+  </figure>
+  <div class="cosmic-profile-card__info">
+    <span class="cosmic-profile-card__name">
+      Jackson Williams
+      <span class="cosmic-profile-card__ocupation">Frontend Developer</span>
+    </span>
+    <div class="cosmic-profile-card__links">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z" />
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M11.999 7.377a4.623 4.623 0 1 0 0 9.248 4.623 4.623 0 0 0 0-9.248zm0 7.627a3.004 3.004 0 1 1 0-6.008 3.004 3.004 0 0 1 0 6.008z" />
+        <circle cx="16.806" cy="7.207" r="1.078" />
+        <path d="M20.533 6.111A4.605 4.605 0 0 0 17.9 3.479a6.606 6.606 0 0 0-2.186-.42c-.963-.042-1.268-.054-3.71-.054s-2.755 0-3.71.054a6.554 6.554 0 0 0-2.184.42 4.6 4.6 0 0 0-2.633 2.632 6.585 6.585 0 0 0-.419 2.186c-.043.962-.056 1.267-.056 3.71 0 2.442 0 2.753.056 3.71.015.748.156 1.486.419 2.187a4.61 4.61 0 0 0 2.634 2.632 6.584 6.584 0 0 0 2.185.45c.963.042 1.268.055 3.71.055s2.755 0 3.71-.055a6.615 6.615 0 0 0 2.186-.419 4.613 4.613 0 0 0 2.633-2.633c.263-.7.404-1.438.419-2.186.043-.962.056-1.267.056-3.71s0-2.753-.056-3.71a6.581 6.581 0 0 0-.421-2.217zm-1.218 9.532a5.043 5.043 0 0 1-.311 1.688 2.987 2.987 0 0 1-1.712 1.711 4.985 4.985 0 0 1-1.67.311c-.95.044-1.218.055-3.654.055-2.438 0-2.687 0-3.655-.055a4.96 4.96 0 0 1-1.669-.311 2.985 2.985 0 0 1-1.719-1.711 5.08 5.08 0 0 1-.311-1.669c-.043-.95-.053-1.218-.053-3.654 0-2.437 0-2.686.053-3.655a5.038 5.038 0 0 1 .311-1.687c.305-.789.93-1.41 1.719-1.712a5.01 5.01 0 0 1 1.669-.311c.951-.043 1.218-.055 3.655-.055s2.687 0 3.654.055a4.96 4.96 0 0 1 1.67.311 2.991 2.991 0 0 1 1.712 1.712 5.08 5.08 0 0 1 .311 1.669c.043.951.054 1.218.054 3.655 0 2.436 0 2.698-.043 3.654h-.011z" />
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z" />
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <circle cx="4.983" cy="5.009" r="2.188" />
+        <path d="M9.237 8.855v12.139h3.769v-6.003c0-1.584.298-3.118 2.262-3.118 1.937 0 1.961 1.811 1.961 3.218v5.904H21v-6.657c0-3.27-.704-5.783-4.526-5.783-1.835 0-3.065 1.007-3.568 1.96h-.051v-1.66H9.237zm-6.142 0H6.87v12.139H3.095z" />
+      </svg>
+    </div>
+  </div>
+</div>
+*/
+
+
+/* =============================================
+   CARD 3: OPEN-SOURCE GALAXY CARD
+   Features: Animated gradient, icon list
+   ============================================= */
+
+.cosmic-galaxy-card {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bolder;
+  color: hsla(0, 0%, 0%, 0.3);
+  z-index: 1;
+  width: 280px;
+  height: 400px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  align-content: space-around;
+  text-align: center;
+  grid-template-rows: 0.25fr 0.5fr 0.25fr;
+  padding: 1em;
+  border-radius: 3em;
+  border: solid 0.5em #fafafa;
+  background: #fafafa;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuZGV2L3N2Z2pzIiB2aWV3Qm94PSIwIDAgMjQwMCA4MDAiIG9wYWNpdHk9IjAuODgiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCB4MT0iNTAlIiB5MT0iMCUiIHgyPSI1MCUiIHkyPSIxMDAlIiBpZD0ic3NzdXJmLWdyYWQiPjxzdG9wIHN0b3AtY29sb3I9ImhzbGEoMTc0LCA3NyUsIDUwJSwgMS4wMCkiIHN0b3Atb3BhY2l0eT0iMSIgb2Zmc2V0PSIwJSI+PC9zdG9wPjxzdG9wIHN0b3AtY29sb3I9ImhzbGEoMTc0LCA3NyUsIDgwJSwgMC4yOSkiIHN0b3Atb3BhY2l0eT0iMSIgb2Zmc2V0PSIxMDAlIj48L3N0b3A+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGcgZmlsbD0idXJsKCNzc3N1cmYtZ3JhZCkiIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMCwtODguNTg3MjQ5NzU1ODU5MzgpIj48cGF0aCBkPSJNIDAgMjkyLjE4MDc4ODA0ODE2NzYgUSA2MDAgNjA5Ljg4OTY2NjQwOTY4NTIgODAwIDI5MC4xNzQ1MDY0NTIzMDIxIFEgMTQwMCA2MzMuODIzNjQ1MDgwOTAxMyAxNjAwIDMxMi45MTEwMzE2MDA3MTgzMyBRIDIyMDAgNTU2LjA5OTYxNDc2MzY4NjEgMjQwMCAzMzcuNzE2MTYyODQ1MjExMSBMIDI0MDAgODAwIEwgMCA4MDAgTCAwIDM0OC40OTg2MjAwNDgzMjYyNSBaIiB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDAsNDEpIiBvcGFjaXR5PSIwLjA1Ij48L3BhdGg+PHBhdGggZD0iTSAwIDI5Mi4xODA3ODgwNDgxNjc2IFEgNjAwIDYwOS44ODk2NjY0MDk2ODUyIDgwMCAyOTAuMTc0NTA2NDUyMzAyMSBRIDE0MDAgNjMzLjgyMzY0NTA4MDkwMTMgMTYwMCAzMTIuOTExMDMxNjAwNzE4MzMgUSAyMjAwIDU1Ni4wOTk2MTQ3NjM2ODYxIDI0MDAgMzM3LjcxNjE2Mjg0NTIxMTEgTCAyNDAwIDgwMCBMIDAgODAwIEwgMCAzNDguNDk4NjIwMDQ4MzI2MjUgWiIgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwwLDgyKSIgb3BhY2l0eT0iMC4yNCI+PC9wYXRoPjxwYXRoIGQ9Ik0gMCAyOTIuMTgwNzg4MDQ4MTY3NiBRIDYwMCA2MDkuODg5NjY2NDA5Njg1MiA4MDAgMjkwLjE3NDUwNjQ1MjMwMjEgUSAxNDAwIDYzMy44MjM2NDUwODA5MDEzIDE2MDAgMzEyLjkxMTAzMTYwMDcxODMzIFEgMjIwMCA1NTYuMDk5NjE0NzYzNjg2MSAyNDAwIDMzNy43MTYxNjI4NDUyMTExIEwgMjQwMCA4MDAgTCAwIDgwMCBMIDAgMzQ4LjQ5ODYyMDA0ODMyNjI1IFoiIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMCwxMjMpIiBvcGFjaXR5PSIwLjQzIj48L3BhdGg+PHBhdGggZD0iTSAwIDI5Mi4xODA3ODgwNDgxNjc2IFEgNjAwIDYwOS44ODk2NjY0MDk2ODUyIDgwMCAyOTAuMTc0NTA2NDUyMzAyMSBRIDE0MDAgNjMzLjgyMzY0NTA4MDkwMTMgMTYwMCAzMTIuOTExMDMxNjAwNzE4MzMgUSAyMjAwIDU1Ni4wOTk2MTQ3NjM2ODYxIDI0MDAgMzM3LjcxNjE2Mjg0NTIxMTEgTCAyNDAwIDgwMCBMIDAgODAwIEwgMCAzNDguNDk4NjIwMDQ4MzI2MjUgWiIgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwwLDE2NCkiIG9wYWNpdHk9IjAuNjIiPjwvcGF0aD48cGF0aCBkPSJNIDAgMjkyLjE4MDc4ODA0ODE2NzYgUSA2MDAgNjA5Ljg4OTY2NjQwOTY4NTIgODAwIDI5MC4xNzQ1MDY0NTIzMDIxIFEgMTQwMCA2MzMuODIzNjQ1MDgwOTAxMyAxNjAwIDMxMi45MTEwMzE2MDA3MTgzMyBRIDIyMDAgNTU2LjA5OTYxNDc2MzY4NjEgMjQwMCAzMzcuNzE2MTYyODQ1MjExMSBMIDI0MDAgODAwIEwgMCA4MDAgTCAwIDM0OC40OTg2MjAwNDgzMjYyNSBaIiB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDAsMjA1KSIgb3BhY2l0eT0iMC44MSI+PC9wYXRoPjxwYXRoIGQ9Ik0gMCAyOTIuMTgwNzg4MDQ4MTY3NiBRIDYwMCA2MDkuODg5NjY2NDA5Njg1MiA4MDAgMjkwLjE3NDUwNjQ1MjMwMjEgUSAxNDAwIDYzMy44MjM2NDUwODA5MDEzIDE2MDAgMzEyLjkxMTAzMTYwMDcxODMzIFEgMjIwMCA1NTYuMDk5NjE0NzYzNjg2MSAyNDAwIDMzNy43MTYxNjI4NDUyMTExIEwgMjQwMCA4MDAgTCAwIDgwMCBMIDAgMzQ4LjQ5ODYyMDA0ODMyNjI1IFoiIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMCwyNDYpIiBvcGFjaXR5PSIxLjAwIj48L3BhdGg+PC9nPjwvc3ZnPg==");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: revert;
+  box-shadow: 5px 5px 7px hsla(0, 0%, 84%, 0.447), -3px -4px 7px rgba(255, 255, 255, 0.384);
+  backdrop-filter: blur(10px);
+  transition: background-position 1s ease-in;
+  animation: blinkShadowsFilter 8s ease-in infinite;
+}
+
+.cosmic-galaxy-card .heading {
+  align-self: baseline;
+  display: grid;
+  letter-spacing: 3px;
+}
+
+.cosmic-galaxy-card .heading span {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #afafaf;
+  background-color: transparent;
+  transition: all 1s ease-in;
+  transform: translateY(-20%);
+  text-align: center;
+  font-size: 3.5em;
+}
+
+.cosmic-galaxy-card button {
+  align-self: flex-end;
+  font-size: 1em;
+  border-style: none;
+  padding: 1em;
+  border-radius: 5em;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bolder;
+  text-shadow: 3px 3px 5px #48beb3, -3px -3px 5px #68ffff;
+  color: #e0fff8;
+  background: #12a597;
+  background: var(--card-gradient-cyan);
+  box-shadow: 3px 3px 5px #48beb3, -3px -3px 5px #68ffff;
+  cursor: pointer;
+  border: none;
+}
+
+.cosmic-galaxy-card button:active {
+  background: #57e9db;
+  box-shadow: inset 3px 3px 5px #47bfb4, inset -3px -3px 5px #67ffff;
+}
+
+.cosmic-galaxy-card:hover {
+  background-position: right;
+}
+
+.cosmic-galaxy-card:hover .heading span {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuZGV2L3N2Z2pzIiB2aWV3Qm94PSIwIDAgODAwIDgwMCI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJjY2NpcmN1bGFyLWdyYWQiIHI9IjUwJSIgY3g9IjUwJSIgY3k9IjUwJSI+CiAgICAgICAgIDxzdG9wIG9mZnNldD0iMTUlIiBzdG9wLWNvbG9yPSIjYWMzZDAwIiBzdG9wLW9wYWNpdHk9IjAuNSI+PC9zdG9wPgogICAgICAgICA8c3RvcCBvZmZzZXQ9Ijc1JSIgc3RvcC1jb2xvcj0iaHNsKDI1LCA4MyUsIDQ5JSkiIHN0b3Atb3BhY2l0eT0iMSI+PC9zdG9wPgogICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZjZTc4IiBzdG9wLW9wYWNpdHk9IjEiPjwvc3RvcD4KICAgICAgICA8L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48ZyBmaWxsPSJ1cmwoI2NjY2lyY3VsYXItZ3JhZCkiPjxjaXJjbGUgcj0iNjQzLjUiIGN4PSI0MDAiIGN5PSI0MDAiPjwvY2lyY2xlPjxjaXJjbGUgcj0iNTg1IiBjeD0iNDAwIiBjeT0iNDAwIj48L2NpcmNsZT48Y2lyY2xlIHI9IjUyNi41IiBjeD0iNDAwIiBjeT0iNDAwIj48L2NpcmNsZT48Y2lyY2xlIHI9IjQ2OCIgY3g9IjQwMCIgY3k9IjQwMCI+PC9jaXJjbGU+PGNpcmNsZSByPSI0MDkuNSIgY3g9IjQwMCIgY3k9IjQwMCI+PC9jaXJjbGU+PGNpcmNsZSByPSIzNTEiIGN4PSI0MDAiIGN5PSI0MDAiPjwvY2lyY2xlPjxjaXJjbGUgcj0iMjkyLjUiIGN4PSI0MDAiIGN5PSI0MDAiPjwvY2lyY2xlPjxjaXJjbGUgcj0iMjM0IiBjeD0iNDAwIiBjeT0iNDAwIj48L2NpcmNsZT48Y2lyY2xlIHI9IjE3NS41IiBjeD0iNDAwIiBjeT0iNDAwIj48L2NpcmNsZT48Y2lyY2xlIHI9IjExNyIgY3g9IjQwMCIgY3k9IjQwMCI+PC9jaXJjbGU+PC9nPjwvc3ZnPg==");
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cosmic-galaxy-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 1s ease-in;
+}
+
+.cosmic-galaxy-content .item {
+  width: fit-content;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  transition: all 0.8s ease-in-out;
+}
+
+.cosmic-galaxy-content .item span {
+  transition: all 0.5s ease-in;
+  width: 0%;
+  background: transparent;
+  font-size: 1.2em;
+}
+
+.cosmic-galaxy-content .item--create {
+  transition: all 0.8s ease-in-out;
+  transform: translateX(100%);
+}
+
+.cosmic-galaxy-content .item--post {
+  transition: all 0.8s ease-in-out;
+  transform: translateX(80%);
+}
+
+.cosmic-galaxy-content .item--inspire {
+  transition: all 0.8s ease-in-out;
+  transform: translateX(20%);
+}
+
+.cosmic-galaxy-content .item--inspire svg {
+  box-shadow: 4px 4px 7px #47bfb4, -4px -4px 7px #67ffff;
+}
+
+.cosmic-galaxy-content svg {
+  border-radius: 1em;
+  width: 2.5em;
+  height: 2.5em;
+  padding: 0.5em;
+  background: #fafafa;
+  box-shadow: 4px 4px 7px #d5d5d5, -4px -4px 7px #ffffff;
+  fill: currentColor;
+}
+
+.cosmic-galaxy-content:hover .item {
+  padding-left: 2em;
+}
+
+.cosmic-galaxy-content:hover .item--create {
+  transform: translateX(20%);
+}
+
+.cosmic-galaxy-content:hover .item--post {
+  transform: translateX(20%);
+}
+
+.cosmic-galaxy-content:hover .item--inspire {
+  transform: translateX(20%);
+}
+
+.cosmic-galaxy-content .item:hover {
+  gap: 2em;
+  color: hsl(19, 78%, 65%);
+  cursor: pointer;
+}
+
+.cosmic-galaxy-content .item:hover span {
+  letter-spacing: 2px;
+  padding-inline: 1rem;
+  border-radius: 1em;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.cosmic-galaxy-content .item:hover svg {
+  box-shadow: inset 4px 4px 7px #d5d5d5, inset -4px -4px 7px #ffffff;
+}
+
+@keyframes blinkShadowsFilter {
+  0% {
+    filter: drop-shadow(23px 12px 28px hsla(218, 87%, 88%, 0.3)) drop-shadow(-20px -18px 28px hsla(171, 80%, 73%, 0.3));
+  }
+  25% {
+    filter: drop-shadow(23px -12px 24px hsla(218, 87%, 88%, 0.3)) drop-shadow(-20px 18px 24px hsla(171, 100%, 93%, 0.3));
+  }
+  50% {
+    filter: drop-shadow(23px 12px 30px hsla(218, 100%, 88%, 0.3)) drop-shadow(-20px 18px 30px hsla(171, 95%, 83%, 0.3));
+  }
+  75% {
+    filter: drop-shadow(20px -18px 25px hsla(218, 87%, 88%, 0.3)) drop-shadow(-20px 20px 25px hsla(171, 100%, 80%, 0.3));
+  }
+  to {
+    filter: drop-shadow(23px 12px 28px hsla(218, 87%, 88%, 0.3)) drop-shadow(-20px -18px 28px hsla(171, 80%, 73%, 0.3));
+  }
+}
+
+/* HTML Example for Card 3:
+<div class="cosmic-galaxy-card">
+  <div class="heading">Join the Open-Source <span>Galaxy</span></div>
+  <div class="cosmic-galaxy-content">
+    <div class="item item--create">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M24 12L18.3431 17.6569L16.9289 16.2426L21.1716 12L16.9289 7.75736L18.3431 6.34315L24 12ZM2.82843 12L7.07107 16.2426L5.65685 17.6569L0 12L5.65685 6.34315L7.07107 7.75736L2.82843 12ZM9.78845 21H7.66009L14.2116 3H16.3399L9.78845 21Z" />
+      </svg>
+      <span>Create</span>
+    </div>
+    <div class="item item--post">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M4.99958 12.9998C4.99958 7.91186 7.90222 3.56348 11.9996 1.81787C16.0969 3.56348 18.9996 7.91186 18.9996 12.9998C18.9996 13.8227 18.9236 14.6263 18.779 15.4026L20.7194 17.2352C20.8845 17.3911 20.9238 17.6388 20.815 17.8381L18.3196 22.4132C18.1873 22.6556 17.8836 22.7449 17.6412 22.6127C17.5993 22.5898 17.5608 22.5611 17.5271 22.5273L15.2925 20.2927C15.1049 20.1052 14.8506 19.9998 14.5854 19.9998H9.41379C9.14857 19.9998 8.89422 20.1052 8.70668 20.2927L6.47209 22.5273C6.27683 22.7226 5.96025 22.7226 5.76498 22.5273C5.73122 22.4935 5.70246 22.4551 5.67959 22.4132L3.18412 17.8381C3.07537 17.6388 3.11464 17.3911 3.27975 17.2352L5.22014 15.4026C5.07551 14.6263 4.99958 13.8227 4.99958 12.9998ZM6.47542 19.6955L7.29247 18.8785C7.85508 18.3159 8.61814 17.9998 9.41379 17.9998H14.5854C15.381 17.9998 16.1441 18.3159 16.7067 18.8785L17.5237 19.6955L18.5056 17.8954L17.4058 16.8566C16.9117 16.39 16.6884 15.7044 16.8128 15.0363C16.9366 14.3721 16.9996 13.691 16.9996 12.9998C16.9996 9.13025 15.0045 5.69953 11.9996 4.04021C8.99462 5.69953 6.99958 9.13025 6.99958 12.9998C6.99958 13.691 7.06255 14.3721 7.18631 15.0363C7.31078 15.7044 7.08746 16.39 6.59338 16.8566L5.49353 17.8954L6.47542 19.6955ZM11.9996 12.9998C10.895 12.9998 9.99958 12.1044 9.99958 10.9998C9.99958 9.89525 10.895 8.99982 11.9996 8.99982C13.1041 8.99982 13.9996 9.89525 13.9996 10.9998C13.9996 12.1044 13.1041 12.9998 11.9996 12.9998Z" />
+      </svg>
+      <span>Post</span>
+    </div>
+    <div class="item item--inspire">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M10.6144 17.7956C10.277 18.5682 9.20776 18.5682 8.8704 17.7956L7.99275 15.7854C7.21171 13.9966 5.80589 12.5726 4.0523 11.7942L1.63658 10.7219C.868536 10.381.868537 9.26368 1.63658 8.92276L3.97685 7.88394C5.77553 7.08552 7.20657 5.60881 7.97427 3.75892L8.8633 1.61673C9.19319.821767 10.2916.821765 10.6215 1.61673L11.5105 3.75894C12.2782 5.60881 13.7092 7.08552 15.5079 7.88394L17.8482 8.92276C18.6162 9.26368 18.6162 10.381 17.8482 10.7219L15.4325 11.7942C13.6789 12.5726 12.2731 13.9966 11.492 15.7854L10.6144 17.7956ZM4.53956 9.82234C6.8254 10.837 8.68402 12.5048 9.74238 14.7996 10.8008 12.5048 12.6594 10.837 14.9452 9.82234 12.6321 8.79557 10.7676 7.04647 9.74239 4.71088 8.71719 7.04648 6.85267 8.79557 4.53956 9.82234ZM19.4014 22.6899 19.6482 22.1242C20.0882 21.1156 20.8807 20.3125 21.8695 19.8732L22.6299 19.5353C23.0412 19.3526 23.0412 18.7549 22.6299 18.5722L21.9121 18.2532C20.8978 17.8026 20.0911 16.9698 19.6586 15.9269L19.4052 15.3156C19.2285 14.8896 18.6395 14.8896 18.4628 15.3156L18.2094 15.9269C17.777 16.9698 16.9703 17.8026 15.956 18.2532L15.2381 18.5722C14.8269 18.7549 14.8269 19.3526 15.2381 19.5353L15.9985 19.8732C16.9874 20.3125 17.7798 21.1156 18.2198 22.1242L18.4667 22.6899C18.6473 23.104 19.2207 23.104 19.4014 22.6899ZM18.3745 19.0469 18.937 18.4883 19.4878 19.0469 18.937 19.5898 18.3745 19.0469Z" />
+      </svg>
+      <span>Inspire</span>
+    </div>
+  </div>
+  <button>Code to Infinity!</button>
+</div>
+*/
+
+
+/* =============================================
+   CARD 4: SOCIAL MEDIA LINKS CARD
+   Features: Isometric hover, tooltips
+   ============================================= */
+
+.cosmic-social-card {
+  max-width: fit-content;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  gap: 1rem;
+  backdrop-filter: blur(15px);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.192),
+              inset 0 0 5px rgba(255, 255, 255, 0.274),
+              0 5px 5px rgba(0, 0, 0, 0.164);
+  transition: var(--transition-slow);
+}
+
+.cosmic-social-card:hover {
+  animation: ease-out 5s;
+  background: rgba(173, 173, 173, 0.05);
+}
+
+.cosmic-social-card ul {
+  padding: 1rem;
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 0;
+}
+
+.cosmic-social-card ul li {
+  cursor: pointer;
+  position: relative;
+}
+
+.cosmic-social-card .svg {
+  transition: all var(--transition-medium);
+  padding: 1rem;
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+  color: rgb(255, 174, 0);
+  fill: currentColor;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3),
+              inset 0 0 5px rgba(255, 255, 255, 0.5),
+              0 5px 5px rgba(0, 0, 0, 0.164);
+}
+
+.cosmic-social-card .text {
+  opacity: 0;
+  border-radius: 5px;
+  padding: 5px;
+  transition: all var(--transition-medium);
+  color: rgb(255, 174, 0);
+  background-color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  z-index: 9999;
+  box-shadow: -5px 0 1px rgba(153, 153, 153, 0.2),
+              -10px 0 1px rgba(153, 153, 153, 0.2),
+              inset 0 0 20px rgba(255, 255, 255, 0.3),
+              inset 0 0 5px rgba(255, 255, 255, 0.5),
+              0 5px 5px rgba(0, 0, 0, 0.082);
+  white-space: nowrap;
+}
+
+.cosmic-social-card .iso-pro {
+  transition: var(--transition-slow);
+}
+
+.cosmic-social-card .iso-pro:hover a > .svg {
+  transform: translate(15px, -15px);
+  border-radius: 100%;
+}
+
+.cosmic-social-card .iso-pro:hover .text {
+  opacity: 1;
+  transform: translate(25px, -2px) skew(-5deg);
+}
+
+.cosmic-social-card .iso-pro:hover .svg {
+  transform: translate(5px, -5px);
+}
+
+.cosmic-social-card .iso-pro span {
+  opacity: 0;
+  position: absolute;
+  color: #1877f2;
+  border-color: #1877f2;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3),
+              inset 0 0 5px rgba(255, 255, 255, 0.5),
+              0 5px 5px rgba(0, 0, 0, 0.164);
+  border-radius: 50%;
+  transition: all var(--transition-medium);
+  height: 60px;
+  width: 60px;
+  top: 0;
+  left: 0;
+}
+
+.cosmic-social-card .iso-pro:hover span {
+  opacity: 1;
+}
+
+.cosmic-social-card .iso-pro:hover span:nth-child(1) {
+  opacity: 0.2;
+}
+
+.cosmic-social-card .iso-pro:hover span:nth-child(2) {
+  opacity: 0.4;
+  transform: translate(5px, -5px);
+}
+
+.cosmic-social-card .iso-pro:hover span:nth-child(3) {
+  opacity: 0.6;
+  transform: translate(10px, -10px);
+}
+
+/* HTML Example for Card 4:
+<div class="cosmic-social-card">
+  <ul>
+    <li class="iso-pro">
+      <span></span>
+      <span></span>
+      <span></span>
+      <a href="#">
+        <svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+          <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+        </svg>
+      </a>
+      <div class="text">Facebook</div>
+    </li>
+    <li class="iso-pro">
+      <span></span>
+      <span></span>
+      <span></span>
+      <a href="#">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="svg">
+          <path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" />
+        </svg>
+      </a>
+      <div class="text">Twitter</div>
+    </li>
+    <li class="iso-pro">
+      <span></span>
+      <span></span>
+      <span></span>
+      <a href="#">
+        <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg" class="svg">
+          <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+        </svg>
+      </a>
+      <div class="text">Instagram</div>
+    </li>
+  </ul>
+</div>
+*/
+
+
+/* =============================================
+   CARD 5: BATTERY WIDGET WRAPPER
+   Features: SVG animation, metrics display
+   ============================================= */
+
+.battery-widget-wrapper {
+  position: relative;
+  transition: all var(--transition-medium);
+  cursor: pointer;
+  padding: 20px;
+}
+
+.battery-widget-wrapper svg path {
+  stroke: url(#animatedWhiteGradient);
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: drawPath 3s infinite;
+}
+
+@keyframes drawPath {
+  0% {
+    stroke-dashoffset: 1200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.battery-widget-wrapper:hover svg path {
+  stroke: url(#hoverGradient);
+  filter: drop-shadow(0 0 4px var(--card-primary-green));
+  animation: drawFast 1.5s forwards;
+}
+
+@keyframes drawFast {
+  from {
+    stroke-dashoffset: 1200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.battery-widget-wrapper:hover {
+  transform: scale(1.05) rotate(2deg);
+  transition: all var(--transition-medium);
+}
+
+.battery-card {
+  height: 205px;
+  width: 205px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -51%);
+  background: linear-gradient(
+    70deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.8) 22%,
+    rgba(0, 0, 0, 0.9) 43%,
+    rgba(0, 0, 0, 0.8) 71%,
+    rgba(0, 0, 0, 0.8) 99%
+  );
+  border: 1px solid var(--card-border-light);
+  color: var(--card-text-white);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  row-gap: 16px;
+  border-radius: 30px;
+  transition: var(--transition-medium);
+}
+
+.battery-widget-wrapper:hover .battery-card {
+  border: 1px solid var(--card-primary-green);
+}
+
+.battery-card:hover > div {
+  color: var(--card-primary-green);
+  transition: var(--transition-medium);
+}
+
+.other-metrics {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.battery-percentage {
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.battery-charged {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 4px;
+  width: 100%;
+}
+
+.battery-metrics {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.battery-metrics svg {
+  fill: currentColor;
+  width: 24px;
+  height: 16px;
+}
+
+.battery-status {
+  appearance: none;
+  flex: 1;
+}
+
+.battery-status::-webkit-progress-bar {
+  background-color: rgb(106, 99, 99);
+  border-radius: 4px;
+  height: 4px;
+}
+
+.battery-status::-webkit-progress-value {
+  background-color: var(--card-primary-green);
+  border-radius: 4px;
+}
+
+.battery-status::-moz-progress-bar {
+  background-color: var(--card-primary-green);
+  border-radius: 4px;
+  height: 4px;
+}
+
+/* HTML Example for Card 5:
+<div class="battery-widget-wrapper">
+  <svg width="274" height="274" viewBox="0 0 274 274" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="animatedWhiteGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="white" />
+        <stop offset="100%" stop-color="white" />
+      </linearGradient>
+      <linearGradient id="hoverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#4caf50" />
+        <stop offset="100%" stop-color="#4caf50" />
+      </linearGradient>
+      <filter id="filter0_d_41_4" x="0" y="0" width="274" height="274" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+        <feOffset />
+        <feGaussianBlur stdDeviation="7" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_41_4" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_41_4" result="shape" />
+      </filter>
+    </defs>
+    <g filter="url(#filter0_d_41_4)">
+      <path d="M17 103.076V53C17 33.1178 33.1178 17 53 17H221C240.882 17 257 33.1178 257 53V90.8505C257 108.871 243.676 124.116 225.817 126.527L48.183 150.511C30.3244 152.922 17 168.167 17 186.187V221C17 240.882 33.1178 257 53 257H221C240.882 257 257 240.882 257 221V178.013" stroke="url(#animatedWhiteGradient)" stroke-width="6" stroke-linecap="round" stroke-dasharray="1200" stroke-dashoffset="1200" />
+    </g>
+  </svg>
+  <div class="battery-card">
+    <div class="battery-percentage">69%</div>
+    <div class="battery-metrics">
+      <svg fill="currentColor" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+        <path d="m422-232 207-248H469l29-227-185 267h139l-30 208ZM320-80l40-280H160l360-520h80l-40 320h240L400-80h-80Zm151-390Z" />
+      </svg>
+      Charging
+    </div>
+    <div class="other-metrics">
+      <div class="battery-metrics">
+        <svg fill="currentColor" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+          <path d="M640-290h80v-380h-80v380Zm-480 80q-33 0-56.5-23.5T80-290v-380q0-33 23.5-56.5T160-750h560q33 0 56.5 23.5T800-670v90h20q25 0 42.5 17.5T880-520v80q0 26-17.5 43T820-380h-20v90q0 33-23.5 56.5T720-210H160Z" />
+        </svg>
+        96% Battery Health
+      </div>
+      <div class="battery-metrics">
+        <svg fill="currentColor" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+          <path d="M482-160q-134 0-228-93t-94-227v-7l-64 64-56-56 160-160 160 160-56 56-64-64v7q0 100 70.5 170T482-240q26 0 51-6t49-18l60 60q-38 22-78 33t-82 11Zm278-161L600-481l56-56 64 64v-7q0-100-70.5-170T478-720q-26 0-51 6t-49 18l-60-60q38-22 78-33t82-11q134 0 228 93t94 227v7l64-64 56 56-160 160Z" />
+        </svg>
+        215 Cycles
+      </div>
+    </div>
+    <div class="battery-charged">
+      <progress max="100" value="100" class="battery-status"></progress>
+      <progress max="100" value="100" class="battery-status"></progress>
+      <progress max="100" value="100" class="battery-status"></progress>
+      <progress max="100" value="100" class="battery-status"></progress>
+      <progress max="100" value="32" class="battery-status"></progress>
+      <progress max="100" value="0" class="battery-status"></progress>
+    </div>
+  </div>
+</div>
+*/
+
+
+/* =============================================
+   UTILITY CLASSES
+   ============================================= */
+
+/* Reset margins and padding for card elements */
+.cosmic-card *,
+.cosmic-profile-card *,
+.cosmic-galaxy-card *,
+.cosmic-social-card *,
+.battery-widget-wrapper * {
+  box-sizing: border-box;
+}
+
+/* Prevent text selection on interactive elements */
+.cosmic-card-item,
+.cosmic-profile-card__links svg,
+.cosmic-galaxy-content .item,
+.cosmic-social-card ul li {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Smooth scrolling for card containers */
+.cosmic-card,
+.cosmic-profile-card,
+.cosmic-galaxy-card,
+.cosmic-social-card {
+  scroll-behavior: smooth;
+}

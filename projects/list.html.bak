@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Projects - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="glass-medium glow-purple-soft mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" style="color: #fff; font-weight: 700;">
+                                <i class="fas fa-folder-open mr-2" style="color: #667eea;"></i>
+                                Projects
+                            </h1>
+                            <p class="mb-0" style="color: rgba(255,255,255,0.6);">
+                                Manage all your projects and track progress
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary" onclick="ProjectsPage.newProject()">
+                                <i class="fas fa-plus mr-2"></i>New Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ffc107;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">PLANNING</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-planning">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3dd598;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">ACTIVE</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-active">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #fc5a5a;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">ON HOLD</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-on_hold">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">COMPLETED</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-completed">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="projects-table-container"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const ProjectsPage = {
+            table: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadStats();
+                this.loadTable();
+            },
+
+            loadStats: function() {
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const stats = {
+                    planning: projects.filter(p => p.status === 'planning').length,
+                    active: projects.filter(p => p.status === 'active').length,
+                    on_hold: projects.filter(p => p.status === 'on_hold').length,
+                    completed: projects.filter(p => p.status === 'completed').length
+                };
+
+                $('#stat-planning').text(stats.planning);
+                $('#stat-active').text(stats.active);
+                $('#stat-on_hold').text(stats.on_hold);
+                $('#stat-completed').text(stats.completed);
+            },
+
+            loadTable: function() {
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                this.table = DataTable.create('projects-table-container', {
+                    title: 'All Projects',
+                    icon: 'fas fa-briefcase',
+                    data: projects,
+                    columns: [
+                        {
+                            field: 'name',
+                            label: 'Project Name',
+                            sortable: true,
+                            render: (value, row) => {
+                                const client = row.client_id ? DB.get(DB.COLLECTIONS.CONTACTS, row.client_id) : null;
+                                const tasks = DB.getProjectTasks(row.id);
+                                const completedTasks = tasks.filter(t => t.completed).length;
+
+                                return `
+                                    <div>
+                                        <div style="color: white; font-weight: 500; margin-bottom: 4px;">${value}</div>
+                                        ${client ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;"><i class="fas fa-user mr-1"></i>${client.name}</div>` : ''}
+                                        ${tasks.length > 0 ? `<div style="color: rgba(255,255,255,0.4); font-size: 11px; margin-top: 2px;"><i class="fas fa-tasks mr-1"></i>${completedTasks}/${tasks.length} tasks completed</div>` : ''}
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'status',
+                            label: 'Status',
+                            sortable: true,
+                            render: (value) => {
+                                const statuses = {
+                                    planning: { label: 'Planning', color: '#ffc107' },
+                                    active: { label: 'Active', color: '#3dd598' },
+                                    on_hold: { label: 'On Hold', color: '#fc5a5a' },
+                                    completed: { label: 'Completed', color: '#667eea' },
+                                    cancelled: { label: 'Cancelled', color: '#6c757d' }
+                                };
+                                const status = statuses[value] || statuses.planning;
+                                return `<span class="cell-badge" style="background: ${status.color}20; color: ${status.color};">${status.label}</span>`;
+                            }
+                        },
+                        {
+                            field: 'start_date',
+                            label: 'Start Date',
+                            sortable: true,
+                            render: (value) => value ? Utils.formatDate(value) : '-'
+                        },
+                        {
+                            field: 'end_date',
+                            label: 'End Date',
+                            sortable: true,
+                            render: (value) => {
+                                if (!value) return '-';
+                                const isOverdue = Utils.isPast(value);
+                                const color = isOverdue ? '#fc5a5a' : 'rgba(255,255,255,0.8)';
+                                return `<span style="color: ${color};">${Utils.formatDate(value)}</span>`;
+                            }
+                        },
+                        {
+                            field: 'budget',
+                            label: 'Budget',
+                            sortable: true,
+                            render: (value) => value ? Utils.formatCurrency(value) : '-'
+                        },
+                        {
+                            field: 'created_at',
+                            label: 'Created',
+                            sortable: true,
+                            render: (value) => Utils.formatRelativeTime(value)
+                        },
+                        {
+                            field: 'id',
+                            label: 'Actions',
+                            width: '220px',
+                            render: (value) => `
+                                <div class="cell-actions">
+                                    <button class="btn btn-sm btn-primary" onclick="ProjectsPage.viewProject('${value}')" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="ProjectsPage.editProject('${value}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="ProjectsPage.deleteProject('${value}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `
+                        }
+                    ],
+                    searchable: true,
+                    pagination: true,
+                    perPage: 10,
+                    emptyMessage: 'No projects found. Click "New Project" to create your first project.',
+                    onRowClick: (row) => this.viewProject(row.id)
+                });
+            },
+
+            newProject: function() {
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+
+                Modals.form({
+                    title: 'New Project',
+                    icon: 'fas fa-folder-plus',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Project Name', type: 'text', required: true, placeholder: 'Website Redesign' },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 3, placeholder: 'Complete website overhaul with new branding' },
+                        { name: 'client_id', label: 'Client', type: 'select', options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'status', label: 'Status', type: 'select', required: true, value: 'planning', options: [
+                            { value: 'planning', label: 'Planning' },
+                            { value: 'active', label: 'Active' },
+                            { value: 'on_hold', label: 'On Hold' },
+                            { value: 'completed', label: 'Completed' },
+                            { value: 'cancelled', label: 'Cancelled' }
+                        ]},
+                        { name: 'start_date', label: 'Start Date', type: 'date' },
+                        { name: 'end_date', label: 'End Date', type: 'date' },
+                        { name: 'budget', label: 'Budget', type: 'number', min: 0, step: 100, placeholder: '10000' },
+                        { name: 'color', label: 'Color', type: 'select', value: '#667eea', options: [
+                            { value: '#667eea', label: '🟣 Purple' },
+                            { value: '#3dd598', label: '🟢 Green' },
+                            { value: '#50b5ff', label: '🔵 Blue' },
+                            { value: '#ffc107', label: '🟡 Yellow' },
+                            { value: '#fc5a5a', label: '🔴 Red' },
+                            { value: '#764ba2', label: '🟣 Dark Purple' }
+                        ]}
+                    ],
+                    submitText: 'Create Project'
+                }).then(data => {
+                    DB.create(DB.COLLECTIONS.PROJECTS, data);
+                    Utils.showToast('Project created successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.PROJECTS));
+                }).catch(() => {});
+            },
+
+            viewProject: function(id) {
+                const project = DB.getProjectWithTasks(id);
+                if (!project) return;
+
+                const client = project.client_id ? DB.get(DB.COLLECTIONS.CONTACTS, project.client_id) : null;
+                const completedTasks = project.tasks.filter(t => t.completed).length;
+                const progress = project.tasks.length > 0 ? Math.round((completedTasks / project.tasks.length) * 100) : 0;
+
+                const content = `
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Status</h6>
+                            <p style="color: white; margin: 0;">${Utils.capitalize(project.status.replace('_', ' '))}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Client</h6>
+                            <p style="color: white; margin: 0;">${client ? client.name : 'No client assigned'}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Start Date</h6>
+                            <p style="color: white; margin: 0;">${project.start_date ? Utils.formatDate(project.start_date) : 'Not set'}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">End Date</h6>
+                            <p style="color: white; margin: 0;">${project.end_date ? Utils.formatDate(project.end_date) : 'Not set'}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Budget</h6>
+                            <p style="color: white; margin: 0;">${project.budget ? Utils.formatCurrency(project.budget) : 'Not set'}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Progress</h6>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${progress}%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                                </div>
+                                <span style="color: white; font-weight: 600;">${progress}%</span>
+                            </div>
+                        </div>
+                        ${project.description ? `
+                            <div class="col-12 mb-3">
+                                <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Description</h6>
+                                <p style="color: rgba(255,255,255,0.8); margin: 0;">${project.description}</p>
+                            </div>
+                        ` : ''}
+                        <div class="col-12">
+                            <h6 style="color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; margin-bottom: 10px;">Tasks (${project.tasks.length})</h6>
+                            ${project.tasks.length > 0 ? `
+                                <div style="max-height: 200px; overflow-y: auto;">
+                                    ${project.tasks.map(task => `
+                                        <div style="padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px;">
+                                            <div style="display: flex; align-items: center; justify-content: between;">
+                                                <div style="flex: 1;">
+                                                    <div style="color: ${task.completed ? 'rgba(255,255,255,0.5)' : 'white'}; ${task.completed ? 'text-decoration: line-through;' : ''}">${task.title}</div>
+                                                </div>
+                                                <div>
+                                                    ${task.completed ? '<i class="fas fa-check-circle" style="color: #3dd598;"></i>' : '<i class="far fa-circle" style="color: rgba(255,255,255,0.3);"></i>'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 20px;">No tasks yet</p>'}
+                        </div>
+                    </div>
+                `;
+
+                Modals.show({
+                    title: project.name,
+                    icon: 'fas fa-folder-open',
+                    size: 'lg',
+                    body: content,
+                    footer: `
+                        <button class="btn btn-secondary" onclick="Modals.closeTopModal()">Close</button>
+                        <button class="btn btn-primary" onclick="Modals.closeTopModal(); ProjectsPage.editProject('${id}')">
+                            <i class="fas fa-edit mr-2"></i>Edit
+                        </button>
+                    `
+                });
+            },
+
+            editProject: function(id) {
+                const project = DB.get(DB.COLLECTIONS.PROJECTS, id);
+                if (!project) return;
+
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+
+                Modals.form({
+                    title: 'Edit Project',
+                    icon: 'fas fa-folder',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Project Name', type: 'text', required: true, value: project.name },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 3, value: project.description },
+                        { name: 'client_id', label: 'Client', type: 'select', value: project.client_id, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'status', label: 'Status', type: 'select', required: true, value: project.status, options: [
+                            { value: 'planning', label: 'Planning' },
+                            { value: 'active', label: 'Active' },
+                            { value: 'on_hold', label: 'On Hold' },
+                            { value: 'completed', label: 'Completed' },
+                            { value: 'cancelled', label: 'Cancelled' }
+                        ]},
+                        { name: 'start_date', label: 'Start Date', type: 'date', value: project.start_date },
+                        { name: 'end_date', label: 'End Date', type: 'date', value: project.end_date },
+                        { name: 'budget', label: 'Budget', type: 'number', min: 0, step: 100, value: project.budget },
+                        { name: 'color', label: 'Color', type: 'select', value: project.color || '#667eea', options: [
+                            { value: '#667eea', label: '🟣 Purple' },
+                            { value: '#3dd598', label: '🟢 Green' },
+                            { value: '#50b5ff', label: '🔵 Blue' },
+                            { value: '#ffc107', label: '🟡 Yellow' },
+                            { value: '#fc5a5a', label: '🔴 Red' },
+                            { value: '#764ba2', label: '🟣 Dark Purple' }
+                        ]}
+                    ],
+                    submitText: 'Update Project'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.PROJECTS, id, data);
+                    Utils.showToast('Project updated successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.PROJECTS));
+                }).catch(() => {});
+            },
+
+            deleteProject: async function(id) {
+                const project = DB.get(DB.COLLECTIONS.PROJECTS, id);
+                if (!project) return;
+
+                const tasks = DB.getProjectTasks(id);
+                const warningMsg = tasks.length > 0
+                    ? `This project has ${tasks.length} task(s). Deleting the project will NOT delete the tasks. Continue?`
+                    : `Are you sure you want to delete project "${project.name}"?`;
+
+                const confirmed = await Utils.confirmDelete(warningMsg);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.PROJECTS, id);
+                    Utils.showToast('Project deleted successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.PROJECTS));
+                }
+            }
+        };
+
+        $(document).ready(() => ProjectsPage.init());
+    </script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Financial Reports - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="glass-medium glow-purple-soft mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" style="color: #fff; font-weight: 700;">
+                                <i class="fas fa-chart-line mr-2" style="color: #667eea;"></i>
+                                Financial Reports
+                            </h1>
+                            <p class="mb-0" style="color: rgba(255,255,255,0.6);">
+                                View financial performance and insights
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <select class="form-control" id="report-period" onchange="ReportsPage.changePeriod(this.value)" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year" selected>This Year</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3dd598;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">REVENUE</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-revenue">$0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #fc5a5a;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">EXPENSES</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-expenses">$0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">PROFIT</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-profit">$0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ffc107;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">OUTSTANDING</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-outstanding">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-lg-8 mb-4">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-chart-bar mr-2" style="color: #667eea;"></i>
+                                Revenue vs Expenses
+                            </h5>
+                            <canvas id="revenue-expense-chart" height="100"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-chart-pie mr-2" style="color: #667eea;"></i>
+                                Expense Categories
+                            </h5>
+                            <canvas id="expense-categories-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Status & Top Clients -->
+                <div class="row mb-4">
+                    <div class="col-lg-6 mb-4">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-file-invoice mr-2" style="color: #667eea;"></i>
+                                Invoice Status
+                            </h5>
+                            <div id="invoice-status-list"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-users mr-2" style="color: #667eea;"></i>
+                                Top Clients
+                            </h5>
+                            <div id="top-clients-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Profitability -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-project-diagram mr-2" style="color: #667eea;"></i>
+                                Project Profitability
+                            </h5>
+                            <div id="project-profitability-table"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <script>
+        const ReportsPage = {
+            period: 'year',
+            revenueExpenseChart: null,
+            expenseCategoriesChart: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadData();
+            },
+
+            changePeriod: function(period) {
+                this.period = period;
+                this.loadData();
+            },
+
+            getDateFilter: function() {
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const currentMonth = now.getMonth();
+                const currentQuarter = Math.floor(currentMonth / 3);
+
+                switch(this.period) {
+                    case 'month':
+                        return (date) => {
+                            const d = new Date(date);
+                            return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+                        };
+                    case 'quarter':
+                        return (date) => {
+                            const d = new Date(date);
+                            const quarter = Math.floor(d.getMonth() / 3);
+                            return quarter === currentQuarter && d.getFullYear() === currentYear;
+                        };
+                    case 'year':
+                        return (date) => {
+                            const d = new Date(date);
+                            return d.getFullYear() === currentYear;
+                        };
+                    case 'all':
+                        return () => true;
+                    default:
+                        return () => true;
+                }
+            },
+
+            loadData: function() {
+                this.loadStats();
+                this.loadRevenueExpenseChart();
+                this.loadExpenseCategoriesChart();
+                this.loadInvoiceStatus();
+                this.loadTopClients();
+                this.loadProjectProfitability();
+            },
+
+            loadStats: function() {
+                const filter = this.getDateFilter();
+                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+
+                const revenue = invoices
+                    .filter(i => i.status === 'paid' && filter(i.issue_date))
+                    .reduce((sum, i) => sum + (i.total || 0), 0);
+
+                const expenseTotal = expenses
+                    .filter(e => filter(e.date))
+                    .reduce((sum, e) => sum + (e.amount || 0), 0);
+
+                const profit = revenue - expenseTotal;
+
+                const outstanding = invoices
+                    .filter(i => i.status === 'sent')
+                    .reduce((sum, i) => sum + (i.total || 0), 0);
+
+                $('#stat-revenue').text(Utils.formatCurrency(revenue));
+                $('#stat-expenses').text(Utils.formatCurrency(expenseTotal));
+                $('#stat-profit').text(Utils.formatCurrency(profit)).css('color', profit >= 0 ? '#3dd598' : '#fc5a5a');
+                $('#stat-outstanding').text(Utils.formatCurrency(outstanding));
+            },
+
+            loadRevenueExpenseChart: function() {
+                const filter = this.getDateFilter();
+                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+
+                // Get last 6 months
+                const labels = [];
+                const revenueData = [];
+                const expenseData = [];
+
+                for (let i = 5; i >= 0; i--) {
+                    const date = new Date();
+                    date.setMonth(date.getMonth() - i);
+                    const month = date.getMonth();
+                    const year = date.getFullYear();
+
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }));
+
+                    const monthRevenue = invoices
+                        .filter(inv => {
+                            const invDate = new Date(inv.issue_date);
+                            return inv.status === 'paid' && invDate.getMonth() === month && invDate.getFullYear() === year && filter(inv.issue_date);
+                        })
+                        .reduce((sum, inv) => sum + (inv.total || 0), 0);
+
+                    const monthExpenses = expenses
+                        .filter(exp => {
+                            const expDate = new Date(exp.date);
+                            return expDate.getMonth() === month && expDate.getFullYear() === year && filter(exp.date);
+                        })
+                        .reduce((sum, exp) => sum + (exp.amount || 0), 0);
+
+                    revenueData.push(monthRevenue);
+                    expenseData.push(monthExpenses);
+                }
+
+                if (this.revenueExpenseChart) {
+                    this.revenueExpenseChart.destroy();
+                }
+
+                const ctx = document.getElementById('revenue-expense-chart').getContext('2d');
+                this.revenueExpenseChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Revenue',
+                                data: revenueData,
+                                backgroundColor: 'rgba(61, 213, 152, 0.8)',
+                                borderColor: 'rgba(61, 213, 152, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Expenses',
+                                data: expenseData,
+                                backgroundColor: 'rgba(252, 90, 90, 0.8)',
+                                borderColor: 'rgba(252, 90, 90, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                labels: { color: 'rgba(255,255,255,0.8)' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: {
+                                    color: 'rgba(255,255,255,0.6)',
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString();
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: 'rgba(255,255,255,0.6)' }
+                            }
+                        }
+                    }
+                });
+            },
+
+            loadExpenseCategoriesChart: function() {
+                const filter = this.getDateFilter();
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES).filter(e => filter(e.date));
+                const categories = DB.getAll(DB.COLLECTIONS.CATEGORIES).filter(c => c.type === 'expense');
+
+                const categoryTotals = {};
+                categories.forEach(cat => {
+                    categoryTotals[cat.name] = expenses
+                        .filter(e => e.category_id === cat.id)
+                        .reduce((sum, e) => sum + (e.amount || 0), 0);
+                });
+
+                // Add uncategorized
+                const uncategorized = expenses
+                    .filter(e => !e.category_id)
+                    .reduce((sum, e) => sum + (e.amount || 0), 0);
+                if (uncategorized > 0) {
+                    categoryTotals['Uncategorized'] = uncategorized;
+                }
+
+                const labels = Object.keys(categoryTotals).filter(key => categoryTotals[key] > 0);
+                const data = labels.map(label => categoryTotals[label]);
+
+                if (this.expenseCategoriesChart) {
+                    this.expenseCategoriesChart.destroy();
+                }
+
+                const ctx = document.getElementById('expense-categories-chart').getContext('2d');
+                this.expenseCategoriesChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                'rgba(102, 126, 234, 0.8)',
+                                'rgba(80, 181, 255, 0.8)',
+                                'rgba(255, 193, 7, 0.8)',
+                                'rgba(252, 90, 90, 0.8)',
+                                'rgba(61, 213, 152, 0.8)',
+                                'rgba(118, 75, 162, 0.8)'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: 'rgba(255,255,255,0.8)', padding: 15 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + Utils.formatCurrency(context.parsed);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+
+            loadInvoiceStatus: function() {
+                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const statuses = {
+                    draft: { count: 0, total: 0, color: '#ffc107', label: 'Draft' },
+                    sent: { count: 0, total: 0, color: '#50b5ff', label: 'Sent' },
+                    paid: { count: 0, total: 0, color: '#3dd598', label: 'Paid' },
+                    overdue: { count: 0, total: 0, color: '#fc5a5a', label: 'Overdue' }
+                };
+
+                const now = new Date();
+                invoices.forEach(inv => {
+                    const isOverdue = inv.status === 'sent' && inv.due_date && new Date(inv.due_date) < now;
+                    const status = isOverdue ? 'overdue' : inv.status;
+
+                    if (statuses[status]) {
+                        statuses[status].count++;
+                        statuses[status].total += inv.total || 0;
+                    }
+                });
+
+                const html = Object.keys(statuses).map(key => {
+                    const s = statuses[key];
+                    return `
+                        <div class="d-flex justify-content-between align-items-center mb-3" style="padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <div>
+                                <span class="cell-badge" style="background: ${s.color}20; color: ${s.color};">${s.label}</span>
+                                <span style="color: rgba(255,255,255,0.6); font-size: 14px; margin-left: 8px;">${s.count} invoice${s.count !== 1 ? 's' : ''}</span>
+                            </div>
+                            <div style="color: white; font-weight: 600;">${Utils.formatCurrency(s.total)}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                $('#invoice-status-list').html(html || '<div style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No invoices found</div>');
+            },
+
+            loadTopClients: function() {
+                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES).filter(i => i.status === 'paid');
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+
+                const clientTotals = {};
+                invoices.forEach(inv => {
+                    if (inv.contact_id) {
+                        clientTotals[inv.contact_id] = (clientTotals[inv.contact_id] || 0) + (inv.total || 0);
+                    }
+                });
+
+                const topClients = Object.entries(clientTotals)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5);
+
+                const html = topClients.map(([contactId, total], index) => {
+                    const contact = contacts.find(c => c.id === contactId);
+                    if (!contact) return '';
+
+                    return `
+                        <div class="d-flex justify-content-between align-items-center mb-3" style="padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <div class="d-flex align-items-center">
+                                <div style="width: 30px; height: 30px; background: rgba(102, 126, 234, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <span style="color: #667eea; font-weight: 700;">${index + 1}</span>
+                                </div>
+                                <div>
+                                    <div style="color: white; font-weight: 500;">${contact.name}</div>
+                                    ${contact.company ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;">${contact.company}</div>` : ''}
+                                </div>
+                            </div>
+                            <div style="color: #3dd598; font-weight: 600;">${Utils.formatCurrency(total)}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                $('#top-clients-list').html(html || '<div style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No client data available</div>');
+            },
+
+            loadProjectProfitability: function() {
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+                const timeEntries = DB.getAll(DB.COLLECTIONS.TIME_ENTRIES);
+
+                const projectData = projects.map(project => {
+                    const projectInvoices = invoices.filter(i => i.project_id === project.id && i.status === 'paid');
+                    const projectExpenses = expenses.filter(e => e.project_id === project.id);
+                    const projectTime = timeEntries.filter(t => t.project_id === project.id);
+
+                    const revenue = projectInvoices.reduce((sum, i) => sum + (i.total || 0), 0);
+                    const cost = projectExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+                    const hours = projectTime.reduce((sum, t) => sum + (t.hours || 0), 0);
+                    const profit = revenue - cost;
+                    const margin = revenue > 0 ? ((profit / revenue) * 100) : 0;
+
+                    return {
+                        name: project.name,
+                        revenue,
+                        cost,
+                        profit,
+                        margin,
+                        hours,
+                        status: project.status
+                    };
+                }).filter(p => p.revenue > 0 || p.cost > 0);
+
+                if (projectData.length === 0) {
+                    $('#project-profitability-table').html('<div style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No project financial data available</div>');
+                    return;
+                }
+
+                const html = `
+                    <table class="table" style="color: rgba(255,255,255,0.8);">
+                        <thead>
+                            <tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">
+                                <th>Project</th>
+                                <th style="text-align: right;">Revenue</th>
+                                <th style="text-align: right;">Costs</th>
+                                <th style="text-align: right;">Profit</th>
+                                <th style="text-align: right;">Margin</th>
+                                <th style="text-align: right;">Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${projectData.map(p => `
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="color: white; font-weight: 500;">${p.name}</td>
+                                    <td style="text-align: right; color: #3dd598;">${Utils.formatCurrency(p.revenue)}</td>
+                                    <td style="text-align: right; color: #fc5a5a;">${Utils.formatCurrency(p.cost)}</td>
+                                    <td style="text-align: right; color: ${p.profit >= 0 ? '#3dd598' : '#fc5a5a'}; font-weight: 600;">${Utils.formatCurrency(p.profit)}</td>
+                                    <td style="text-align: right; color: ${p.margin >= 0 ? '#3dd598' : '#fc5a5a'};">${p.margin.toFixed(1)}%</td>
+                                    <td style="text-align: right; color: rgba(255,255,255,0.8);">${p.hours.toFixed(1)}h</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                $('#project-profitability-table').html(html);
+            }
+        };
+
+        $(document).ready(() => ReportsPage.init());
+    </script>
+</body>
+</html>

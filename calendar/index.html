@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Calendar - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+
+    <style>
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .calendar-day-header {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 12px;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .calendar-day {
+            background: rgba(255,255,255,0.02);
+            min-height: 100px;
+            padding: 8px;
+            cursor: default;
+            position: relative;
+        }
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+        .calendar-day.today {
+            background: rgba(102, 126, 234, 0.15);
+            border: 2px solid #667eea;
+        }
+        .calendar-day-number {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .calendar-event {
+            background: rgba(102, 126, 234, 0.3);
+            border-left: 3px solid #667eea;
+            padding: 4px 6px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: white;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .calendar-event.appointment {
+            background: rgba(61, 213, 152, 0.3);
+            border-left-color: #3dd598;
+        }
+        .appointment-slot {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid #3dd598;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .appointment-slot:hover {
+            background: rgba(61, 213, 152, 0.1);
+        }
+        .appointment-slot.booked {
+            border-left-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* KILL ALL HOVER EFFECTS ON CALENDAR CARD */
+        #calendar-container,
+        #calendar-container:hover {
+            transition: none !important;
+            transform: none !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+    </style>
+    <!-- Modern Card Styles -->
+    <link href="../css/modern-cards.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="modern-card mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="modern-card-shine"></div>
+                    <div class="modern-card-glow"></div>
+                    <div class="modern-card-content">
+                <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h1 class="h2 mb-2" class="modern-card-title" style="font-size: 1.75rem;">
+                                <i class="fas fa-calendar-alt mr-2" style="color: #667eea;"></i>
+                                Calendar
+                            </h1>
+                            <p class="mb-0" class="modern-card-subtitle">
+                                Manage events and appointments
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button class="btn btn-secondary mr-2" onclick="CalendarPage.previousMonth()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-secondary mr-2" onclick="CalendarPage.today()">
+                                Today
+                            </button>
+                            <button class="btn btn-secondary mr-3" onclick="CalendarPage.nextMonth()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <button class="btn btn-primary" onclick="CalendarPage.newEvent()">
+                                <i class="fas fa-plus mr-2"></i>New Event
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Month Display -->
+                <div class="glass-medium mb-4" style="padding: 1.5rem; border-radius: 16px;">
+                    <h3 style="color: white; text-align: center; margin: 0;" id="current-month"></h3>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div id="calendar-container" class="glass-medium no-hover mb-4" style="padding: 1.5rem; border-radius: 16px; transition: none !important; transform: none !important;">
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Calendar will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Events & Appointments -->
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-calendar-check mr-2" style="color: #667eea;"></i>
+                                Upcoming Events
+                            </h5>
+                            <div id="upcoming-events-list"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 1.5rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-clock mr-2" style="color: #3dd598;"></i>
+                                Today's Appointments
+                            </h5>
+                            <div id="today-appointments-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const CalendarPage = {
+            currentDate: new Date(),
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.renderCalendar();
+                this.loadUpcomingEvents();
+                this.loadTodayAppointments();
+            },
+
+            renderCalendar: function() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+
+                // Update month display
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                $('#current-month').text(`${monthNames[month]} ${year}`);
+
+                // Get first day of month and number of days
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+                // Get events for the month
+                const events = DB.getAll(DB.COLLECTIONS.EVENTS);
+                const appointments = DB.getAll(DB.COLLECTIONS.APPOINTMENTS);
+
+                // Build calendar grid
+                let html = '';
+
+                // Day headers
+                const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                dayHeaders.forEach(day => {
+                    html += `<div class="calendar-day-header">${day}</div>`;
+                });
+
+                // Previous month days
+                for (let i = firstDay - 1; i >= 0; i--) {
+                    const day = daysInPrevMonth - i;
+                    html += `<div class="calendar-day other-month"><div class="calendar-day-number">${day}</div></div>`;
+                }
+
+                // Current month days
+                const today = new Date();
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateStr = date.toISOString().split('T')[0];
+                    const isToday = today.toDateString() === date.toDateString();
+
+                    // Get events for this day
+                    const dayEvents = events.filter(e => e.date === dateStr);
+                    const dayAppointments = appointments.filter(a => a.date === dateStr);
+
+                    let eventsHtml = '';
+                    dayEvents.slice(0, 2).forEach(event => {
+                        eventsHtml += `<div class="calendar-event" onclick="CalendarPage.viewEvent('${event.id}')" title="${event.title}">${event.title}</div>`;
+                    });
+                    dayAppointments.slice(0, 1).forEach(appt => {
+                        const contact = appt.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, appt.contact_id) : null;
+                        const label = contact ? contact.name : 'Appointment';
+                        eventsHtml += `<div class="calendar-event appointment" onclick="CalendarPage.viewAppointment('${appt.id}')" title="${label}">${label}</div>`;
+                    });
+
+                    if (dayEvents.length + dayAppointments.length > 3) {
+                        eventsHtml += `<div style="color: rgba(255,255,255,0.5); font-size: 10px;">+${dayEvents.length + dayAppointments.length - 3} more</div>`;
+                    }
+
+                    html += `
+                        <div class="calendar-day ${isToday ? 'today' : ''}" onclick="CalendarPage.dayClick('${dateStr}')">
+                            <div class="calendar-day-number">${day}</div>
+                            ${eventsHtml}
+                        </div>
+                    `;
+                }
+
+                // Next month days
+                const remainingDays = 42 - (firstDay + daysInMonth);
+                for (let day = 1; day <= remainingDays; day++) {
+                    html += `<div class="calendar-day other-month"><div class="calendar-day-number">${day}</div></div>`;
+                }
+
+                $('#calendar-grid').html(html);
+            },
+
+            today: function() {
+                this.currentDate = new Date();
+                this.renderCalendar();
+            },
+
+            previousMonth: function() {
+                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                this.renderCalendar();
+            },
+
+            nextMonth: function() {
+                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                this.renderCalendar();
+            },
+
+            dayClick: function(dateStr) {
+                Modals.custom({
+                    title: `${Utils.formatDate(dateStr)} - Quick Actions`,
+                    content: '<div style="color: rgba(255,255,255,0.7);">What would you like to create?</div>',
+                    size: 'md',
+                    buttons: [
+                        {
+                            text: 'New Event',
+                            class: 'btn-primary',
+                            onClick: (modal) => {
+                                modal.close();
+                                this.newEvent(dateStr);
+                            }
+                        },
+                        {
+                            text: 'New Appointment',
+                            class: 'btn-success',
+                            onClick: (modal) => {
+                                modal.close();
+                                this.newAppointment(dateStr);
+                            }
+                        },
+                        {
+                            text: 'Cancel',
+                            class: 'btn-secondary',
+                            onClick: (modal) => modal.close()
+                        }
+                    ]
+                });
+            },
+
+            newEvent: function(defaultDate) {
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'New Event',
+                    icon: 'fas fa-calendar-plus',
+                    size: 'lg',
+                    fields: [
+                        { name: 'title', label: 'Event Title', type: 'text', required: true, placeholder: 'Team Meeting' },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+                        { name: 'date', label: 'Date', type: 'date', required: true, value: defaultDate || new Date().toISOString().split('T')[0] },
+                        { name: 'start_time', label: 'Start Time', type: 'time', required: true, value: '09:00' },
+                        { name: 'end_time', label: 'End Time', type: 'time', value: '10:00' },
+                        { name: 'project_id', label: 'Project', type: 'select', options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'location', label: 'Location', type: 'text', placeholder: 'Office, Zoom, etc.' },
+                        { name: 'color', label: 'Color', type: 'select', value: '#667eea', options: [
+                            { value: '#667eea', label: 'Purple' },
+                            { value: '#3dd598', label: 'Green' },
+                            { value: '#50b5ff', label: 'Blue' },
+                            { value: '#ffc107', label: 'Yellow' },
+                            { value: '#fc5a5a', label: 'Red' }
+                        ]},
+                        { name: 'all_day', label: 'All Day Event', type: 'checkbox', checkboxLabel: 'This is an all-day event' }
+                    ],
+                    submitText: 'Create Event'
+                }).then(data => {
+                    DB.create(DB.COLLECTIONS.EVENTS, data);
+                    Utils.showToast('Event created successfully!', 'success');
+                    this.renderCalendar();
+                    this.loadUpcomingEvents();
+                }).catch(() => {});
+            },
+
+            viewEvent: function(id) {
+                const event = DB.get(DB.COLLECTIONS.EVENTS, id);
+                if (!event) return;
+
+                const project = event.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, event.project_id) : null;
+
+                const content = `
+                    <div class="modern-card" style="padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: white; margin-bottom: 1rem;">${event.title}</h4>
+                        ${event.description ? `<p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">${event.description}</p>` : ''}
+                        <div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+                            <i class="fas fa-calendar mr-2"></i>${Utils.formatDate(event.date)}
+                        </div>
+                        ${!event.all_day && event.start_time ? `
+                            <div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+                                <i class="fas fa-clock mr-2"></i>${event.start_time}${event.end_time ? ' - ' + event.end_time : ''}
+                            </div>
+                        ` : ''}
+                        ${event.location ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><i class="fas fa-map-marker-alt mr-2"></i>${event.location}</div>` : ''}
+                        ${project ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><i class="fas fa-folder mr-2"></i>${project.name}</div>` : ''}
+                        ${event.all_day ? `<div style="color: #667eea; margin-top: 12px;"><i class="fas fa-sun mr-2"></i>All Day Event</div>` : ''}
+                    </div>
+                `;
+
+                Modals.custom({
+                    title: 'Event Details',
+                    content: content,
+                    size: 'lg',
+                    buttons: [
+                        {
+                            text: 'Edit',
+                            class: 'btn-secondary',
+                            onClick: (modal) => {
+                                modal.close();
+                                this.editEvent(id);
+                            }
+                        },
+                        {
+                            text: 'Delete',
+                            class: 'btn-danger',
+                            onClick: (modal) => {
+                                modal.close();
+                                this.deleteEvent(id);
+                            }
+                        },
+                        {
+                            text: 'Close',
+                            class: 'btn-primary',
+                            onClick: (modal) => modal.close()
+                        }
+                    ]
+                });
+            },
+
+            editEvent: function(id) {
+                const event = DB.get(DB.COLLECTIONS.EVENTS, id);
+                if (!event) return;
+
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'Edit Event',
+                    icon: 'fas fa-edit',
+                    size: 'lg',
+                    fields: [
+                        { name: 'title', label: 'Event Title', type: 'text', required: true, value: event.title },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 3, value: event.description },
+                        { name: 'date', label: 'Date', type: 'date', required: true, value: event.date },
+                        { name: 'start_time', label: 'Start Time', type: 'time', required: true, value: event.start_time },
+                        { name: 'end_time', label: 'End Time', type: 'time', value: event.end_time },
+                        { name: 'project_id', label: 'Project', type: 'select', value: event.project_id, options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'location', label: 'Location', type: 'text', value: event.location },
+                        { name: 'color', label: 'Color', type: 'select', value: event.color || '#667eea', options: [
+                            { value: '#667eea', label: 'Purple' },
+                            { value: '#3dd598', label: 'Green' },
+                            { value: '#50b5ff', label: 'Blue' },
+                            { value: '#ffc107', label: 'Yellow' },
+                            { value: '#fc5a5a', label: 'Red' }
+                        ]},
+                        { name: 'all_day', label: 'All Day Event', type: 'checkbox', checkboxLabel: 'This is an all-day event', value: event.all_day }
+                    ],
+                    submitText: 'Update Event'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.EVENTS, id, data);
+                    Utils.showToast('Event updated successfully!', 'success');
+                    this.renderCalendar();
+                    this.loadUpcomingEvents();
+                }).catch(() => {});
+            },
+
+            deleteEvent: async function(id) {
+                const event = DB.get(DB.COLLECTIONS.EVENTS, id);
+                if (!event) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete event "${event.title}"?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.EVENTS, id);
+                    Utils.showToast('Event deleted successfully!', 'success');
+                    this.renderCalendar();
+                    this.loadUpcomingEvents();
+                }
+            },
+
+            newAppointment: function(defaultDate) {
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+
+                Modals.form({
+                    title: 'New Appointment',
+                    icon: 'fas fa-user-clock',
+                    size: 'lg',
+                    fields: [
+                        { name: 'contact_id', label: 'Client', type: 'select', required: true, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'title', label: 'Purpose', type: 'text', required: true, placeholder: 'Initial Consultation' },
+                        { name: 'date', label: 'Date', type: 'date', required: true, value: defaultDate || new Date().toISOString().split('T')[0] },
+                        { name: 'time', label: 'Time', type: 'time', required: true, value: '10:00' },
+                        { name: 'duration', label: 'Duration (minutes)', type: 'number', required: true, value: 60, min: 15, step: 15 },
+                        { name: 'location', label: 'Location', type: 'text', placeholder: 'Office, Zoom link, etc.' },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 3 },
+                        { name: 'status', label: 'Status', type: 'select', value: 'scheduled', options: [
+                            { value: 'scheduled', label: 'Scheduled' },
+                            { value: 'confirmed', label: 'Confirmed' },
+                            { value: 'completed', label: 'Completed' },
+                            { value: 'cancelled', label: 'Cancelled' }
+                        ]}
+                    ],
+                    submitText: 'Create Appointment'
+                }).then(data => {
+                    DB.create(DB.COLLECTIONS.APPOINTMENTS, data);
+                    Utils.showToast('Appointment created successfully!', 'success');
+                    this.renderCalendar();
+                    this.loadTodayAppointments();
+                }).catch(() => {});
+            },
+
+            viewAppointment: function(id) {
+                const appointment = DB.get(DB.COLLECTIONS.APPOINTMENTS, id);
+                if (!appointment) return;
+
+                const contact = appointment.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, appointment.contact_id) : null;
+
+                const statuses = {
+                    scheduled: { label: 'Scheduled', color: '#50b5ff' },
+                    confirmed: { label: 'Confirmed', color: '#3dd598' },
+                    completed: { label: 'Completed', color: '#6c757d' },
+                    cancelled: { label: 'Cancelled', color: '#fc5a5a' }
+                };
+                const status = statuses[appointment.status] || statuses.scheduled;
+
+                const content = `
+                    <div class="modern-card" style="padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: white; margin-bottom: 1rem;">${appointment.title}</h4>
+                        ${contact ? `
+                            <div style="margin-bottom: 1rem;">
+                                <div style="color: white; font-weight: 500;">${contact.name}</div>
+                                ${contact.email ? `<div style="color: rgba(255,255,255,0.6); font-size: 14px;"><i class="fas fa-envelope mr-2"></i>${contact.email}</div>` : ''}
+                                ${contact.phone ? `<div style="color: rgba(255,255,255,0.6); font-size: 14px;"><i class="fas fa-phone mr-2"></i>${contact.phone}</div>` : ''}
+                            </div>
+                        ` : ''}
+                        <div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+                            <i class="fas fa-calendar mr-2"></i>${Utils.formatDate(appointment.date)}
+                        </div>
+                        <div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+                            <i class="fas fa-clock mr-2"></i>${appointment.time} (${appointment.duration} min)
+                        </div>
+                        ${appointment.location ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><i class="fas fa-map-marker-alt mr-2"></i>${appointment.location}</div>` : ''}
+                        <div style="margin-top: 12px;">
+                            <span class="cell-badge" style="background: ${status.color}20; color: ${status.color};">${status.label}</span>
+                        </div>
+                        ${appointment.notes ? `<div style="color: rgba(255,255,255,0.7); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">${appointment.notes}</div>` : ''}
+                    </div>
+                `;
+
+                Modals.custom({
+                    title: 'Appointment Details',
+                    content: content,
+                    size: 'lg',
+                    buttons: [
+                        {
+                            text: 'Edit',
+                            class: 'btn-secondary',
+                            onClick: (modal) => {
+                                modal.close();
+                                this.editAppointment(id);
+                            }
+                        },
+                        {
+                            text: 'Delete',
+                            class: 'btn-danger',
+                            onClick: (modal) => {
+                                modal.close();
+                                this.deleteAppointment(id);
+                            }
+                        },
+                        {
+                            text: 'Close',
+                            class: 'btn-primary',
+                            onClick: (modal) => modal.close()
+                        }
+                    ]
+                });
+            },
+
+            editAppointment: function(id) {
+                const appointment = DB.get(DB.COLLECTIONS.APPOINTMENTS, id);
+                if (!appointment) return;
+
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+
+                Modals.form({
+                    title: 'Edit Appointment',
+                    icon: 'fas fa-edit',
+                    size: 'lg',
+                    fields: [
+                        { name: 'contact_id', label: 'Client', type: 'select', required: true, value: appointment.contact_id, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'title', label: 'Purpose', type: 'text', required: true, value: appointment.title },
+                        { name: 'date', label: 'Date', type: 'date', required: true, value: appointment.date },
+                        { name: 'time', label: 'Time', type: 'time', required: true, value: appointment.time },
+                        { name: 'duration', label: 'Duration (minutes)', type: 'number', required: true, value: appointment.duration, min: 15, step: 15 },
+                        { name: 'location', label: 'Location', type: 'text', value: appointment.location },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 3, value: appointment.notes },
+                        { name: 'status', label: 'Status', type: 'select', value: appointment.status, options: [
+                            { value: 'scheduled', label: 'Scheduled' },
+                            { value: 'confirmed', label: 'Confirmed' },
+                            { value: 'completed', label: 'Completed' },
+                            { value: 'cancelled', label: 'Cancelled' }
+                        ]}
+                    ],
+                    submitText: 'Update Appointment'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.APPOINTMENTS, id, data);
+                    Utils.showToast('Appointment updated successfully!', 'success');
+                    this.renderCalendar();
+                    this.loadTodayAppointments();
+                }).catch(() => {});
+            },
+
+            deleteAppointment: async function(id) {
+                const appointment = DB.get(DB.COLLECTIONS.APPOINTMENTS, id);
+                if (!appointment) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete this appointment?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.APPOINTMENTS, id);
+                    Utils.showToast('Appointment deleted successfully!', 'success');
+                    this.renderCalendar();
+                    this.loadTodayAppointments();
+                }
+            },
+
+            loadUpcomingEvents: function() {
+                const events = DB.getAll(DB.COLLECTIONS.EVENTS);
+                const today = new Date().toISOString().split('T')[0];
+
+                const upcoming = events
+                    .filter(e => e.date >= today)
+                    .sort((a, b) => a.date.localeCompare(b.date) || (a.start_time || '').localeCompare(b.start_time || ''))
+                    .slice(0, 5);
+
+                if (upcoming.length === 0) {
+                    $('#upcoming-events-list').html('<div style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No upcoming events</div>');
+                    return;
+                }
+
+                const html = upcoming.map(event => {
+                    const project = event.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, event.project_id) : null;
+                    return `
+                        <div class="appointment-slot" onclick="CalendarPage.viewEvent('${event.id}')">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div style="color: white; font-weight: 500; margin-bottom: 4px;">${event.title}</div>
+                                    <div style="color: rgba(255,255,255,0.6); font-size: 12px;">
+                                        <i class="fas fa-calendar mr-1"></i>${Utils.formatDate(event.date)}
+                                        ${event.start_time ? `<i class="fas fa-clock ml-2 mr-1"></i>${event.start_time}` : ''}
+                                    </div>
+                                    ${project ? `<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;"><i class="fas fa-folder mr-1"></i>${project.name}</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                $('#upcoming-events-list').html(html);
+            },
+
+            loadTodayAppointments: function() {
+                const appointments = DB.getAll(DB.COLLECTIONS.APPOINTMENTS);
+                const today = new Date().toISOString().split('T')[0];
+
+                const todayAppointments = appointments
+                    .filter(a => a.date === today && a.status !== 'cancelled')
+                    .sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+                if (todayAppointments.length === 0) {
+                    $('#today-appointments-list').html('<div style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No appointments today</div>');
+                    return;
+                }
+
+                const html = todayAppointments.map(appt => {
+                    const contact = appt.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, appt.contact_id) : null;
+                    const statuses = {
+                        scheduled: { label: 'Scheduled', color: '#50b5ff' },
+                        confirmed: { label: 'Confirmed', color: '#3dd598' },
+                        completed: { label: 'Completed', color: '#6c757d' }
+                    };
+                    const status = statuses[appt.status] || statuses.scheduled;
+
+                    return `
+                        <div class="appointment-slot booked" onclick="CalendarPage.viewAppointment('${appt.id}')">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div style="color: white; font-weight: 500; margin-bottom: 4px;">${appt.title}</div>
+                                    ${contact ? `<div style="color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 4px;">${contact.name}</div>` : ''}
+                                    <div style="color: rgba(255,255,255,0.6); font-size: 12px;">
+                                        <i class="fas fa-clock mr-1"></i>${appt.time} (${appt.duration} min)
+                                    </div>
+                                </div>
+                                <span class="cell-badge" style="background: ${status.color}20; color: ${status.color}; font-size: 10px;">${status.label}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                $('#today-appointments-list').html(html);
+            }
+        };
+
+        $(document).ready(() => CalendarPage.init());
+    </script>
+
+    <!-- Enhancement Modules -->
+    <script src="../js/enhancements.js"></script>
+    <script src="../js/validation.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="../js/gradient-button-wrapper.js"></script>
+    <script src="../js/integrate-enhancements.js"></script>
+</body>
+</html>

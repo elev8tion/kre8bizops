@@ -1,0 +1,828 @@
+/* ================================================================
+   COSMIC FORMS - Pure CSS Form Components
+   Converted from React/styled-components to vanilla CSS
+   Compatible with jQuery and HTML5 form validation
+   ================================================================ */
+
+/* === RESET & BASE STYLES === */
+* {
+  box-sizing: border-box;
+}
+
+/* ================================================================
+   FLOATING LABEL INPUT
+   Based on: input-group.txt
+   Features: Animated floating label, focus states, validation
+   ================================================================ */
+
+.cosmic-input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.cosmic-input {
+  width: 100%;
+  border: solid 1.5px #9e9e9e;
+  border-radius: 1rem;
+  background: none;
+  padding: 1rem;
+  font-size: 1rem;
+  color: #f5f5f5;
+  transition: border 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+.cosmic-input:focus {
+  outline: none;
+  border: 1.5px solid #1a73e8;
+}
+
+.cosmic-input:valid {
+  border: 1.5px solid #1a73e8;
+}
+
+.cosmic-label {
+  position: absolute;
+  left: 15px;
+  top: 0;
+  color: #e8e8e8;
+  pointer-events: none;
+  transform: translateY(1rem);
+  transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: transparent;
+  padding: 0;
+}
+
+.cosmic-input:focus ~ .cosmic-label,
+.cosmic-input:valid ~ .cosmic-label,
+.cosmic-input:not(:placeholder-shown) ~ .cosmic-label {
+  transform: translateY(-50%) scale(0.8);
+  background-color: #212121;
+  padding: 0 0.2em;
+  color: #2196f3;
+}
+
+/* HTML Example:
+<div class="cosmic-input-group">
+  <input type="text" id="firstname" class="cosmic-input" placeholder=" " required />
+  <label for="firstname" class="cosmic-label">First Name</label>
+</div>
+*/
+
+/* ================================================================
+   GLASS SWITCH / CHECKBOX
+   Based on: checkbox.txt
+   Features: Circular switch with glow effect, icon animation
+   ================================================================ */
+
+.cosmic-checkbox-wrapper {
+  display: inline-block;
+}
+
+.cosmic-checkbox-input {
+  display: none;
+}
+
+.cosmic-switch {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  background-color: rgb(99, 99, 99);
+  border-radius: 50%;
+  z-index: 1;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.9em;
+  font-weight: 700;
+  color: rgb(37, 37, 37);
+  border: 2px solid rgb(126, 126, 126);
+  box-shadow: 0px 0px 3px rgb(2, 2, 2) inset;
+  transition: all 0.3s ease;
+}
+
+.cosmic-switch-icon {
+  position: relative;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.3s ease;
+}
+
+.cosmic-switch-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: rgb(37, 37, 37);
+  transition: fill 0.3s ease;
+}
+
+.cosmic-checkbox-input:checked + .cosmic-switch .cosmic-switch-icon {
+  filter: drop-shadow(0px 0px 3px rgb(222, 151, 255));
+}
+
+.cosmic-checkbox-input:checked + .cosmic-switch .cosmic-switch-icon svg {
+  fill: rgb(255, 255, 255);
+}
+
+.cosmic-checkbox-input:checked + .cosmic-switch {
+  box-shadow: 0px 0px 1px rgb(222, 151, 255) inset,
+    0px 0px 2px rgb(222, 151, 255) inset,
+    0px 0px 10px rgb(222, 151, 255) inset,
+    0px 0px 40px rgb(222, 151, 255),
+    0px 0px 100px rgb(222, 151, 255),
+    0px 0px 5px rgb(222, 151, 255);
+  border: 2px solid rgb(255, 255, 255);
+  background-color: rgb(152, 107, 172);
+  color: rgb(255, 255, 255);
+}
+
+/* HTML Example:
+<div class="cosmic-checkbox-wrapper">
+  <input id="cosmic-toggle" type="checkbox" class="cosmic-checkbox-input" />
+  <label class="cosmic-switch" for="cosmic-toggle">
+    <span class="cosmic-switch-icon">
+      <svg viewBox="0 0 448 512">
+        <path d="M320 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5c1.9 0 3.8 .1 5.6 .3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H362.7c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2c-31 0-60.8 12.3-82.7 34.3L57.4 153.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5L157 361.6l-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z" />
+      </svg>
+    </span>
+    Start
+  </label>
+</div>
+*/
+
+/* ================================================================
+   GLASS RADIO GROUP (VERTICAL)
+   Based on: glass-radio-group-vertical.txt
+   Features: Animated glider, color-coded options, checkmark animation
+   ================================================================ */
+
+.cosmic-radio-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0);
+  padding: 1.5rem 1.2rem;
+  border: 0px solid rgb(255, 255, 255, 0);
+  border-radius: 1rem;
+  backdrop-filter: blur(16px);
+  width: 230px;
+  overflow: hidden;
+  gap: 0.5rem;
+  transition: all 0.4s ease-in-out;
+}
+
+.cosmic-radio-input {
+  display: none;
+}
+
+.cosmic-radio-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #ccc;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.4s ease-in-out;
+  overflow: hidden;
+}
+
+.cosmic-radio-label-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cosmic-radio-indicator {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: white;
+  box-shadow: 0 0 0 2px transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.cosmic-radio-checkmark {
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease-in-out;
+}
+
+.cosmic-radio-glider {
+  position: absolute;
+  left: 0;
+  height: 56px;
+  width: 80%;
+  margin-left: 20px;
+  border-radius: 0.8rem;
+  z-index: 1;
+  transition: transform 0.4s cubic-bezier(0.5, 1.6, 0.4, 1),
+    background 0.5s ease-in-out,
+    box-shadow 0.4s;
+}
+
+/* Silver Option */
+#cosmic-radio-silver:checked ~ .cosmic-radio-glider {
+  transform: translateY(0%);
+  background: linear-gradient(135deg, #00000050, #d1d1d1cc);
+  box-shadow: 0 0 15px #00000077;
+}
+
+#cosmic-radio-silver:checked + .cosmic-radio-label {
+  color: white;
+}
+
+#cosmic-radio-silver:checked + .cosmic-radio-label .cosmic-radio-indicator {
+  background: #c0c0c0;
+  box-shadow: 0 0 0 2px #858585aa, 0 0 6px #6b6b6baa;
+}
+
+#cosmic-radio-silver:checked + .cosmic-radio-label .cosmic-radio-checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Gold Option */
+#cosmic-radio-gold:checked ~ .cosmic-radio-glider {
+  transform: translateY(115%);
+  background: linear-gradient(135deg, #00000050, #ffbb00);
+  box-shadow: 0 0 15px #00000077;
+}
+
+#cosmic-radio-gold:checked + .cosmic-radio-label {
+  color: white;
+}
+
+#cosmic-radio-gold:checked + .cosmic-radio-label .cosmic-radio-indicator {
+  background: #ffc400;
+  box-shadow: 0 0 0 2px #9c7300d3, 0 0 6px #695a00aa;
+}
+
+#cosmic-radio-gold:checked + .cosmic-radio-label .cosmic-radio-checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Platinum Option */
+#cosmic-radio-platinum:checked ~ .cosmic-radio-glider {
+  transform: translateY(230%);
+  background: linear-gradient(135deg, #00000050, #57d5ff);
+  box-shadow: 0 0 15px #00000077;
+}
+
+#cosmic-radio-platinum:checked + .cosmic-radio-label {
+  color: white;
+}
+
+#cosmic-radio-platinum:checked + .cosmic-radio-label .cosmic-radio-indicator {
+  background: #75c5ff;
+  box-shadow: 0 0 0 2px #0095ff5b, 0 0 6px #0095ff57;
+}
+
+#cosmic-radio-platinum:checked + .cosmic-radio-label .cosmic-radio-checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Container border effects */
+.cosmic-radio-group:has(#cosmic-radio-silver:checked) {
+  border-color: #c0c0c0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2),
+    inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.cosmic-radio-group:has(#cosmic-radio-gold:checked) {
+  border-color: #ffbb00;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2),
+    inset 0 0 8px rgba(255, 196, 0, 0.527);
+}
+
+.cosmic-radio-group:has(#cosmic-radio-platinum:checked) {
+  border-color: #57d5ff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2),
+    inset 0 0 8px rgba(0, 183, 255, 0.63);
+}
+
+/* HTML Example:
+<div class="cosmic-radio-group">
+  <input id="cosmic-radio-silver" name="plan" type="radio" class="cosmic-radio-input" checked />
+  <label for="cosmic-radio-silver" class="cosmic-radio-label">
+    <span class="cosmic-radio-indicator">
+      <span class="cosmic-radio-checkmark">✓</span>
+    </span>
+    <span class="cosmic-radio-label-text">Silver</span>
+  </label>
+
+  <input id="cosmic-radio-gold" name="plan" type="radio" class="cosmic-radio-input" />
+  <label for="cosmic-radio-gold" class="cosmic-radio-label">
+    <span class="cosmic-radio-indicator">
+      <span class="cosmic-radio-checkmark">✓</span>
+    </span>
+    <span class="cosmic-radio-label-text">Gold</span>
+  </label>
+
+  <input id="cosmic-radio-platinum" name="plan" type="radio" class="cosmic-radio-input" />
+  <label for="cosmic-radio-platinum" class="cosmic-radio-label">
+    <span class="cosmic-radio-indicator">
+      <span class="cosmic-radio-checkmark">✓</span>
+    </span>
+    <span class="cosmic-radio-label-text">Platinum</span>
+  </label>
+
+  <div class="cosmic-radio-glider"></div>
+</div>
+*/
+
+/* ================================================================
+   AI CHAT INPUT (ADVANCED TEXTAREA)
+   Based on: ai-chat-input.txt
+   Features: Badges, status indicators, control buttons, tooltips
+   ================================================================ */
+
+.cosmic-ai-chat-input {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1.5em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.cosmic-chat-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.25em;
+  background: linear-gradient(135deg, rgba(39, 39, 42, 0.8), rgba(9, 9, 11, 0.9));
+  border: 1px solid rgba(113, 113, 122, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.cosmic-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em 1.5em 0.5em;
+}
+
+.cosmic-status-section {
+  display: flex;
+  align-items: center;
+  gap: 0.375em;
+}
+
+.cosmic-status-indicator {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: cosmic-pulse 2s infinite;
+}
+
+@keyframes cosmic-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.cosmic-status-text {
+  font-size: 0.75em;
+  font-weight: 500;
+  color: #a1a1aa;
+}
+
+.cosmic-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.cosmic-badge {
+  padding: 0.25em 0.5em;
+  font-size: 0.75em;
+  font-weight: 500;
+  border-radius: 1em;
+}
+
+.cosmic-badge-gpt {
+  background-color: rgba(39, 39, 42, 0.6);
+  color: #d4d4d8;
+}
+
+.cosmic-badge-pro {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.cosmic-input-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-main-input {
+  width: 100%;
+  padding: 1em 1.5em;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 1em;
+  font-weight: normal;
+  line-height: 1.6;
+  min-height: 7.5em;
+  color: #f4f4f5;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-family: inherit;
+}
+
+.cosmic-main-input::-webkit-scrollbar {
+  display: none;
+}
+
+.cosmic-main-input::placeholder {
+  color: #71717a;
+}
+
+.cosmic-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(39, 39, 42, 0.05), transparent);
+  pointer-events: none;
+}
+
+.cosmic-controls-section {
+  padding: 0 1em 1em;
+}
+
+.cosmic-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cosmic-left-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.cosmic-attachment-group {
+  display: flex;
+  align-items: center;
+  gap: 0.375em;
+  padding: 0.25em;
+  background-color: rgba(39, 39, 42, 0.4);
+  border-radius: 0.75em;
+  border: 1px solid rgba(63, 63, 70, 0.5);
+}
+
+.cosmic-control-btn {
+  position: relative;
+  padding: 0.625em;
+  background: transparent;
+  border: none;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #71717a;
+}
+
+.cosmic-control-btn:hover {
+  color: #d4d4d8;
+  background-color: rgba(63, 63, 70, 0.5);
+}
+
+.cosmic-control-btn:hover .cosmic-btn-icon {
+  transform: scale(1.1);
+}
+
+.cosmic-link-btn:hover {
+  color: #60a5fa;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.cosmic-code-btn:hover {
+  color: #4ade80;
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.cosmic-design-btn:hover {
+  color: #a78bfa;
+  background-color: rgba(147, 51, 234, 0.1);
+}
+
+.cosmic-voice-btn {
+  border: 1px solid rgba(63, 63, 70, 0.3);
+}
+
+.cosmic-voice-btn:hover {
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.cosmic-btn-icon {
+  width: 1em;
+  height: 1em;
+  transition: transform 0.2s ease;
+}
+
+.cosmic-tooltip {
+  position: absolute;
+  top: -2em;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5em;
+  background-color: #27272a;
+  color: #d4d4d8;
+  font-size: 0.75em;
+  border-radius: 0.25em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.cosmic-control-btn:hover .cosmic-tooltip {
+  opacity: 1;
+}
+
+.cosmic-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.cosmic-counter {
+  font-size: 0.75em;
+  font-weight: 500;
+  color: #71717a;
+}
+
+.cosmic-counter-max {
+  color: #a1a1aa;
+}
+
+.cosmic-send-btn {
+  position: relative;
+  padding: 0.75em;
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+  border: none;
+  border-radius: 0.75em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.cosmic-send-btn:hover {
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.25);
+}
+
+.cosmic-send-btn:hover .cosmic-send-icon {
+  transform: translateY(-0.125em) translateX(0.125em);
+}
+
+.cosmic-send-icon {
+  width: 1.25em;
+  height: 1.25em;
+  transition: transform 0.2s ease;
+}
+
+.cosmic-footer-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75em;
+  padding-top: 0.75em;
+  border-top: 1px solid rgba(39, 39, 42, 0.5);
+  font-size: 0.75em;
+  color: #71717a;
+}
+
+.cosmic-shortcut-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.cosmic-info-icon {
+  width: 0.75em;
+  height: 0.75em;
+}
+
+.cosmic-shortcut-key {
+  padding: 0.375em 0.375em;
+  background-color: #27272a;
+  border: 1px solid #3f3f46;
+  border-radius: 0.25em;
+  color: #a1a1aa;
+  font-family: monospace;
+  font-size: 0.75em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.cosmic-system-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.cosmic-system-indicator {
+  width: 0.375em;
+  height: 0.375em;
+  background-color: #22c55e;
+  border-radius: 50%;
+}
+
+.cosmic-floating-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25em;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent, rgba(147, 51, 234, 0.05));
+  pointer-events: none;
+}
+
+/* HTML Example:
+<div class="cosmic-ai-chat-input">
+  <div class="cosmic-chat-container">
+    <div class="cosmic-chat-header">
+      <div class="cosmic-status-section">
+        <div class="cosmic-status-indicator"></div>
+        <span class="cosmic-status-text">AI Assistant</span>
+      </div>
+      <div class="cosmic-badges">
+        <span class="cosmic-badge cosmic-badge-gpt">GPT-4</span>
+        <span class="cosmic-badge cosmic-badge-pro">Pro</span>
+      </div>
+    </div>
+
+    <div class="cosmic-input-section">
+      <textarea rows="4" class="cosmic-main-input" placeholder="What would you like to explore today?"></textarea>
+      <div class="cosmic-gradient-overlay"></div>
+    </div>
+
+    <div class="cosmic-controls-section">
+      <div class="cosmic-controls-row">
+        <div class="cosmic-left-controls">
+          <div class="cosmic-attachment-group">
+            <button class="cosmic-control-btn cosmic-file-btn" aria-label="Upload files" type="button">
+              <svg class="cosmic-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              </svg>
+              <div class="cosmic-tooltip">Upload files</div>
+            </button>
+            <button class="cosmic-control-btn cosmic-link-btn" aria-label="Add web link" type="button">
+              <svg class="cosmic-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              <div class="cosmic-tooltip">Web link</div>
+            </button>
+            <button class="cosmic-control-btn cosmic-code-btn" aria-label="Add code repository" type="button">
+              <svg class="cosmic-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+              <div class="cosmic-tooltip">Code repo</div>
+            </button>
+          </div>
+          <button class="cosmic-control-btn cosmic-voice-btn" aria-label="Voice input" type="button">
+            <svg class="cosmic-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+            <div class="cosmic-tooltip">Voice input</div>
+          </button>
+        </div>
+
+        <div class="cosmic-right-controls">
+          <div class="cosmic-counter">
+            <span>0</span>/<span class="cosmic-counter-max">2000</span>
+          </div>
+          <button class="cosmic-send-btn" aria-label="Send message" type="button">
+            <svg class="cosmic-send-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="cosmic-footer-info">
+        <div class="cosmic-shortcut-info">
+          <svg class="cosmic-info-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+          </svg>
+          <span>Press <kbd class="cosmic-shortcut-key">Shift + Enter</kbd> for new line</span>
+        </div>
+        <div class="cosmic-system-status">
+          <div class="cosmic-system-indicator"></div>
+          <span>All systems operational</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cosmic-floating-overlay"></div>
+  </div>
+</div>
+*/
+
+/* ================================================================
+   UTILITY CLASSES
+   ================================================================ */
+
+/* Form validation states */
+.cosmic-input.is-valid {
+  border-color: #22c55e;
+}
+
+.cosmic-input.is-invalid {
+  border-color: #ef4444;
+}
+
+/* Disabled states */
+.cosmic-input:disabled,
+.cosmic-checkbox-input:disabled + .cosmic-switch,
+.cosmic-radio-input:disabled + .cosmic-radio-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cosmic-ai-chat-input {
+    padding: 1em;
+  }
+
+  .cosmic-chat-container {
+    border-radius: 1em;
+  }
+
+  .cosmic-radio-group {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .cosmic-switch {
+    width: 70px;
+    height: 70px;
+    font-size: 0.75em;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: light) {
+  .cosmic-input {
+    color: #1f2937;
+    border-color: #d1d5db;
+  }
+
+  .cosmic-label {
+    color: #4b5563;
+  }
+
+  .cosmic-input:focus ~ .cosmic-label,
+  .cosmic-input:valid ~ .cosmic-label,
+  .cosmic-input:not(:placeholder-shown) ~ .cosmic-label {
+    background-color: #ffffff;
+  }
+}
+
+/* Accessibility improvements */
+.cosmic-control-btn:focus,
+.cosmic-send-btn:focus,
+.cosmic-input:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .cosmic-tooltip,
+  .cosmic-floating-overlay,
+  .cosmic-gradient-overlay {
+    display: none;
+  }
+}

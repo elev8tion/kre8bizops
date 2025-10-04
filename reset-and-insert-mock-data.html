@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset & Insert Mock Data - ELEV8TION</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #667eea;
+            margin: 0 0 20px 0;
+        }
+        .status {
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status div {
+            margin: 5px 0;
+        }
+        .success { color: #28a745; }
+        .info { color: #667eea; }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Reset & Insert Mock Data</h1>
+        <p>This will clear all existing data and insert fresh mock data for testing.</p>
+
+        <button class="btn" onclick="resetAndInsert()">Clear & Insert Mock Data</button>
+
+        <div class="status" id="status" style="display: none;"></div>
+
+        <a href="dashboard.html" id="dashboardLink" style="display: none;" class="btn">Go to Dashboard</a>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = message;
+            status.appendChild(div);
+            status.scrollTop = status.scrollHeight;
+        }
+
+        function resetAndInsert() {
+            const btn = event.target;
+            btn.disabled = true;
+            const status = document.getElementById('status');
+            status.innerHTML = '';
+
+            log('🗑️ Clearing all existing data...', 'info');
+
+            // Clear all ELEV8TION data from localStorage
+            const keys = Object.keys(localStorage);
+            const elev8tionKeys = keys.filter(key => key.startsWith('elev8tion_'));
+
+            elev8tionKeys.forEach(key => {
+                localStorage.removeItem(key);
+                log(`   Removed: ${key}`, 'info');
+            });
+
+            log(`✓ Cleared ${elev8tionKeys.length} items`, 'success');
+            log('', 'info');
+            log('📝 Inserting mock data...', 'info');
+
+            // Now insert the mock data
+            setTimeout(() => {
+                try {
+                    insertMockData();
+                    log('', 'info');
+                    log('🎉 All done!', 'success');
+                    log('✅ Mock data has been inserted successfully', 'success');
+
+                    document.getElementById('dashboardLink').style.display = 'block';
+                    btn.textContent = 'Done! Click "Go to Dashboard" below';
+                } catch (error) {
+                    log('❌ Error: ' + error.message, 'error');
+                    btn.disabled = false;
+                }
+            }, 500);
+        }
+
+        function insertMockData() {
+            // Helper to generate IDs
+            function generateId() {
+                return Date.now() + Math.random().toString(36).substr(2, 9);
+            }
+
+            // Helper to format date
+            function formatDate(daysOffset = 0) {
+                const date = new Date();
+                date.setDate(date.getDate() + daysOffset);
+                return date.toISOString().split('T')[0];
+            }
+
+            // 1. INSERT CONTACTS
+            const contacts = [
+                {
+                    id: generateId(),
+                    name: 'Sarah Johnson',
+                    email: 'sarah.johnson@techcorp.com',
+                    phone: '(555) 123-4567',
+                    company: 'TechCorp Solutions',
+                    position: 'CEO',
+                    type: 'client',
+                    status: 'active',
+                    tags: ['VIP', 'High Value'],
+                    notes: 'Key decision maker for enterprise deals. Prefers morning meetings.',
+                    address: '123 Tech Street, San Francisco, CA 94105',
+                    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'Michael Chen',
+                    email: 'mchen@innovate.io',
+                    phone: '(555) 234-5678',
+                    company: 'Innovate.io',
+                    position: 'CTO',
+                    type: 'lead',
+                    status: 'active',
+                    tags: ['Hot Lead', 'Follow-up'],
+                    notes: 'Interested in our premium package. Schedule demo next week.',
+                    address: '456 Innovation Ave, Austin, TX 78701',
+                    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'Emily Rodriguez',
+                    email: 'emily.r@designstudio.com',
+                    phone: '(555) 345-6789',
+                    company: 'Creative Design Studio',
+                    position: 'Creative Director',
+                    type: 'client',
+                    status: 'active',
+                    tags: ['VIP'],
+                    notes: 'Long-term client. Annual contract renewal in 3 months.',
+                    address: '789 Design Blvd, New York, NY 10001',
+                    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'David Thompson',
+                    email: 'dthompson@startup.co',
+                    phone: '(555) 456-7890',
+                    company: 'Startup Ventures Co',
+                    position: 'Founder',
+                    type: 'lead',
+                    status: 'active',
+                    tags: ['Hot Lead', 'Urgent'],
+                    notes: 'Fast-growing startup. Budget approved for Q2.',
+                    address: '321 Venture Lane, Seattle, WA 98101',
+                    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'Lisa Anderson',
+                    email: 'l.anderson@global-corp.com',
+                    phone: '(555) 567-8901',
+                    company: 'Global Corp International',
+                    position: 'VP Operations',
+                    type: 'client',
+                    status: 'active',
+                    tags: ['High Value'],
+                    notes: 'Manages multiple departments. Potential for expansion.',
+                    address: '654 Global Plaza, Chicago, IL 60601',
+                    createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+
+            localStorage.setItem('elev8tion_contacts', JSON.stringify(contacts));
+            log('✓ Created 5 contacts', 'success');
+
+            // 2. INSERT PROJECTS
+            const projects = [
+                {
+                    id: generateId(),
+                    name: 'Website Redesign - TechCorp',
+                    description: 'Complete overhaul of corporate website with modern design and improved UX',
+                    client: 'TechCorp Solutions',
+                    status: 'active',
+                    startDate: '2025-09-01',
+                    endDate: '2025-11-30',
+                    budget: 45000,
+                    tags: ['Development', 'High Value'],
+                    progress: 65,
+                    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'Mobile App Development - Innovate',
+                    description: 'iOS and Android app for customer engagement',
+                    client: 'Innovate.io',
+                    status: 'planning',
+                    startDate: '2025-10-15',
+                    endDate: '2026-03-15',
+                    budget: 120000,
+                    tags: ['Development', 'VIP'],
+                    progress: 15,
+                    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'Marketing Campaign Q4',
+                    description: 'Comprehensive digital marketing campaign across all channels',
+                    client: 'Creative Design Studio',
+                    status: 'active',
+                    startDate: '2025-09-20',
+                    endDate: '2025-12-31',
+                    budget: 30000,
+                    tags: ['Marketing', 'Urgent'],
+                    progress: 45,
+                    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'CRM Integration - Startup Ventures',
+                    description: 'Custom CRM integration with existing tools',
+                    client: 'Startup Ventures Co',
+                    status: 'on_hold',
+                    startDate: '2025-08-01',
+                    endDate: '2025-10-15',
+                    budget: 25000,
+                    tags: ['Development'],
+                    progress: 30,
+                    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    name: 'Brand Identity - Global Corp',
+                    description: 'Complete brand refresh including logo, colors, and guidelines',
+                    client: 'Global Corp International',
+                    status: 'completed',
+                    startDate: '2025-06-01',
+                    endDate: '2025-09-15',
+                    budget: 55000,
+                    tags: ['Marketing', 'High Value'],
+                    progress: 100,
+                    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+
+            localStorage.setItem('elev8tion_projects', JSON.stringify(projects));
+            log('✓ Created 5 projects', 'success');
+
+            // 3. INSERT TASKS
+            const tasks = [
+                {
+                    id: generateId(),
+                    title: 'Design Homepage Mockup',
+                    description: 'Create initial design concepts for TechCorp homepage',
+                    project: 'Website Redesign - TechCorp',
+                    assignedTo: 'Design Team',
+                    priority: 'high',
+                    status: 'in_progress',
+                    dueDate: formatDate(7),
+                    tags: ['Design', 'Urgent'],
+                    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Client Meeting Preparation',
+                    description: 'Prepare presentation slides and demo for Innovate.io',
+                    project: 'Mobile App Development - Innovate',
+                    assignedTo: 'Sales Team',
+                    priority: 'high',
+                    status: 'pending',
+                    dueDate: formatDate(-1),
+                    tags: ['Sales', 'Urgent'],
+                    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Social Media Content Calendar',
+                    description: 'Plan Q4 content calendar for all platforms',
+                    project: 'Marketing Campaign Q4',
+                    assignedTo: 'Marketing Team',
+                    priority: 'medium',
+                    status: 'in_progress',
+                    dueDate: formatDate(0),
+                    tags: ['Marketing'],
+                    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'API Documentation',
+                    description: 'Complete technical documentation for CRM API endpoints',
+                    project: 'CRM Integration - Startup Ventures',
+                    assignedTo: 'Dev Team',
+                    priority: 'low',
+                    status: 'pending',
+                    dueDate: formatDate(-7),
+                    tags: ['Development'],
+                    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Final Brand Guidelines',
+                    description: 'Deliver final brand guidelines document to client',
+                    project: 'Brand Identity - Global Corp',
+                    assignedTo: 'Design Team',
+                    priority: 'medium',
+                    status: 'completed',
+                    dueDate: '2025-09-10',
+                    completedDate: '2025-09-10',
+                    tags: ['Marketing', 'High Value'],
+                    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+
+            localStorage.setItem('elev8tion_tasks', JSON.stringify(tasks));
+            log('✓ Created 5 tasks (2 overdue)', 'success');
+
+            // 4. INSERT INVOICES
+            const invoices = [
+                {
+                    id: generateId(),
+                    invoiceNumber: 'INV-2025-001',
+                    client: 'TechCorp Solutions',
+                    project: 'Website Redesign - TechCorp',
+                    issueDate: '2025-09-15',
+                    dueDate: '2025-10-15',
+                    status: 'sent',
+                    items: [
+                        { description: 'Design Phase - Homepage', quantity: 1, rate: 8000, amount: 8000 },
+                        { description: 'Development Phase - Initial Setup', quantity: 1, rate: 7000, amount: 7000 }
+                    ],
+                    subtotal: 15000,
+                    tax: 1200,
+                    total: 16200,
+                    notes: 'Payment terms: Net 30',
+                    createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    invoiceNumber: 'INV-2025-002',
+                    client: 'Creative Design Studio',
+                    project: 'Marketing Campaign Q4',
+                    issueDate: '2025-09-01',
+                    dueDate: '2025-09-20',
+                    status: 'overdue',
+                    items: [
+                        { description: 'Social Media Management - September', quantity: 1, rate: 5000, amount: 5000 },
+                        { description: 'Content Creation', quantity: 20, rate: 150, amount: 3000 }
+                    ],
+                    subtotal: 8000,
+                    tax: 640,
+                    total: 8640,
+                    notes: 'Follow-up needed',
+                    createdAt: new Date(Date.now() - 32 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    invoiceNumber: 'INV-2025-003',
+                    client: 'Global Corp International',
+                    project: 'Brand Identity - Global Corp',
+                    issueDate: '2025-09-10',
+                    dueDate: '2025-09-25',
+                    status: 'paid',
+                    paidDate: '2025-09-22',
+                    items: [
+                        { description: 'Brand Strategy & Research', quantity: 1, rate: 12000, amount: 12000 },
+                        { description: 'Logo Design & Variations', quantity: 1, rate: 8000, amount: 8000 },
+                        { description: 'Brand Guidelines Document', quantity: 1, rate: 5000, amount: 5000 }
+                    ],
+                    subtotal: 25000,
+                    tax: 2000,
+                    total: 27000,
+                    notes: 'Paid via wire transfer',
+                    createdAt: new Date(Date.now() - 23 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: generateId(),
+                    invoiceNumber: 'INV-2025-004',
+                    client: 'Innovate.io',
+                    project: 'Mobile App Development - Innovate',
+                    issueDate: '2025-09-25',
+                    dueDate: '2025-10-25',
+                    status: 'draft',
+                    items: [
+                        { description: 'Project Planning & Discovery', quantity: 1, rate: 15000, amount: 15000 }
+                    ],
+                    subtotal: 15000,
+                    tax: 1200,
+                    total: 16200,
+                    notes: 'Draft - pending approval',
+                    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    invoiceNumber: 'INV-2025-005',
+                    client: 'Startup Ventures Co',
+                    project: 'CRM Integration - Startup Ventures',
+                    issueDate: '2025-08-20',
+                    dueDate: '2025-09-20',
+                    status: 'overdue',
+                    items: [
+                        { description: 'CRM Setup & Configuration', quantity: 1, rate: 6000, amount: 6000 },
+                        { description: 'Data Migration Services', quantity: 1, rate: 4000, amount: 4000 }
+                    ],
+                    subtotal: 10000,
+                    tax: 800,
+                    total: 10800,
+                    notes: 'Multiple follow-up attempts made',
+                    createdAt: new Date(Date.now() - 44 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+
+            localStorage.setItem('elev8tion_invoices', JSON.stringify(invoices));
+            log('✓ Created 5 invoices (2 overdue)', 'success');
+
+            // 5. INSERT DEALS
+            const deals = [
+                {
+                    id: generateId(),
+                    title: 'Enterprise Package - TechCorp',
+                    company: 'TechCorp Solutions',
+                    contact: 'Sarah Johnson',
+                    value: 150000,
+                    stage: 'proposal',
+                    probability: 75,
+                    expectedCloseDate: '2025-11-15',
+                    description: 'Annual enterprise package with premium support',
+                    tags: ['VIP', 'High Value'],
+                    createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Mobile App Suite - Innovate',
+                    company: 'Innovate.io',
+                    contact: 'Michael Chen',
+                    value: 120000,
+                    stage: 'qualification',
+                    probability: 60,
+                    expectedCloseDate: '2025-10-30',
+                    description: 'Full mobile app development with maintenance',
+                    tags: ['Hot Lead', 'Development'],
+                    createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Marketing Retainer - Creative Studio',
+                    company: 'Creative Design Studio',
+                    contact: 'Emily Rodriguez',
+                    value: 36000,
+                    stage: 'negotiation',
+                    probability: 85,
+                    expectedCloseDate: '2025-10-05',
+                    description: 'Annual marketing retainer agreement',
+                    tags: ['Marketing', 'VIP'],
+                    createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Consulting Services - Startup Ventures',
+                    company: 'Startup Ventures Co',
+                    contact: 'David Thompson',
+                    value: 50000,
+                    stage: 'discovery',
+                    probability: 40,
+                    expectedCloseDate: '2025-12-01',
+                    description: 'Strategic consulting and implementation',
+                    tags: ['Hot Lead'],
+                    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: 'Brand Extension - Global Corp',
+                    company: 'Global Corp International',
+                    contact: 'Lisa Anderson',
+                    value: 85000,
+                    stage: 'closed_won',
+                    probability: 100,
+                    closeDate: '2025-09-20',
+                    description: 'Brand extension for new product line',
+                    tags: ['High Value', 'Marketing'],
+                    createdAt: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+
+            localStorage.setItem('elev8tion_deals', JSON.stringify(deals));
+            log('✓ Created 5 deals', 'success');
+
+            // 6. INSERT EXPENSES
+            const expenses = [
+                {
+                    id: generateId(),
+                    description: 'Adobe Creative Cloud Subscription',
+                    amount: 599.88,
+                    category: 'Software',
+                    date: '2025-09-01',
+                    vendor: 'Adobe Inc.',
+                    paymentMethod: 'Credit Card',
+                    billable: false,
+                    status: 'paid',
+                    tags: ['Recurring', 'Design'],
+                    createdAt: new Date(Date.now() - 32 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 32 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: generateId(),
+                    description: 'Client Dinner - TechCorp Meeting',
+                    amount: 287.50,
+                    category: 'Meals & Entertainment',
+                    date: '2025-09-15',
+                    vendor: 'The Capital Grille',
+                    paymentMethod: 'Company Card',
+                    billable: true,
+                    project: 'Website Redesign - TechCorp',
+                    status: 'paid',
+                    tags: ['Client Meeting'],
+                    createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: generateId(),
+                    description: 'Stock Photos & Assets',
+                    amount: 450.00,
+                    category: 'Marketing',
+                    date: '2025-09-20',
+                    vendor: 'Shutterstock',
+                    paymentMethod: 'Credit Card',
+                    billable: true,
+                    project: 'Marketing Campaign Q4',
+                    status: 'paid',
+                    tags: ['Marketing', 'Design'],
+                    createdAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: generateId(),
+                    description: 'Cloud Hosting Services - AWS',
+                    amount: 1247.32,
+                    category: 'Infrastructure',
+                    date: '2025-09-25',
+                    vendor: 'Amazon Web Services',
+                    paymentMethod: 'ACH',
+                    billable: false,
+                    status: 'paid',
+                    tags: ['Recurring', 'Development'],
+                    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: generateId(),
+                    description: 'Conference Registration - WebSummit',
+                    amount: 1899.00,
+                    category: 'Professional Development',
+                    date: '2025-09-28',
+                    vendor: 'WebSummit',
+                    paymentMethod: 'Credit Card',
+                    billable: false,
+                    status: 'pending',
+                    tags: ['Training'],
+                    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+
+            localStorage.setItem('elev8tion_expenses', JSON.stringify(expenses));
+            log('✓ Created 5 expenses', 'success');
+
+            // 7. INSERT ACTIVITIES
+            const activities = [
+                {
+                    id: generateId(),
+                    type: 'contact',
+                    action: 'created',
+                    description: 'Created contact: Sarah Johnson',
+                    timestamp: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                    itemId: contacts[0].id
+                },
+                {
+                    id: generateId(),
+                    type: 'project',
+                    action: 'created',
+                    description: 'Created project: Website Redesign - TechCorp',
+                    timestamp: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                    itemId: projects[0].id
+                },
+                {
+                    id: generateId(),
+                    type: 'invoice',
+                    action: 'paid',
+                    description: 'Invoice INV-2025-003 marked as paid',
+                    timestamp: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString(),
+                    itemId: invoices[2].id
+                },
+                {
+                    id: generateId(),
+                    type: 'task',
+                    action: 'completed',
+                    description: 'Completed task: Final Brand Guidelines',
+                    timestamp: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+                    itemId: tasks[4].id
+                },
+                {
+                    id: generateId(),
+                    type: 'deal',
+                    action: 'won',
+                    description: 'Deal won: Brand Extension - Global Corp ($85,000)',
+                    timestamp: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
+                    itemId: deals[4].id
+                }
+            ];
+
+            localStorage.setItem('elev8tion_activities', JSON.stringify(activities));
+            log('✓ Created activity timeline entries', 'success');
+
+            // 8. SETTINGS
+            const settings = {
+                businessName: 'ELEV8TION Agency',
+                businessEmail: 'contact@elev8tion.agency',
+                businessPhone: '(555) 000-0000',
+                businessAddress: '100 Business Blvd, Suite 200, San Francisco, CA 94105',
+                currency: 'USD',
+                dateFormat: 'MM/DD/YYYY',
+                timezone: 'America/Los_Angeles',
+                taxRate: 8,
+                invoicePrefix: 'INV-',
+                theme: 'light'
+            };
+
+            localStorage.setItem('elev8tion_settings', JSON.stringify(settings));
+            log('✓ Updated business settings', 'success');
+
+            // Mark as inserted
+            localStorage.setItem('elev8tion_mock_data_inserted', 'true');
+        }
+    </script>
+</body>
+</html>

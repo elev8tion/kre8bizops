@@ -1,0 +1,845 @@
+/* ================================================================
+   COSMIC ANIMATIONS LIBRARY
+   Comprehensive animation patterns extracted from all components
+   Compatible with jQuery, vanilla JS, and modern frameworks
+   ================================================================ */
+
+/* ================================================================
+   KEYFRAMES DEFINITIONS
+   ================================================================ */
+
+/* === GLOW & PULSE EFFECTS === */
+@keyframes cosmic-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(222, 151, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(222, 151, 255, 0.8);
+  }
+}
+
+@keyframes cosmic-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes cosmic-pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* === FLOATING & VERTICAL MOVEMENT === */
+@keyframes cosmic-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes cosmic-float-smooth {
+  0% {
+    transform: translateY(-60px);
+  }
+  50% {
+    transform: translateY(-35px);
+  }
+  100% {
+    transform: translateY(-60px);
+  }
+}
+
+/* === JELLO & ELASTIC EFFECTS === */
+@keyframes cosmic-jello-vertical {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  40% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  50% {
+    transform: scale3d(0.85, 1.15, 1);
+  }
+  65% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  75% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+/* === TEXT ANIMATIONS === */
+@keyframes cosmic-animated-text {
+  0% {
+    transform: translateY(2px) scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-2px) scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+}
+
+/* === ARROW & ICON ANIMATIONS === */
+@keyframes cosmic-animated-arrow {
+  0% {
+    transform: scale(1.25) translateX(4px);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === SCALE & EMERGE EFFECTS === */
+@keyframes cosmic-emerge {
+  0% {
+    transform: scale(10);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes cosmic-scale-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes cosmic-scale-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* === SHIMMER & GRADIENT EFFECTS === */
+@keyframes cosmic-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes cosmic-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* === SVG PATH DRAWING === */
+@keyframes cosmic-draw-path {
+  0% {
+    stroke-dashoffset: 1200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cosmic-draw-fast {
+  from {
+    stroke-dashoffset: 1200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* === DELETE & PROGRESS ANIMATIONS === */
+@keyframes cosmic-delete {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes cosmic-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* === SHADOW & FILTER EFFECTS === */
+@keyframes cosmic-blink-shadows {
+  0% {
+    filter: drop-shadow(23px 12px 28px hsla(218, 87%, 88%, 0.3))
+            drop-shadow(-20px -18px 28px hsla(171, 80%, 73%, 0.3));
+  }
+  25% {
+    filter: drop-shadow(23px -12px 24px hsla(218, 87%, 88%, 0.3))
+            drop-shadow(-20px 18px 24px hsla(171, 100%, 93%, 0.3));
+  }
+  50% {
+    filter: drop-shadow(23px 12px 30px hsla(218, 100%, 88%, 0.3))
+            drop-shadow(-20px 18px 30px hsla(171, 95%, 83%, 0.3));
+  }
+  75% {
+    filter: drop-shadow(20px -18px 25px hsla(218, 87%, 88%, 0.3))
+            drop-shadow(-20px 20px 25px hsla(171, 100%, 80%, 0.3));
+  }
+  100% {
+    filter: drop-shadow(23px 12px 28px hsla(218, 87%, 88%, 0.3))
+            drop-shadow(-20px -18px 28px hsla(171, 80%, 73%, 0.3));
+  }
+}
+
+/* === ROTATION ANIMATIONS === */
+@keyframes cosmic-rotate-360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cosmic-rotate-back {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* === SLIDE ANIMATIONS === */
+@keyframes cosmic-slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes cosmic-slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes cosmic-slide-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes cosmic-slide-in-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* === FADE ANIMATIONS === */
+@keyframes cosmic-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cosmic-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* === BOUNCE EFFECTS === */
+@keyframes cosmic-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes cosmic-bounce-horizontal {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+
+/* ================================================================
+   ANIMATION UTILITY CLASSES
+   ================================================================ */
+
+/* === PULSE & GLOW === */
+.animate-glow {
+  animation: cosmic-glow-pulse 2s infinite;
+}
+
+.animate-pulse {
+  animation: cosmic-pulse 2s infinite;
+}
+
+.animate-pulse-glow {
+  animation: cosmic-pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-fast {
+  animation: cosmic-pulse 1s infinite;
+}
+
+.animate-pulse-slow {
+  animation: cosmic-pulse 3s infinite;
+}
+
+/* === FLOATING === */
+.animate-float {
+  animation: cosmic-float 3s ease-in-out infinite;
+}
+
+.animate-float-smooth {
+  animation: cosmic-float-smooth 3s infinite;
+}
+
+.animate-float-fast {
+  animation: cosmic-float 1.5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: cosmic-float 6s ease-in-out infinite;
+}
+
+/* === JELLO & ELASTIC === */
+.animate-jello {
+  animation: cosmic-jello-vertical 0.8s linear;
+}
+
+.animate-jello-delayed {
+  animation: cosmic-jello-vertical 0.8s 1s linear;
+}
+
+/* === SHIMMER === */
+.animate-shimmer {
+  animation: cosmic-shimmer 2s infinite;
+}
+
+.animate-shimmer-fast {
+  animation: cosmic-shimmer 1s infinite;
+}
+
+.animate-shimmer-slow {
+  animation: cosmic-shimmer 4s infinite;
+}
+
+/* === GRADIENT === */
+.animate-gradient {
+  animation: cosmic-gradient-shift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+/* === ROTATION === */
+.animate-spin {
+  animation: cosmic-rotate-360 1s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: cosmic-rotate-360 3s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: cosmic-rotate-back 1s linear infinite;
+}
+
+/* === SCALE === */
+.animate-scale-in {
+  animation: cosmic-scale-in 0.3s ease-out;
+}
+
+.animate-scale-out {
+  animation: cosmic-scale-out 0.3s ease-out;
+}
+
+.animate-emerge {
+  animation: cosmic-emerge 2s ease forwards;
+}
+
+/* === SLIDE === */
+.animate-slide-in-right {
+  animation: cosmic-slide-in-right 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: cosmic-slide-in-left 0.5s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: cosmic-slide-in-up 0.5s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: cosmic-slide-in-down 0.5s ease-out;
+}
+
+/* === FADE === */
+.animate-fade-in {
+  animation: cosmic-fade-in 0.5s ease-in;
+}
+
+.animate-fade-out {
+  animation: cosmic-fade-out 0.5s ease-out;
+}
+
+.animate-fade-in-fast {
+  animation: cosmic-fade-in 0.2s ease-in;
+}
+
+.animate-fade-in-slow {
+  animation: cosmic-fade-in 1s ease-in;
+}
+
+/* === BOUNCE === */
+.animate-bounce {
+  animation: cosmic-bounce 1s ease-in-out infinite;
+}
+
+.animate-bounce-horizontal {
+  animation: cosmic-bounce-horizontal 1s ease-in-out infinite;
+}
+
+/* === SVG PATH DRAWING === */
+.animate-draw-path {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: cosmic-draw-path 3s infinite;
+}
+
+.animate-draw-fast {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: cosmic-draw-fast 1.5s forwards;
+}
+
+
+/* ================================================================
+   TRANSITION UTILITY CLASSES
+   ================================================================ */
+
+/* === BASIC TRANSITIONS === */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-bounce {
+  transition: all 0.4s cubic-bezier(0.5, 1.6, 0.4, 1);
+}
+
+.transition-elastic {
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.transition-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-base {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-slow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-slower {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === SPECIFIC PROPERTY TRANSITIONS === */
+.transition-transform {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-opacity {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-colors {
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-shadow {
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ================================================================
+   EASING CURVES (CUBIC-BEZIER)
+   ================================================================ */
+
+:root {
+  /* Standard Easings */
+  --ease-linear: cubic-bezier(0, 0, 1, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Custom Cosmic Easings */
+  --ease-cosmic-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-cosmic-bounce: cubic-bezier(0.5, 1.6, 0.4, 1);
+  --ease-cosmic-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-cosmic-snap: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-cosmic-float: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Material Design Easings */
+  --ease-material-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-material-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-material-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+
+  /* iOS Easings */
+  --ease-ios-in: cubic-bezier(0.42, 0, 1, 1);
+  --ease-ios-out: cubic-bezier(0, 0, 0.58, 1);
+  --ease-ios-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+
+/* ================================================================
+   ANIMATION DURATION CLASSES
+   ================================================================ */
+
+.duration-fast {
+  animation-duration: 150ms;
+}
+
+.duration-base {
+  animation-duration: 200ms;
+}
+
+.duration-slow {
+  animation-duration: 300ms;
+}
+
+.duration-slower {
+  animation-duration: 500ms;
+}
+
+.duration-slowest {
+  animation-duration: 1s;
+}
+
+
+/* ================================================================
+   ANIMATION DELAY CLASSES
+   ================================================================ */
+
+.delay-0 {
+  animation-delay: 0ms;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+
+/* ================================================================
+   HOVER STATE ANIMATIONS
+   ================================================================ */
+
+/* === SCALE HOVER === */
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-sm:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale-lg:hover {
+  transform: scale(1.1);
+}
+
+/* === TRANSLATE HOVER === */
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.hover-lift-sm:hover {
+  transform: translateY(-2px);
+}
+
+.hover-lift-lg:hover {
+  transform: translateY(-8px);
+}
+
+/* === GLOW HOVER === */
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(222, 151, 255, 0.6);
+}
+
+.hover-glow-blue:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+.hover-glow-cyan:hover {
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
+}
+
+.hover-glow-purple:hover {
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
+}
+
+/* === BRIGHTNESS HOVER === */
+.hover-brighten:hover {
+  filter: brightness(1.2);
+}
+
+.hover-dim:hover {
+  filter: brightness(0.8);
+}
+
+
+/* ================================================================
+   ANIMATION STATE CLASSES
+   ================================================================ */
+
+/* Animation play state controls */
+.animation-paused {
+  animation-play-state: paused;
+}
+
+.animation-running {
+  animation-play-state: running;
+}
+
+/* Animation fill modes */
+.animation-fill-forwards {
+  animation-fill-mode: forwards;
+}
+
+.animation-fill-backwards {
+  animation-fill-mode: backwards;
+}
+
+.animation-fill-both {
+  animation-fill-mode: both;
+}
+
+/* Animation iteration */
+.animation-infinite {
+  animation-iteration-count: infinite;
+}
+
+.animation-once {
+  animation-iteration-count: 1;
+}
+
+
+/* ================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ================================================================ */
+
+/* Enable hardware acceleration for animated elements */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+/* GPU acceleration */
+.gpu-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+
+/* ================================================================
+   REDUCED MOTION SUPPORT (ACCESSIBILITY)
+   ================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Disable specific animations */
+  .animate-glow,
+  .animate-pulse,
+  .animate-float,
+  .animate-shimmer,
+  .animate-bounce,
+  .animate-spin {
+    animation: none !important;
+  }
+}
+
+
+/* ================================================================
+   COMPOSITE ANIMATION CLASSES
+   ================================================================ */
+
+/* Fade + Scale */
+.animate-fade-scale-in {
+  animation: cosmic-fade-in 0.3s ease-out,
+             cosmic-scale-in 0.3s ease-out;
+}
+
+/* Slide + Fade */
+.animate-slide-fade-in-right {
+  animation: cosmic-slide-in-right 0.5s ease-out,
+             cosmic-fade-in 0.5s ease-out;
+}
+
+/* Bounce + Glow */
+.animate-bounce-glow {
+  animation: cosmic-bounce 1s ease-in-out infinite,
+             cosmic-glow-pulse 2s infinite;
+}
+
+
+/* ================================================================
+   PRINT STYLES
+   ================================================================ */
+
+@media print {
+  /* Disable all animations for printing */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* ================================================================
+   JQUERY INTEGRATION EXAMPLES
+   ================================================================ */
+
+/*
+// Add animation class
+$('.element').addClass('animate-fade-in');
+
+// Remove animation after completion
+$('.element').on('animationend', function() {
+  $(this).removeClass('animate-fade-in');
+});
+
+// Chain animations
+$('.element')
+  .addClass('animate-slide-in-right')
+  .one('animationend', function() {
+    $(this).removeClass('animate-slide-in-right')
+           .addClass('animate-bounce');
+  });
+
+// Toggle animation on click
+$('.button').on('click', function() {
+  $(this).addClass('animate-jello');
+  setTimeout(() => {
+    $(this).removeClass('animate-jello');
+  }, 800);
+});
+
+// Conditional animation based on user preference
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  $('.hero').addClass('animate-float');
+}
+*/

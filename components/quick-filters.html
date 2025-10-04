@@ -1,0 +1,381 @@
+<!-- Quick Filter Buttons Component -->
+<div class="quick-filters-widget" style="margin-bottom: 20px;">
+    <div class="d-flex flex-wrap align-items-center" style="gap: 10px;">
+        <span style="color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 600; margin-right: 5px;">
+            <i class="fas fa-filter mr-1"></i>Quick Filters:
+        </span>
+
+        <!-- Filter Pills -->
+        <div id="quick-filter-pills" class="d-flex flex-wrap" style="gap: 8px;"></div>
+
+        <!-- Clear Filters -->
+        <button
+            id="clear-filters-btn"
+            class="btn btn-sm btn-outline-secondary"
+            onclick="QuickFilters.clearAll()"
+            style="display: none; border-radius: 15px; padding: 4px 12px; font-size: 12px;"
+        >
+            <i class="fas fa-times mr-1"></i>Clear All
+        </button>
+
+        <!-- Custom Filter Builder -->
+        <button
+            class="btn btn-sm btn-outline-primary"
+            onclick="QuickFilters.showCustomBuilder()"
+            style="border-radius: 15px; padding: 4px 12px; font-size: 12px;"
+        >
+            <i class="fas fa-plus mr-1"></i>Custom Filter
+        </button>
+    </div>
+
+    <!-- Active Filters Display -->
+    <div id="active-filters-display" style="margin-top: 12px; display: none;">
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+            <span style="color: rgba(255,255,255,0.5); font-size: 12px;">Active:</span>
+            <div id="active-filter-tags" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const QuickFilters = (function() {
+    'use strict';
+
+    let activeFilters = [];
+    let currentContext = 'default'; // default, contacts, projects, tasks, invoices
+
+    // Predefined filter templates
+    const filterTemplates = {
+        contacts: [
+            { label: 'Clients', field: 'type', operator: 'equals', value: 'client', icon: 'fa-star' },
+            { label: 'Leads', field: 'type', operator: 'equals', value: 'lead', icon: 'fa-user-plus' },
+            { label: 'Recent', field: 'created_at', operator: 'days_ago', value: 7, icon: 'fa-clock' },
+            { label: 'Has Email', field: 'email', operator: 'not_empty', icon: 'fa-envelope' },
+            { label: 'Has Phone', field: 'phone', operator: 'not_empty', icon: 'fa-phone' }
+        ],
+        projects: [
+            { label: 'Active', field: 'status', operator: 'equals', value: 'active', icon: 'fa-play', color: '#3dd598' },
+            { label: 'On Hold', field: 'status', operator: 'equals', value: 'on_hold', icon: 'fa-pause', color: '#ffc107' },
+            { label: 'Completed', field: 'status', operator: 'equals', value: 'completed', icon: 'fa-check', color: '#667eea' },
+            { label: 'Overdue', field: 'end_date', operator: 'is_past', icon: 'fa-exclamation-triangle', color: '#fc5a5a' },
+            { label: 'This Month', field: 'created_at', operator: 'this_month', icon: 'fa-calendar' }
+        ],
+        tasks: [
+            { label: 'Open', field: 'completed', operator: 'equals', value: false, icon: 'fa-circle', color: '#ffc107' },
+            { label: 'Completed', field: 'completed', operator: 'equals', value: true, icon: 'fa-check-circle', color: '#3dd598' },
+            { label: 'High Priority', field: 'priority', operator: 'equals', value: 'high', icon: 'fa-arrow-up', color: '#fc5a5a' },
+            { label: 'Overdue', field: 'due_date', operator: 'is_past', icon: 'fa-exclamation-triangle', color: '#fc5a5a' },
+            { label: 'Due Soon', field: 'due_date', operator: 'within_days', value: 7, icon: 'fa-clock', color: '#ffc107' }
+        ],
+        invoices: [
+            { label: 'Draft', field: 'status', operator: 'equals', value: 'draft', icon: 'fa-file', color: '#6c757d' },
+            { label: 'Sent', field: 'status', operator: 'equals', value: 'sent', icon: 'fa-paper-plane', color: '#50b5ff' },
+            { label: 'Paid', field: 'status', operator: 'equals', value: 'paid', icon: 'fa-check-circle', color: '#3dd598' },
+            { label: 'Overdue', field: 'status', operator: 'equals', value: 'overdue', icon: 'fa-exclamation-circle', color: '#fc5a5a' },
+            { label: 'This Month', field: 'issue_date', operator: 'this_month', icon: 'fa-calendar' }
+        ]
+    };
+
+    /**
+     * Initialize quick filters for a context
+     */
+    function init(context = 'default') {
+        currentContext = context;
+        render();
+    }
+
+    /**
+     * Render filter pills
+     */
+    function render() {
+        const $container = $('#quick-filter-pills');
+        const templates = filterTemplates[currentContext] || [];
+
+        if (templates.length === 0) {
+            $container.hide();
+            return;
+        }
+
+        let html = '';
+
+        templates.forEach((filter, index) => {
+            const isActive = isFilterActive(filter);
+            const color = filter.color || '#667eea';
+
+            html += `
+                <button
+                    class="filter-pill ${isActive ? 'active' : ''}"
+                    data-filter-index="${index}"
+                    onclick="QuickFilters.toggle(${index}, '${currentContext}')"
+                    style="
+                        background: ${isActive ? color + '30' : 'rgba(255,255,255,0.03)'};
+                        border: 1px solid ${isActive ? color : 'rgba(255,255,255,0.1)'};
+                        color: ${isActive ? color : 'rgba(255,255,255,0.7)'};
+                        padding: 6px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 500;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        white-space: nowrap;
+                    "
+                    onmouseover="if (!this.classList.contains('active')) { this.style.background='rgba(255,255,255,0.06)'; this.style.borderColor='${color}'; this.style.color='${color}'; }"
+                    onmouseout="if (!this.classList.contains('active')) { this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.1)'; this.style.color='rgba(255,255,255,0.7)'; }"
+                >
+                    <i class="fas ${filter.icon} mr-1"></i>${filter.label}
+                </button>
+            `;
+        });
+
+        $container.html(html).show();
+        updateActiveFiltersDisplay();
+    }
+
+    /**
+     * Check if filter is active
+     */
+    function isFilterActive(filter) {
+        return activeFilters.some(f =>
+            f.field === filter.field &&
+            f.operator === filter.operator &&
+            JSON.stringify(f.value) === JSON.stringify(filter.value)
+        );
+    }
+
+    /**
+     * Toggle filter
+     */
+    function toggle(index, context) {
+        const filter = filterTemplates[context][index];
+
+        if (isFilterActive(filter)) {
+            // Remove filter
+            activeFilters = activeFilters.filter(f =>
+                !(f.field === filter.field &&
+                  f.operator === filter.operator &&
+                  JSON.stringify(f.value) === JSON.stringify(filter.value))
+            );
+        } else {
+            // Add filter
+            activeFilters.push(filter);
+        }
+
+        render();
+        applyFilters();
+    }
+
+    /**
+     * Update active filters display
+     */
+    function updateActiveFiltersDisplay() {
+        const $display = $('#active-filters-display');
+        const $tags = $('#active-filter-tags');
+        const $clearBtn = $('#clear-filters-btn');
+
+        if (activeFilters.length === 0) {
+            $display.hide();
+            $clearBtn.hide();
+            return;
+        }
+
+        $clearBtn.show();
+        $display.show();
+
+        let html = '';
+
+        activeFilters.forEach((filter, index) => {
+            const color = filter.color || '#667eea';
+
+            html += `
+                <span style="
+                    background: ${color}20;
+                    border: 1px solid ${color}40;
+                    color: ${color};
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                ">
+                    <i class="fas ${filter.icon}"></i>
+                    ${filter.label}
+                    <i class="fas fa-times" style="cursor: pointer; opacity: 0.7;" onclick="QuickFilters.removeFilter(${index}); event.stopPropagation();"></i>
+                </span>
+            `;
+        });
+
+        $tags.html(html);
+    }
+
+    /**
+     * Remove specific filter
+     */
+    function removeFilter(index) {
+        activeFilters.splice(index, 1);
+        render();
+        applyFilters();
+    }
+
+    /**
+     * Clear all filters
+     */
+    function clearAll() {
+        activeFilters = [];
+        render();
+        applyFilters();
+    }
+
+    /**
+     * Apply filters to data
+     */
+    function applyFilters() {
+        // Trigger custom event that pages can listen to
+        $(document).trigger('quickFiltersChanged', [activeFilters]);
+    }
+
+    /**
+     * Filter data array
+     */
+    function filterData(data) {
+        if (activeFilters.length === 0) {
+            return data;
+        }
+
+        return data.filter(item => {
+            return activeFilters.every(filter => {
+                return matchesFilter(item, filter);
+            });
+        });
+    }
+
+    /**
+     * Check if item matches filter
+     */
+    function matchesFilter(item, filter) {
+        const value = item[filter.field];
+
+        switch (filter.operator) {
+            case 'equals':
+                return value === filter.value;
+
+            case 'not_equals':
+                return value !== filter.value;
+
+            case 'not_empty':
+                return value !== null && value !== undefined && value !== '';
+
+            case 'is_empty':
+                return !value;
+
+            case 'contains':
+                return String(value).toLowerCase().includes(String(filter.value).toLowerCase());
+
+            case 'is_past':
+                return value && Utils.isPast(value);
+
+            case 'days_ago':
+                if (!value) return false;
+                const daysAgo = Math.floor((new Date() - new Date(value)) / (1000 * 60 * 60 * 24));
+                return daysAgo <= filter.value;
+
+            case 'within_days':
+                if (!value) return false;
+                const daysUntil = Math.floor((new Date(value) - new Date()) / (1000 * 60 * 60 * 24));
+                return daysUntil >= 0 && daysUntil <= filter.value;
+
+            case 'this_month':
+                if (!value) return false;
+                const date = new Date(value);
+                const now = new Date();
+                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+
+            case 'this_week':
+                if (!value) return false;
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                return new Date(value) >= weekAgo;
+
+            case 'greater_than':
+                return parseFloat(value) > parseFloat(filter.value);
+
+            case 'less_than':
+                return parseFloat(value) < parseFloat(filter.value);
+
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Show custom filter builder
+     */
+    function showCustomBuilder() {
+        Modals.form({
+            title: 'Custom Filter',
+            icon: 'fas fa-filter',
+            size: 'md',
+            fields: [
+                { name: 'label', label: 'Filter Name', type: 'text', required: true, placeholder: 'My Custom Filter' },
+                { name: 'field', label: 'Field', type: 'text', required: true, placeholder: 'status' },
+                { name: 'operator', label: 'Operator', type: 'select', required: true, options: [
+                    { value: 'equals', label: 'Equals' },
+                    { value: 'not_equals', label: 'Not Equals' },
+                    { value: 'contains', label: 'Contains' },
+                    { value: 'not_empty', label: 'Is Not Empty' },
+                    { value: 'is_empty', label: 'Is Empty' },
+                    { value: 'is_past', label: 'Is Past Date' },
+                    { value: 'greater_than', label: 'Greater Than' },
+                    { value: 'less_than', label: 'Less Than' }
+                ]},
+                { name: 'value', label: 'Value', type: 'text', placeholder: 'active' }
+            ],
+            submitText: 'Add Filter'
+        }).then(data => {
+            const filter = {
+                label: data.label,
+                field: data.field,
+                operator: data.operator,
+                value: data.value || true,
+                icon: 'fa-filter',
+                color: '#667eea',
+                custom: true
+            };
+
+            activeFilters.push(filter);
+
+            // Add to templates for this session
+            if (!filterTemplates[currentContext]) {
+                filterTemplates[currentContext] = [];
+            }
+            filterTemplates[currentContext].push(filter);
+
+            render();
+            applyFilters();
+            Utils.showToast('Custom filter added!', 'success');
+        }).catch(() => {});
+    }
+
+    /**
+     * Get active filters
+     */
+    function getActiveFilters() {
+        return activeFilters;
+    }
+
+    // Public API
+    return {
+        init: init,
+        toggle: toggle,
+        removeFilter: removeFilter,
+        clearAll: clearAll,
+        filterData: filterData,
+        showCustomBuilder: showCustomBuilder,
+        getActiveFilters: getActiveFilters
+    };
+})();
+
+// Make available globally
+window.QuickFilters = QuickFilters;
+</script>

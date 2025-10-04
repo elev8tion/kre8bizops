@@ -1,0 +1,85 @@
+/* COSMIC LAYOUT FIXES */
+
+/* Remove Bootstrap auth-floated layout conflicts */
+.auth-floated {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Kill all bouncing animations */
+.animate-float-smooth,
+.animate-float,
+.animate-bounce {
+  animation: none !important;
+}
+
+/* Override Bootstrap min-height utilities */
+.min-h-screen {
+  min-height: 100vh !important;
+  height: auto !important;
+}
+
+/* Fix fullwidth background */
+.w-full {
+  width: 100% !important;
+}
+
+/* Proper centering */
+.bg-black {
+  background-color: #000 !important;
+}
+
+/* Ensure no weird grid layouts */
+main {
+  max-width: 100% !important;
+}
+
+/* Fix form inputs - no rounded weird shapes */
+.cosmic-input-group {
+  width: 100% !important;
+  margin-bottom: 1.5rem;
+}
+
+.cosmic-input {
+  width: 100% !important;
+  min-width: 100% !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  font-size: 1rem !important;
+}
+
+/* Fix button */
+.cosmic-btn-primary {
+  width: 100% !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  font-size: 1rem !important;
+  border: none !important;
+}
+
+/* No position relative issues */
+.position-relative {
+  position: relative !important;
+}
+
+/* Fix z-index */
+.z-10 {
+  z-index: 10 !important;
+}
+
+/* Remove ALL hover bounce effects */
+* {
+  animation-play-state: running !important;
+}
+
+*:hover {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Fix announcement panel */
+.auth-announcement {
+  max-width: 480px !important;
+  margin: 2rem auto !important;
+  width: 100% !important;
+}

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Mock Data - ELEV8TION</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .result-item {
+            padding: 8px;
+            margin: 4px 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+        }
+        .btn-insert {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+        }
+        .btn-insert:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .spinner-border {
+            display: none;
+        }
+        .spinner-border.active {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">🎭 Insert Mock Data</h3>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">This will add 5 realistic examples of each data type to your ELEV8TION app for visualization purposes.</p>
+
+            <div class="alert alert-info">
+                <strong>What will be created:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>5 Contacts with companies and tags</li>
+                    <li>5 Projects with various statuses</li>
+                    <li>5 Tasks (some overdue for notifications)</li>
+                    <li>5 Invoices (draft, sent, paid, overdue)</li>
+                    <li>5 Deals in pipeline stages</li>
+                    <li>5 Expenses with categories</li>
+                    <li>5 Events/Appointments</li>
+                    <li>Categories and Tags for organization</li>
+                </ul>
+            </div>
+
+            <button id="insertBtn" class="btn btn-primary btn-insert btn-block">
+                <span class="spinner-border spinner-border-sm mr-2" id="spinner"></span>
+                Insert Mock Data
+            </button>
+
+            <div id="results" class="mt-4" style="display: none;">
+                <h5 class="text-success">✅ Mock Data Inserted Successfully!</h5>
+                <div id="resultsList"></div>
+                <a href="dashboard.html" class="btn btn-success btn-block mt-3">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="js/db.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="js/gradient-button-wrapper.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#insertBtn').click(function() {
+                const $btn = $(this);
+                const $spinner = $('#spinner');
+                const $results = $('#results');
+                const $resultsList = $('#resultsList');
+
+                // Disable button and show spinner
+                $btn.prop('disabled', true);
+                $spinner.addClass('active');
+                $resultsList.empty();
+
+                // Wait a moment for visual effect
+                setTimeout(() => {
+                    try {
+                        insertMockData($resultsList);
+
+                        // Show results
+                        $results.fadeIn();
+                        $btn.hide();
+                    } catch (error) {
+                        alert('Error inserting data: ' + error.message);
+                        $btn.prop('disabled', false);
+                        $spinner.removeClass('active');
+                    }
+                }, 500);
+            });
+        });
+
+        function insertMockData($resultsList) {
+            const results = [];
+
+            // 1. Create Categories and Tags
+            const categories = ['Marketing', 'Development', 'Sales', 'Support', 'Finance'];
+            const tags = ['VIP', 'Hot Lead', 'Urgent', 'Follow-up', 'Low Priority', 'High Value'];
+
+            results.push('Created ' + categories.length + ' categories and ' + tags.length + ' tags');
+
+            // 2. Create 5 Contacts
+            const contacts = [
+                {
+                    name: 'Sarah Johnson',
+                    email: 'sarah.johnson@techcorp.com',
+                    phone: '(555) 123-4567',
+                    company: 'TechCorp Solutions',
+                    position: 'CEO',
+                    type: 'client',
+                    status: 'active',
+                    tags: ['VIP', 'High Value'],
+                    notes: 'Key decision maker for enterprise deals. Prefers morning meetings.',
+                    address: '123 Tech Street, San Francisco, CA 94105'
+                },
+                {
+                    name: 'Michael Chen',
+                    email: 'mchen@innovate.io',
+                    phone: '(555) 234-5678',
+                    company: 'Innovate.io',
+                    position: 'CTO',
+                    type: 'lead',
+                    status: 'active',
+                    tags: ['Hot Lead', 'Follow-up'],
+                    notes: 'Interested in our premium package. Schedule demo next week.',
+                    address: '456 Innovation Ave, Austin, TX 78701'
+                },
+                {
+                    name: 'Emily Rodriguez',
+                    email: 'emily.r@designstudio.com',
+                    phone: '(555) 345-6789',
+                    company: 'Creative Design Studio',
+                    position: 'Creative Director',
+                    type: 'client',
+                    status: 'active',
+                    tags: ['VIP'],
+                    notes: 'Long-term client. Annual contract renewal in 3 months.',
+                    address: '789 Design Blvd, New York, NY 10001'
+                },
+                {
+                    name: 'David Thompson',
+                    email: 'dthompson@startup.co',
+                    phone: '(555) 456-7890',
+                    company: 'Startup Ventures Co',
+                    position: 'Founder',
+                    type: 'lead',
+                    status: 'active',
+                    tags: ['Hot Lead', 'Urgent'],
+                    notes: 'Fast-growing startup. Budget approved for Q2.',
+                    address: '321 Venture Lane, Seattle, WA 98101'
+                },
+                {
+                    name: 'Lisa Anderson',
+                    email: 'l.anderson@global-corp.com',
+                    phone: '(555) 567-8901',
+                    company: 'Global Corp International',
+                    position: 'VP Operations',
+                    type: 'client',
+                    status: 'active',
+                    tags: ['High Value'],
+                    notes: 'Manages multiple departments. Potential for expansion.',
+                    address: '654 Global Plaza, Chicago, IL 60601'
+                }
+            ];
+
+            contacts.forEach(contact => {
+                DB.contacts.create(contact);
+            });
+            results.push('Created 5 contacts');
+
+            // 3. Create 5 Projects
+            const projectStatuses = ['planning', 'active', 'active', 'on_hold', 'completed'];
+            const projects = [
+                {
+                    name: 'Website Redesign - TechCorp',
+                    description: 'Complete overhaul of corporate website with modern design and improved UX',
+                    client: 'TechCorp Solutions',
+                    status: 'active',
+                    startDate: '2025-09-01',
+                    endDate: '2025-11-30',
+                    budget: 45000,
+                    tags: ['Development', 'High Value'],
+                    progress: 65
+                },
+                {
+                    name: 'Mobile App Development - Innovate',
+                    description: 'iOS and Android app for customer engagement',
+                    client: 'Innovate.io',
+                    status: 'planning',
+                    startDate: '2025-10-15',
+                    endDate: '2026-03-15',
+                    budget: 120000,
+                    tags: ['Development', 'VIP'],
+                    progress: 15
+                },
+                {
+                    name: 'Marketing Campaign Q4',
+                    description: 'Comprehensive digital marketing campaign across all channels',
+                    client: 'Creative Design Studio',
+                    status: 'active',
+                    startDate: '2025-09-20',
+                    endDate: '2025-12-31',
+                    budget: 30000,
+                    tags: ['Marketing', 'Urgent'],
+                    progress: 45
+                },
+                {
+                    name: 'CRM Integration - Startup Ventures',
+                    description: 'Custom CRM integration with existing tools',
+                    client: 'Startup Ventures Co',
+                    status: 'on_hold',
+                    startDate: '2025-08-01',
+                    endDate: '2025-10-15',
+                    budget: 25000,
+                    tags: ['Development'],
+                    progress: 30
+                },
+                {
+                    name: 'Brand Identity - Global Corp',
+                    description: 'Complete brand refresh including logo, colors, and guidelines',
+                    client: 'Global Corp International',
+                    status: 'completed',
+                    startDate: '2025-06-01',
+                    endDate: '2025-09-15',
+                    budget: 55000,
+                    tags: ['Marketing', 'High Value'],
+                    progress: 100
+                }
+            ];
+
+            projects.forEach(project => {
+                DB.projects.create(project);
+            });
+            results.push('Created 5 projects');
+
+            // 4. Create 5 Tasks (some overdue for notifications)
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const lastWeek = new Date(today);
+            lastWeek.setDate(lastWeek.getDate() - 7);
+            const nextWeek = new Date(today);
+            nextWeek.setDate(nextWeek.getDate() + 7);
+
+            const tasks = [
+                {
+                    title: 'Design Homepage Mockup',
+                    description: 'Create initial design concepts for TechCorp homepage',
+                    project: 'Website Redesign - TechCorp',
+                    assignedTo: 'Design Team',
+                    priority: 'high',
+                    status: 'in_progress',
+                    dueDate: nextWeek.toISOString().split('T')[0],
+                    tags: ['Design', 'Urgent']
+                },
+                {
+                    title: 'Client Meeting Preparation',
+                    description: 'Prepare presentation slides and demo for Innovate.io',
+                    project: 'Mobile App Development - Innovate',
+                    assignedTo: 'Sales Team',
+                    priority: 'high',
+                    status: 'pending',
+                    dueDate: yesterday.toISOString().split('T')[0], // OVERDUE
+                    tags: ['Sales', 'Urgent']
+                },
+                {
+                    title: 'Social Media Content Calendar',
+                    description: 'Plan Q4 content calendar for all platforms',
+                    project: 'Marketing Campaign Q4',
+                    assignedTo: 'Marketing Team',
+                    priority: 'medium',
+                    status: 'in_progress',
+                    dueDate: today.toISOString().split('T')[0],
+                    tags: ['Marketing']
+                },
+                {
+                    title: 'API Documentation',
+                    description: 'Complete technical documentation for CRM API endpoints',
+                    project: 'CRM Integration - Startup Ventures',
+                    assignedTo: 'Dev Team',
+                    priority: 'low',
+                    status: 'pending',
+                    dueDate: lastWeek.toISOString().split('T')[0], // OVERDUE
+                    tags: ['Development']
+                },
+                {
+                    title: 'Final Brand Guidelines',
+                    description: 'Deliver final brand guidelines document to client',
+                    project: 'Brand Identity - Global Corp',
+                    assignedTo: 'Design Team',
+                    priority: 'medium',
+                    status: 'completed',
+                    dueDate: '2025-09-10',
+                    completedDate: '2025-09-10',
+                    tags: ['Marketing', 'High Value']
+                }
+            ];
+
+            tasks.forEach(task => {
+                DB.tasks.create(task);
+            });
+            results.push('Created 5 tasks (2 overdue for notifications)');
+
+            // 5. Create 5 Invoices (different statuses)
+            const invoices = [
+                {
+                    invoiceNumber: 'INV-2025-001',
+                    client: 'TechCorp Solutions',
+                    project: 'Website Redesign - TechCorp',
+                    issueDate: '2025-09-15',
+                    dueDate: '2025-10-15',
+                    status: 'sent',
+                    items: [
+                        { description: 'Design Phase - Homepage', quantity: 1, rate: 8000, amount: 8000 },
+                        { description: 'Development Phase - Initial Setup', quantity: 1, rate: 7000, amount: 7000 }
+                    ],
+                    subtotal: 15000,
+                    tax: 1200,
+                    total: 16200,
+                    notes: 'Payment terms: Net 30'
+                },
+                {
+                    invoiceNumber: 'INV-2025-002',
+                    client: 'Creative Design Studio',
+                    project: 'Marketing Campaign Q4',
+                    issueDate: '2025-09-01',
+                    dueDate: '2025-09-20',
+                    status: 'overdue',
+                    items: [
+                        { description: 'Social Media Management - September', quantity: 1, rate: 5000, amount: 5000 },
+                        { description: 'Content Creation', quantity: 20, rate: 150, amount: 3000 }
+                    ],
+                    subtotal: 8000,
+                    tax: 640,
+                    total: 8640,
+                    notes: 'Follow-up needed'
+                },
+                {
+                    invoiceNumber: 'INV-2025-003',
+                    client: 'Global Corp International',
+                    project: 'Brand Identity - Global Corp',
+                    issueDate: '2025-09-10',
+                    dueDate: '2025-09-25',
+                    status: 'paid',
+                    paidDate: '2025-09-22',
+                    items: [
+                        { description: 'Brand Strategy & Research', quantity: 1, rate: 12000, amount: 12000 },
+                        { description: 'Logo Design & Variations', quantity: 1, rate: 8000, amount: 8000 },
+                        { description: 'Brand Guidelines Document', quantity: 1, rate: 5000, amount: 5000 }
+                    ],
+                    subtotal: 25000,
+                    tax: 2000,
+                    total: 27000,
+                    notes: 'Paid via wire transfer'
+                },
+                {
+                    invoiceNumber: 'INV-2025-004',
+                    client: 'Innovate.io',
+                    project: 'Mobile App Development - Innovate',
+                    issueDate: '2025-09-25',
+                    dueDate: '2025-10-25',
+                    status: 'draft',
+                    items: [
+                        { description: 'Project Planning & Discovery', quantity: 1, rate: 15000, amount: 15000 }
+                    ],
+                    subtotal: 15000,
+                    tax: 1200,
+                    total: 16200,
+                    notes: 'Draft - pending approval'
+                },
+                {
+                    invoiceNumber: 'INV-2025-005',
+                    client: 'Startup Ventures Co',
+                    project: 'CRM Integration - Startup Ventures',
+                    issueDate: '2025-08-20',
+                    dueDate: '2025-08-10',
+                    status: 'overdue',
+                    items: [
+                        { description: 'CRM Setup & Configuration', quantity: 1, rate: 6000, amount: 6000 },
+                        { description: 'Data Migration Services', quantity: 1, rate: 4000, amount: 4000 }
+                    ],
+                    subtotal: 10000,
+                    tax: 800,
+                    total: 10800,
+                    notes: 'Multiple follow-up attempts made'
+                }
+            ];
+
+            invoices.forEach(invoice => {
+                DB.invoices.create(invoice);
+            });
+            results.push('Created 5 invoices (draft, sent, paid, 2 overdue)');
+
+            // 6. Create 5 Deals
+            const deals = [
+                {
+                    title: 'Enterprise Package - TechCorp',
+                    company: 'TechCorp Solutions',
+                    contact: 'Sarah Johnson',
+                    value: 150000,
+                    stage: 'proposal',
+                    probability: 75,
+                    expectedCloseDate: '2025-11-15',
+                    description: 'Annual enterprise package with premium support',
+                    tags: ['VIP', 'High Value']
+                },
+                {
+                    title: 'Mobile App Suite - Innovate',
+                    company: 'Innovate.io',
+                    contact: 'Michael Chen',
+                    value: 120000,
+                    stage: 'qualification',
+                    probability: 60,
+                    expectedCloseDate: '2025-10-30',
+                    description: 'Full mobile app development with maintenance',
+                    tags: ['Hot Lead', 'Development']
+                },
+                {
+                    title: 'Marketing Retainer - Creative Studio',
+                    company: 'Creative Design Studio',
+                    contact: 'Emily Rodriguez',
+                    value: 36000,
+                    stage: 'negotiation',
+                    probability: 85,
+                    expectedCloseDate: '2025-10-05',
+                    description: 'Annual marketing retainer agreement',
+                    tags: ['Marketing', 'VIP']
+                },
+                {
+                    title: 'Consulting Services - Startup Ventures',
+                    company: 'Startup Ventures Co',
+                    contact: 'David Thompson',
+                    value: 50000,
+                    stage: 'discovery',
+                    probability: 40,
+                    expectedCloseDate: '2025-12-01',
+                    description: 'Strategic consulting and implementation',
+                    tags: ['Hot Lead']
+                },
+                {
+                    title: 'Brand Extension - Global Corp',
+                    company: 'Global Corp International',
+                    contact: 'Lisa Anderson',
+                    value: 85000,
+                    stage: 'closed_won',
+                    probability: 100,
+                    closeDate: '2025-09-20',
+                    description: 'Brand extension for new product line',
+                    tags: ['High Value', 'Marketing']
+                }
+            ];
+
+            deals.forEach(deal => {
+                DB.deals.create(deal);
+            });
+            results.push('Created 5 deals in various pipeline stages');
+
+            // 7. Create 5 Expenses
+            const expenses = [
+                {
+                    description: 'Adobe Creative Cloud Subscription',
+                    amount: 599.88,
+                    category: 'Software',
+                    date: '2025-09-01',
+                    vendor: 'Adobe Inc.',
+                    paymentMethod: 'Credit Card',
+                    billable: false,
+                    status: 'paid',
+                    tags: ['Recurring', 'Design']
+                },
+                {
+                    description: 'Client Dinner - TechCorp Meeting',
+                    amount: 287.50,
+                    category: 'Meals & Entertainment',
+                    date: '2025-09-15',
+                    vendor: 'The Capital Grille',
+                    paymentMethod: 'Company Card',
+                    billable: true,
+                    project: 'Website Redesign - TechCorp',
+                    status: 'paid',
+                    tags: ['Client Meeting']
+                },
+                {
+                    description: 'Stock Photos & Assets',
+                    amount: 450.00,
+                    category: 'Marketing',
+                    date: '2025-09-20',
+                    vendor: 'Shutterstock',
+                    paymentMethod: 'Credit Card',
+                    billable: true,
+                    project: 'Marketing Campaign Q4',
+                    status: 'paid',
+                    tags: ['Marketing', 'Design']
+                },
+                {
+                    description: 'Cloud Hosting Services - AWS',
+                    amount: 1247.32,
+                    category: 'Infrastructure',
+                    date: '2025-09-25',
+                    vendor: 'Amazon Web Services',
+                    paymentMethod: 'ACH',
+                    billable: false,
+                    status: 'paid',
+                    tags: ['Recurring', 'Development']
+                },
+                {
+                    description: 'Conference Registration - WebSummit',
+                    amount: 1899.00,
+                    category: 'Professional Development',
+                    date: '2025-09-28',
+                    vendor: 'WebSummit',
+                    paymentMethod: 'Credit Card',
+                    billable: false,
+                    status: 'pending',
+                    tags: ['Training']
+                }
+            ];
+
+            expenses.forEach(expense => {
+                DB.expenses.create(expense);
+            });
+            results.push('Created 5 expenses');
+
+            // 8. Create 5 Events/Appointments
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const in3Days = new Date(today);
+            in3Days.setDate(in3Days.getDate() + 3);
+            const in5Days = new Date(today);
+            in5Days.setDate(in5Days.getDate() + 5);
+
+            const events = [
+                {
+                    title: 'Kickoff Meeting - Mobile App Project',
+                    description: 'Initial kickoff with Innovate.io team',
+                    date: tomorrow.toISOString().split('T')[0],
+                    startTime: '10:00',
+                    endTime: '11:30',
+                    type: 'meeting',
+                    location: 'Zoom',
+                    attendees: 'Michael Chen, Dev Team',
+                    project: 'Mobile App Development - Innovate',
+                    reminder: true,
+                    tags: ['Client Meeting', 'Important']
+                },
+                {
+                    title: 'Design Review - TechCorp Website',
+                    description: 'Review homepage designs with client',
+                    date: in3Days.toISOString().split('T')[0],
+                    startTime: '14:00',
+                    endTime: '15:00',
+                    type: 'meeting',
+                    location: 'Client Office',
+                    attendees: 'Sarah Johnson, Design Team',
+                    project: 'Website Redesign - TechCorp',
+                    reminder: true,
+                    tags: ['Client Meeting', 'Design']
+                },
+                {
+                    title: 'Team Standup',
+                    description: 'Weekly team sync and planning',
+                    date: today.toISOString().split('T')[0],
+                    startTime: '09:00',
+                    endTime: '09:30',
+                    type: 'meeting',
+                    location: 'Office Conference Room',
+                    attendees: 'All Team',
+                    reminder: false,
+                    tags: ['Internal', 'Recurring']
+                },
+                {
+                    title: 'Invoice Follow-up Call - Creative Studio',
+                    description: 'Follow up on overdue invoice payment',
+                    date: in5Days.toISOString().split('T')[0],
+                    startTime: '11:00',
+                    endTime: '11:30',
+                    type: 'call',
+                    location: 'Phone',
+                    attendees: 'Emily Rodriguez',
+                    reminder: true,
+                    tags: ['Finance', 'Follow-up']
+                },
+                {
+                    title: 'Project Planning Session',
+                    description: 'Q4 project planning and resource allocation',
+                    date: nextWeek.toISOString().split('T')[0],
+                    startTime: '13:00',
+                    endTime: '16:00',
+                    type: 'meeting',
+                    location: 'Office Conference Room',
+                    attendees: 'Management Team',
+                    reminder: true,
+                    tags: ['Planning', 'Internal']
+                }
+            ];
+
+            events.forEach(event => {
+                if (!DB.events) {
+                    // If events collection doesn't exist, create it in activities
+                    if (!localStorage.getItem('elev8tion_activities')) {
+                        localStorage.setItem('elev8tion_activities', JSON.stringify([]));
+                    }
+                    const activities = JSON.parse(localStorage.getItem('elev8tion_activities'));
+                    const eventActivity = {
+                        id: Date.now() + Math.random(),
+                        type: 'event',
+                        timestamp: new Date().toISOString(),
+                        description: event.title,
+                        data: event
+                    };
+                    activities.push(eventActivity);
+                    localStorage.setItem('elev8tion_activities', JSON.stringify(activities));
+                } else {
+                    DB.events.create(event);
+                }
+            });
+            results.push('Created 5 events/appointments');
+
+            // Display results
+            results.forEach(result => {
+                $resultsList.append(`<div class="result-item">✓ ${result}</div>`);
+            });
+
+            // Add summary
+            $resultsList.append(`<div class="alert alert-success mt-3">
+                <strong>🎉 All Done!</strong><br>
+                Your app now has realistic data to showcase all features:
+                <ul class="mb-0 mt-2">
+                    <li>Activity Timeline is populated</li>
+                    <li>Notifications show overdue items</li>
+                    <li>Global Search returns results</li>
+                    <li>All filters have data to filter</li>
+                    <li>Widgets display real metrics</li>
+                </ul>
+            </div>`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Leads - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="glass-medium glow-purple-soft mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" style="color: #fff; font-weight: 700;">
+                                <i class="fas fa-funnel-dollar mr-2" style="color: #667eea;"></i>
+                                Leads Pipeline
+                            </h1>
+                            <p class="mb-0" style="color: rgba(255,255,255,0.6);">
+                                Track and manage potential customers through your sales pipeline
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary" onclick="LeadsPage.newLead()">
+                                <i class="fas fa-plus mr-2"></i>Add Lead
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pipeline Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #6c757d;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">NEW</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-new">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #50b5ff;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">CONTACTED</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-contacted">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ffc107;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">QUALIFIED</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-qualified">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #764ba2;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">PROPOSAL</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-proposal">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="leads-table-container"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const LeadsPage = {
+            table: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadStats();
+                this.loadTable();
+            },
+
+            loadStats: function() {
+                const leads = DB.getAll(DB.COLLECTIONS.LEADS);
+                const stats = {
+                    new: leads.filter(l => l.stage === 'new').length,
+                    contacted: leads.filter(l => l.stage === 'contacted').length,
+                    qualified: leads.filter(l => l.stage === 'qualified').length,
+                    proposal: leads.filter(l => l.stage === 'proposal').length
+                };
+
+                $('#stat-new').text(stats.new);
+                $('#stat-contacted').text(stats.contacted);
+                $('#stat-qualified').text(stats.qualified);
+                $('#stat-proposal').text(stats.proposal);
+            },
+
+            loadTable: function() {
+                const leads = DB.getAll(DB.COLLECTIONS.LEADS);
+
+                this.table = DataTable.create('leads-table-container', {
+                    title: 'All Leads',
+                    icon: 'fas fa-filter',
+                    data: leads,
+                    columns: [
+                        {
+                            field: 'name',
+                            label: 'Lead Name',
+                            sortable: true,
+                            render: (value, row) => `
+                                <div>
+                                    <div style="color: white; font-weight: 500;">${value}</div>
+                                    ${row.company ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;">${row.company}</div>` : ''}
+                                </div>
+                            `
+                        },
+                        {
+                            field: 'email',
+                            label: 'Email',
+                            render: (value) => value ? `<a href="mailto:${value}" style="color: #667eea;">${value}</a>` : '-'
+                        },
+                        {
+                            field: 'phone',
+                            label: 'Phone',
+                            render: (value) => value || '-'
+                        },
+                        {
+                            field: 'stage',
+                            label: 'Stage',
+                            sortable: true,
+                            render: (value) => {
+                                const stages = {
+                                    new: { label: 'New', color: '#6c757d' },
+                                    contacted: { label: 'Contacted', color: '#50b5ff' },
+                                    qualified: { label: 'Qualified', color: '#ffc107' },
+                                    proposal: { label: 'Proposal', color: '#764ba2' },
+                                    negotiation: { label: 'Negotiation', color: '#667eea' }
+                                };
+                                const stage = stages[value] || stages.new;
+                                return `<span class="cell-badge" style="background: ${stage.color}20; color: ${stage.color};">${stage.label}</span>`;
+                            }
+                        },
+                        {
+                            field: 'source',
+                            label: 'Source',
+                            render: (value) => {
+                                const sources = {
+                                    website: 'Website',
+                                    social: 'Social Media',
+                                    referral: 'Referral',
+                                    cold_call: 'Cold Call',
+                                    event: 'Event'
+                                };
+                                return sources[value] || value || '-';
+                            }
+                        },
+                        {
+                            field: 'value',
+                            label: 'Est. Value',
+                            sortable: true,
+                            render: (value) => value ? Utils.formatCurrency(value) : '-'
+                        },
+                        {
+                            field: 'created_at',
+                            label: 'Added',
+                            sortable: true,
+                            render: (value) => Utils.formatRelativeTime(value)
+                        },
+                        {
+                            field: 'id',
+                            label: 'Actions',
+                            width: '220px',
+                            render: (value) => `
+                                <div class="cell-actions">
+                                    <button class="btn btn-sm btn-success" onclick="LeadsPage.convertLead('${value}')" title="Convert to Contact">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="LeadsPage.editLead('${value}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="LeadsPage.deleteLead('${value}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `
+                        }
+                    ],
+                    searchable: true,
+                    pagination: true,
+                    perPage: 10,
+                    emptyMessage: 'No leads found. Click "Add Lead" to create your first lead.',
+                    onRowClick: (row) => this.editLead(row.id)
+                });
+            },
+
+            newLead: function() {
+                Modals.form({
+                    title: 'New Lead',
+                    icon: 'fas fa-user-plus',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Lead Name', type: 'text', required: true, placeholder: 'Jane Smith' },
+                        { name: 'email', label: 'Email', type: 'email', placeholder: 'jane@company.com' },
+                        { name: 'phone', label: 'Phone', type: 'tel', placeholder: '+1 (555) 123-4567' },
+                        { name: 'company', label: 'Company', type: 'text', placeholder: 'Tech Startup Inc' },
+                        { name: 'stage', label: 'Stage', type: 'select', required: true, value: 'new', options: [
+                            { value: 'new', label: 'New' },
+                            { value: 'contacted', label: 'Contacted' },
+                            { value: 'qualified', label: 'Qualified' },
+                            { value: 'proposal', label: 'Proposal' },
+                            { value: 'negotiation', label: 'Negotiation' }
+                        ]},
+                        { name: 'source', label: 'Source', type: 'select', options: [
+                            { value: 'website', label: 'Website' },
+                            { value: 'social', label: 'Social Media' },
+                            { value: 'referral', label: 'Referral' },
+                            { value: 'cold_call', label: 'Cold Call' },
+                            { value: 'event', label: 'Event' }
+                        ]},
+                        { name: 'value', label: 'Estimated Value', type: 'number', min: 0, step: 100, placeholder: '5000' },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 3 }
+                    ],
+                    submitText: 'Create Lead'
+                }).then(data => {
+                    data.contact_id = null;
+                    DB.create(DB.COLLECTIONS.LEADS, data);
+                    Utils.showToast('Lead created successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                }).catch(() => {});
+            },
+
+            editLead: function(id) {
+                const lead = DB.get(DB.COLLECTIONS.LEADS, id);
+                if (!lead) return;
+
+                Modals.form({
+                    title: 'Edit Lead',
+                    icon: 'fas fa-user-edit',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Lead Name', type: 'text', required: true, value: lead.name },
+                        { name: 'email', label: 'Email', type: 'email', value: lead.email },
+                        { name: 'phone', label: 'Phone', type: 'tel', value: lead.phone },
+                        { name: 'company', label: 'Company', type: 'text', value: lead.company },
+                        { name: 'stage', label: 'Stage', type: 'select', required: true, value: lead.stage, options: [
+                            { value: 'new', label: 'New' },
+                            { value: 'contacted', label: 'Contacted' },
+                            { value: 'qualified', label: 'Qualified' },
+                            { value: 'proposal', label: 'Proposal' },
+                            { value: 'negotiation', label: 'Negotiation' }
+                        ]},
+                        { name: 'source', label: 'Source', type: 'select', value: lead.source, options: [
+                            { value: 'website', label: 'Website' },
+                            { value: 'social', label: 'Social Media' },
+                            { value: 'referral', label: 'Referral' },
+                            { value: 'cold_call', label: 'Cold Call' },
+                            { value: 'event', label: 'Event' }
+                        ]},
+                        { name: 'value', label: 'Estimated Value', type: 'number', min: 0, step: 100, value: lead.value },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 3, value: lead.notes }
+                    ],
+                    submitText: 'Update Lead'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.LEADS, id, data);
+                    Utils.showToast('Lead updated successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                }).catch(() => {});
+            },
+
+            convertLead: async function(id) {
+                const lead = DB.get(DB.COLLECTIONS.LEADS, id);
+                if (!lead) return;
+
+                const confirmed = await Modals.confirm({
+                    title: 'Convert Lead',
+                    message: `Convert ${lead.name} to a contact? This will create a new contact and mark the lead as converted.`,
+                    confirmText: 'Convert',
+                    confirmClass: 'btn-success'
+                });
+
+                if (confirmed) {
+                    // Create contact from lead
+                    const contact = DB.create(DB.COLLECTIONS.CONTACTS, {
+                        name: lead.name,
+                        email: lead.email,
+                        phone: lead.phone,
+                        company: lead.company,
+                        notes: lead.notes,
+                        tags: ['converted-lead']
+                    });
+
+                    // Update lead with contact reference
+                    DB.update(DB.COLLECTIONS.LEADS, id, {
+                        contact_id: contact.id
+                    });
+
+                    Utils.showToast('Lead converted to contact successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                }
+            },
+
+            deleteLead: async function(id) {
+                const lead = DB.get(DB.COLLECTIONS.LEADS, id);
+                if (!lead) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete lead ${lead.name}?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.LEADS, id);
+                    Utils.showToast('Lead deleted successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                }
+            }
+        };
+
+        $(document).ready(() => LeadsPage.init());
+    </script>
+</body>
+</html>

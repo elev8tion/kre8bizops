@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Deals - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+    <!-- Modern Card Styles -->
+    <link href="../css/modern-cards.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="modern-card mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="modern-card-shine"></div>
+                    <div class="modern-card-glow"></div>
+                    <div class="modern-card-content">
+                <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" class="modern-card-title" style="font-size: 1.75rem;">
+                                <i class="fas fa-handshake mr-2" style="color: #667eea;"></i>
+                                Deals Pipeline
+                            </h1>
+                            <p class="mb-0" class="modern-card-subtitle">
+                                Track sales opportunities and manage your deal pipeline
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary" onclick="DealsPage.newDeal()">
+                                <i class="fas fa-plus mr-2"></i>Add Deal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pipeline Value Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #50b5ff;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">PROSPECTING</div>
+                                <div class="modern-card-value" id="stat-prospecting">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">NEGOTIATION</div>
+                                <div class="modern-card-value" id="stat-negotiation">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3dd598;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">WON</div>
+                                <div class="modern-card-value" id="stat-won">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #fc5a5a;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">LOST</div>
+                                <div class="modern-card-value" id="stat-lost">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="deals-table-container"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const DealsPage = {
+            table: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadStats();
+                this.loadTable();
+            },
+
+            loadStats: function() {
+                const deals = DB.getAll(DB.COLLECTIONS.DEALS);
+                const stats = {
+                    prospecting: deals.filter(d => d.stage === 'prospecting').reduce((sum, d) => sum + (d.value || 0), 0),
+                    negotiation: deals.filter(d => d.stage === 'negotiation').reduce((sum, d) => sum + (d.value || 0), 0),
+                    won: deals.filter(d => d.stage === 'won').reduce((sum, d) => sum + (d.value || 0), 0),
+                    lost: deals.filter(d => d.stage === 'lost').reduce((sum, d) => sum + (d.value || 0), 0)
+                };
+
+                $('#stat-prospecting').text(Utils.formatCurrency(stats.prospecting));
+                $('#stat-negotiation').text(Utils.formatCurrency(stats.negotiation));
+                $('#stat-won').text(Utils.formatCurrency(stats.won));
+                $('#stat-lost').text(Utils.formatCurrency(stats.lost));
+            },
+
+            loadTable: function() {
+                const deals = DB.getAll(DB.COLLECTIONS.DEALS);
+
+                this.table = DataTable.create('deals-table-container', {
+                    title: 'All Deals',
+                    icon: 'fas fa-briefcase',
+                    data: deals,
+                    columns: [
+                        {
+                            field: 'name',
+                            label: 'Deal Name',
+                            sortable: true,
+                            render: (value, row) => {
+                                const contact = row.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, row.contact_id) : null;
+                                return `
+                                    <div>
+                                        <div style="color: white; font-weight: 500;">${value}</div>
+                                        ${contact ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;">${contact.name}</div>` : ''}
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'value',
+                            label: 'Value',
+                            sortable: true,
+                            render: (value) => `<span style="color: #3dd598; font-weight: 600;">${Utils.formatCurrency(value || 0)}</span>`
+                        },
+                        {
+                            field: 'stage',
+                            label: 'Stage',
+                            sortable: true,
+                            render: (value) => {
+                                const stages = {
+                                    prospecting: { label: 'Prospecting', color: '#50b5ff' },
+                                    negotiation: { label: 'Negotiation', color: '#667eea' },
+                                    won: { label: 'Won', color: '#3dd598' },
+                                    lost: { label: 'Lost', color: '#fc5a5a' }
+                                };
+                                const stage = stages[value] || stages.prospecting;
+                                return `<span class="cell-badge" style="background: ${stage.color}20; color: ${stage.color};">${stage.label}</span>`;
+                            }
+                        },
+                        {
+                            field: 'probability',
+                            label: 'Probability',
+                            sortable: true,
+                            render: (value) => {
+                                if (!value) return '-';
+                                const color = value >= 70 ? '#3dd598' : value >= 40 ? '#ffc107' : '#fc5a5a';
+                                return `
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                                            <div style="width: ${value}%; height: 100%; background: ${color};"></div>
+                                        </div>
+                                        <span style="color: ${color}; font-weight: 600; font-size: 12px;">${value}%</span>
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'close_date',
+                            label: 'Close Date',
+                            sortable: true,
+                            render: (value) => value ? Utils.formatDate(value) : '-'
+                        },
+                        {
+                            field: 'created_at',
+                            label: 'Created',
+                            sortable: true,
+                            render: (value) => Utils.formatRelativeTime(value)
+                        },
+                        {
+                            field: 'id',
+                            label: 'Actions',
+                            width: '180px',
+                            render: (value) => `
+                                <div class="cell-actions">
+                                    <button class="btn btn-sm btn-secondary" onclick="DealsPage.editDeal('${value}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="DealsPage.deleteDeal('${value}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `
+                        }
+                    ],
+                    searchable: true,
+                    pagination: true,
+                    perPage: 10,
+                    emptyMessage: 'No deals found. Click "Add Deal" to create your first deal.',
+                    onRowClick: (row) => this.editDeal(row.id)
+                });
+            },
+
+            newDeal: function() {
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'New Deal',
+                    icon: 'fas fa-handshake',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Deal Name', type: 'text', required: true, placeholder: 'Website Redesign Deal' },
+                        { name: 'contact_id', label: 'Contact', type: 'select', required: true, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'project_id', label: 'Project', type: 'select', options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'value', label: 'Deal Value', type: 'number', required: true, min: 0, step: 100, placeholder: '10000' },
+                        { name: 'stage', label: 'Stage', type: 'select', required: true, value: 'prospecting', options: [
+                            { value: 'prospecting', label: 'Prospecting' },
+                            { value: 'negotiation', label: 'Negotiation' },
+                            { value: 'won', label: 'Won' },
+                            { value: 'lost', label: 'Lost' }
+                        ]},
+                        { name: 'probability', label: 'Probability (%)', type: 'number', min: 0, max: 100, step: 5, value: 50, placeholder: '50' },
+                        { name: 'close_date', label: 'Expected Close Date', type: 'date' },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 3 }
+                    ],
+                    submitText: 'Create Deal'
+                }).then(data => {
+                    DB.create(DB.COLLECTIONS.DEALS, data);
+                    Utils.showToast('Deal created successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.DEALS));
+                }).catch(() => {});
+            },
+
+            editDeal: function(id) {
+                const deal = DB.get(DB.COLLECTIONS.DEALS, id);
+                if (!deal) return;
+
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'Edit Deal',
+                    icon: 'fas fa-handshake',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Deal Name', type: 'text', required: true, value: deal.name },
+                        { name: 'contact_id', label: 'Contact', type: 'select', required: true, value: deal.contact_id, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'project_id', label: 'Project', type: 'select', value: deal.project_id, options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'value', label: 'Deal Value', type: 'number', required: true, min: 0, step: 100, value: deal.value },
+                        { name: 'stage', label: 'Stage', type: 'select', required: true, value: deal.stage, options: [
+                            { value: 'prospecting', label: 'Prospecting' },
+                            { value: 'negotiation', label: 'Negotiation' },
+                            { value: 'won', label: 'Won' },
+                            { value: 'lost', label: 'Lost' }
+                        ]},
+                        { name: 'probability', label: 'Probability (%)', type: 'number', min: 0, max: 100, step: 5, value: deal.probability },
+                        { name: 'close_date', label: 'Expected Close Date', type: 'date', value: deal.close_date },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 3, value: deal.notes }
+                    ],
+                    submitText: 'Update Deal'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.DEALS, id, data);
+                    Utils.showToast('Deal updated successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.DEALS));
+                }).catch(() => {});
+            },
+
+            deleteDeal: async function(id) {
+                const deal = DB.get(DB.COLLECTIONS.DEALS, id);
+                if (!deal) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete deal "${deal.name}"?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.DEALS, id);
+                    Utils.showToast('Deal deleted successfully!', 'success');
+                    this.loadStats();
+                    this.table.setData(DB.getAll(DB.COLLECTIONS.DEALS));
+                }
+            }
+        };
+
+        $(document).ready(() => DealsPage.init());
+    </script>
+
+    <!-- Enhancement Modules -->
+    <script src="../js/enhancements.js"></script>
+    <script src="../js/validation.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="../js/gradient-button-wrapper.js"></script>
+    <script src="../js/integrate-enhancements.js"></script>
+</body>
+</html>

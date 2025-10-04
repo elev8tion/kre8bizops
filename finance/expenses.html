@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Expenses - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+    <!-- Modern Card Styles -->
+    <link href="../css/modern-cards.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="modern-card mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="modern-card-shine"></div>
+                    <div class="modern-card-glow"></div>
+                    <div class="modern-card-content">
+                <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" class="modern-card-title" style="font-size: 1.75rem;">
+                                <i class="fas fa-receipt mr-2" style="color: #667eea;"></i>
+                                Expenses
+                            </h1>
+                            <p class="mb-0" class="modern-card-subtitle">
+                                Track and categorize business expenses
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary" onclick="ExpensesPage.newExpense()">
+                                <i class="fas fa-plus mr-2"></i>Add Expense
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expense Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #fc5a5a;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">THIS MONTH</div>
+                                <div class="modern-card-value" id="stat-month">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ffc107;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">THIS YEAR</div>
+                                <div class="modern-card-value" id="stat-year">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3dd598;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">BILLABLE</div>
+                                <div class="modern-card-value" id="stat-billable">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="modern-card modern-stat-card" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <div class="modern-card-shine"></div>
+                            <div class="modern-card-glow"></div>
+                            <div class="modern-card-content">
+                                <div class="modern-card-subtitle" style="font-size: 12px; margin-bottom: 5px;">TOTAL</div>
+                                <div class="modern-card-value" id="stat-total">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="expenses-table-container"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const ExpensesPage = {
+            table: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadStats();
+                this.loadTable();
+            },
+
+            loadStats: function() {
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+
+                const monthExpenses = expenses.filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+                }).reduce((sum, e) => sum + (e.amount || 0), 0);
+
+                const yearExpenses = expenses.filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getFullYear() === currentYear;
+                }).reduce((sum, e) => sum + (e.amount || 0), 0);
+
+                const billableExpenses = expenses.filter(e => e.billable).reduce((sum, e) => sum + (e.amount || 0), 0);
+                const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+
+                $('#stat-month').text(Utils.formatCurrency(monthExpenses));
+                $('#stat-year').text(Utils.formatCurrency(yearExpenses));
+                $('#stat-billable').text(Utils.formatCurrency(billableExpenses));
+                $('#stat-total').text(Utils.formatCurrency(totalExpenses));
+            },
+
+            loadTable: function() {
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+
+                this.table = DataTable.create('expenses-table-container', {
+                    title: 'All Expenses',
+                    icon: 'fas fa-money-bill-wave',
+                    data: expenses,
+                    columns: [
+                        {
+                            field: 'date',
+                            label: 'Date',
+                            sortable: true,
+                            render: (value) => {
+                                const isToday = Utils.isToday(new Date(value));
+                                return `
+                                    <div>
+                                        <div style="color: white;">${Utils.formatDate(value)}</div>
+                                        ${isToday ? '<span class="cell-badge" style="background: rgba(61, 213, 152, 0.2); color: #3dd598; font-size: 10px;">TODAY</span>' : ''}
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'description',
+                            label: 'Description',
+                            sortable: true,
+                            render: (value, row) => {
+                                const category = row.category_id ? DB.get(DB.COLLECTIONS.CATEGORIES, row.category_id) : null;
+                                return `
+                                    <div>
+                                        <div style="color: white; font-weight: 500;">${value}</div>
+                                        ${category ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;"><i class="fas fa-tag mr-1"></i>${category.name}</div>` : ''}
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'amount',
+                            label: 'Amount',
+                            sortable: true,
+                            render: (value) => `<span style="color: #fc5a5a; font-weight: 600; font-size: 16px;">${Utils.formatCurrency(value || 0)}</span>`
+                        },
+                        {
+                            field: 'category_id',
+                            label: 'Category',
+                            render: (value) => {
+                                if (!value) return '-';
+                                const category = DB.get(DB.COLLECTIONS.CATEGORIES, value);
+                                if (!category) return '-';
+                                return `<span class="cell-badge" style="background: rgba(102, 126, 234, 0.2); color: #667eea;">${category.name}</span>`;
+                            }
+                        },
+                        {
+                            field: 'billable',
+                            label: 'Billable',
+                            render: (value, row) => {
+                                if (value) {
+                                    const contact = row.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, row.contact_id) : null;
+                                    return `
+                                        <div>
+                                            <span class="cell-badge" style="background: rgba(61, 213, 152, 0.2); color: #3dd598;"><i class="fas fa-check mr-1"></i>Billable</span>
+                                            ${contact ? `<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">${contact.name}</div>` : ''}
+                                        </div>
+                                    `;
+                                } else {
+                                    return '<span class="cell-badge" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5);">Non-billable</span>';
+                                }
+                            }
+                        },
+                        {
+                            field: 'payment_method',
+                            label: 'Payment',
+                            render: (value) => {
+                                const methods = {
+                                    cash: 'Cash',
+                                    card: 'Card',
+                                    bank_transfer: 'Bank Transfer',
+                                    check: 'Check'
+                                };
+                                return methods[value] || value || '-';
+                            }
+                        },
+                        {
+                            field: 'created_at',
+                            label: 'Added',
+                            sortable: true,
+                            render: (value) => Utils.formatRelativeTime(value)
+                        },
+                        {
+                            field: 'id',
+                            label: 'Actions',
+                            width: '180px',
+                            render: (value) => `
+                                <div class="cell-actions">
+                                    <button class="btn btn-sm btn-secondary" onclick="ExpensesPage.editExpense('${value}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="ExpensesPage.deleteExpense('${value}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `
+                        }
+                    ],
+                    searchable: true,
+                    pagination: true,
+                    perPage: 15,
+                    actions: [
+                        {
+                            id: 'export',
+                            label: 'Export',
+                            icon: 'fas fa-download',
+                            class: 'btn-secondary',
+                            onClick: () => this.exportExpenses()
+                        }
+                    ],
+                    emptyMessage: 'No expenses found. Click "Add Expense" to track your first expense.',
+                    onRowClick: (row) => this.editExpense(row.id)
+                });
+            },
+
+            newExpense: function() {
+                const categories = DB.getAll(DB.COLLECTIONS.CATEGORIES).filter(c => c.type === 'expense');
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'New Expense',
+                    icon: 'fas fa-plus-square',
+                    size: 'lg',
+                    fields: [
+                        { name: 'date', label: 'Date', type: 'date', required: true, value: new Date().toISOString().split('T')[0] },
+                        { name: 'description', label: 'Description', type: 'text', required: true, placeholder: 'Office supplies' },
+                        { name: 'amount', label: 'Amount', type: 'number', required: true, min: 0, step: 0.01, placeholder: '150.00' },
+                        { name: 'category_id', label: 'Category', type: 'select', options: categories.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'payment_method', label: 'Payment Method', type: 'select', options: [
+                            { value: 'cash', label: 'Cash' },
+                            { value: 'card', label: 'Card' },
+                            { value: 'bank_transfer', label: 'Bank Transfer' },
+                            { value: 'check', label: 'Check' }
+                        ]},
+                        { name: 'billable', label: 'Billable', type: 'checkbox', checkboxLabel: 'This expense is billable to a client' },
+                        { name: 'contact_id', label: 'Client (if billable)', type: 'select', options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'project_id', label: 'Project', type: 'select', options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 2 }
+                    ],
+                    submitText: 'Add Expense'
+                }).then(data => {
+                    DB.create(DB.COLLECTIONS.EXPENSES, data);
+                    Utils.showToast('Expense added successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }).catch(() => {});
+            },
+
+            editExpense: function(id) {
+                const expense = DB.get(DB.COLLECTIONS.EXPENSES, id);
+                if (!expense) return;
+
+                const categories = DB.getAll(DB.COLLECTIONS.CATEGORIES).filter(c => c.type === 'expense');
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'Edit Expense',
+                    icon: 'fas fa-edit',
+                    size: 'lg',
+                    fields: [
+                        { name: 'date', label: 'Date', type: 'date', required: true, value: expense.date },
+                        { name: 'description', label: 'Description', type: 'text', required: true, value: expense.description },
+                        { name: 'amount', label: 'Amount', type: 'number', required: true, min: 0, step: 0.01, value: expense.amount },
+                        { name: 'category_id', label: 'Category', type: 'select', value: expense.category_id, options: categories.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'payment_method', label: 'Payment Method', type: 'select', value: expense.payment_method, options: [
+                            { value: 'cash', label: 'Cash' },
+                            { value: 'card', label: 'Card' },
+                            { value: 'bank_transfer', label: 'Bank Transfer' },
+                            { value: 'check', label: 'Check' }
+                        ]},
+                        { name: 'billable', label: 'Billable', type: 'checkbox', checkboxLabel: 'This expense is billable to a client', value: expense.billable },
+                        { name: 'contact_id', label: 'Client (if billable)', type: 'select', value: expense.contact_id, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'project_id', label: 'Project', type: 'select', value: expense.project_id, options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'notes', label: 'Notes', type: 'textarea', rows: 2, value: expense.notes }
+                    ],
+                    submitText: 'Update Expense'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.EXPENSES, id, data);
+                    Utils.showToast('Expense updated successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }).catch(() => {});
+            },
+
+            deleteExpense: async function(id) {
+                const expense = DB.get(DB.COLLECTIONS.EXPENSES, id);
+                if (!expense) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete this ${Utils.formatCurrency(expense.amount)} expense?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.EXPENSES, id);
+                    Utils.showToast('Expense deleted successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }
+            },
+
+            exportExpenses: function() {
+                const expenses = DB.getAll(DB.COLLECTIONS.EXPENSES);
+
+                // Enhance with category names
+                const enhanced = expenses.map(expense => {
+                    const category = expense.category_id ? DB.get(DB.COLLECTIONS.CATEGORIES, expense.category_id) : null;
+                    const contact = expense.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, expense.contact_id) : null;
+                    const project = expense.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, expense.project_id) : null;
+
+                    return {
+                        date: expense.date,
+                        description: expense.description,
+                        amount: expense.amount,
+                        category: category ? category.name : '',
+                        payment_method: expense.payment_method,
+                        billable: expense.billable ? 'Yes' : 'No',
+                        client: contact ? contact.name : '',
+                        project: project ? project.name : '',
+                        notes: expense.notes || ''
+                    };
+                });
+
+                Utils.downloadJson(enhanced, `expenses-export-${new Date().toISOString().split('T')[0]}.json`);
+                Utils.showToast('Expenses exported successfully!', 'success');
+            }
+        };
+
+        $(document).ready(() => ExpensesPage.init());
+    </script>
+
+    <!-- Enhancement Modules -->
+    <script src="../js/enhancements.js"></script>
+    <script src="../js/validation.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="../js/gradient-button-wrapper.js"></script>
+    <script src="../js/integrate-enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Documents - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="glass-medium glow-purple-soft mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2" style="color: #fff; font-weight: 700;">
+                                <i class="fas fa-folder-open mr-2" style="color: #667eea;"></i>
+                                Documents
+                            </h1>
+                            <p class="mb-0" style="color: rgba(255,255,255,0.6);">
+                                Store and organize important files and documents
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary" onclick="DocumentsPage.uploadDocument()">
+                                <i class="fas fa-plus mr-2"></i>Upload Document
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">TOTAL DOCUMENTS</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-total">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #50b5ff;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">CONTRACTS</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-contracts">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3dd598;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">INVOICES</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-invoices">0</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ffc107;">
+                            <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 5px;">OTHER</div>
+                            <div style="color: white; font-size: 24px; font-weight: 700;" id="stat-other">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="documents-table-container"></div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+
+    <script>
+        const DocumentsPage = {
+            table: null,
+
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadStats();
+                this.loadTable();
+            },
+
+            loadStats: function() {
+                const documents = DB.getAll(DB.COLLECTIONS.DOCUMENTS);
+
+                const stats = {
+                    total: documents.length,
+                    contracts: documents.filter(d => d.type === 'contract').length,
+                    invoices: documents.filter(d => d.type === 'invoice').length,
+                    other: documents.filter(d => !d.type || (d.type !== 'contract' && d.type !== 'invoice')).length
+                };
+
+                $('#stat-total').text(stats.total);
+                $('#stat-contracts').text(stats.contracts);
+                $('#stat-invoices').text(stats.invoices);
+                $('#stat-other').text(stats.other);
+            },
+
+            loadTable: function() {
+                const documents = DB.getAll(DB.COLLECTIONS.DOCUMENTS);
+
+                this.table = DataTable.create('documents-table-container', {
+                    title: 'All Documents',
+                    icon: 'fas fa-file-alt',
+                    data: documents,
+                    columns: [
+                        {
+                            field: 'name',
+                            label: 'Document Name',
+                            sortable: true,
+                            render: (value, row) => {
+                                const icons = {
+                                    pdf: 'fa-file-pdf',
+                                    doc: 'fa-file-word',
+                                    docx: 'fa-file-word',
+                                    xls: 'fa-file-excel',
+                                    xlsx: 'fa-file-excel',
+                                    txt: 'fa-file-alt',
+                                    image: 'fa-file-image'
+                                };
+                                const ext = row.file_type || '';
+                                const icon = icons[ext] || 'fa-file';
+
+                                return `
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas ${icon} mr-3" style="color: #667eea; font-size: 20px;"></i>
+                                        <div>
+                                            <div style="color: white; font-weight: 500;">${value}</div>
+                                            ${row.description ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;">${Utils.truncate(row.description, 50)}</div>` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'type',
+                            label: 'Type',
+                            sortable: true,
+                            render: (value) => {
+                                const types = {
+                                    contract: { label: 'Contract', color: '#50b5ff' },
+                                    invoice: { label: 'Invoice', color: '#3dd598' },
+                                    proposal: { label: 'Proposal', color: '#667eea' },
+                                    receipt: { label: 'Receipt', color: '#ffc107' },
+                                    other: { label: 'Other', color: '#6c757d' }
+                                };
+                                const type = types[value] || types.other;
+                                return `<span class="cell-badge" style="background: ${type.color}20; color: ${type.color};">${type.label}</span>`;
+                            }
+                        },
+                        {
+                            field: 'contact_id',
+                            label: 'Related To',
+                            render: (value, row) => {
+                                const contact = value ? DB.get(DB.COLLECTIONS.CONTACTS, value) : null;
+                                const project = row.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, row.project_id) : null;
+
+                                return `
+                                    <div>
+                                        ${contact ? `<div style="color: white; font-size: 13px;"><i class="fas fa-user mr-1"></i>${contact.name}</div>` : ''}
+                                        ${project ? `<div style="color: rgba(255,255,255,0.5); font-size: 12px;"><i class="fas fa-folder mr-1"></i>${project.name}</div>` : ''}
+                                        ${!contact && !project ? '<span style="color: rgba(255,255,255,0.5);">-</span>' : ''}
+                                    </div>
+                                `;
+                            }
+                        },
+                        {
+                            field: 'file_size',
+                            label: 'Size',
+                            sortable: true,
+                            render: (value) => {
+                                if (!value) return '-';
+                                if (value < 1024) return value + ' B';
+                                if (value < 1024 * 1024) return (value / 1024).toFixed(1) + ' KB';
+                                return (value / (1024 * 1024)).toFixed(1) + ' MB';
+                            }
+                        },
+                        {
+                            field: 'created_at',
+                            label: 'Uploaded',
+                            sortable: true,
+                            render: (value) => Utils.formatRelativeTime(value)
+                        },
+                        {
+                            field: 'id',
+                            label: 'Actions',
+                            width: '220px',
+                            render: (value, row) => `
+                                <div class="cell-actions">
+                                    ${row.file_url ? `<button class="btn btn-sm btn-info" onclick="DocumentsPage.downloadDocument('${value}')" title="Download"><i class="fas fa-download"></i></button>` : ''}
+                                    <button class="btn btn-sm btn-secondary" onclick="DocumentsPage.editDocument('${value}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="DocumentsPage.deleteDocument('${value}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `
+                        }
+                    ],
+                    searchable: true,
+                    pagination: true,
+                    perPage: 15,
+                    emptyMessage: 'No documents found. Click "Upload Document" to add your first document.',
+                    onRowClick: (row) => this.viewDocument(row.id)
+                });
+            },
+
+            uploadDocument: function() {
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'Upload Document',
+                    icon: 'fas fa-cloud-upload-alt',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Document Name', type: 'text', required: true, placeholder: 'Contract Agreement.pdf' },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 2 },
+                        { name: 'type', label: 'Document Type', type: 'select', required: true, value: 'other', options: [
+                            { value: 'contract', label: 'Contract' },
+                            { value: 'invoice', label: 'Invoice' },
+                            { value: 'proposal', label: 'Proposal' },
+                            { value: 'receipt', label: 'Receipt' },
+                            { value: 'other', label: 'Other' }
+                        ]},
+                        { name: 'contact_id', label: 'Related Contact', type: 'select', options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'project_id', label: 'Related Project', type: 'select', options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'file_type', label: 'File Type', type: 'select', options: [
+                            { value: 'pdf', label: 'PDF' },
+                            { value: 'docx', label: 'Word Document' },
+                            { value: 'xlsx', label: 'Excel Spreadsheet' },
+                            { value: 'txt', label: 'Text File' },
+                            { value: 'image', label: 'Image' }
+                        ]},
+                        { name: 'file_url', label: 'File URL (optional)', type: 'text', placeholder: 'https://example.com/file.pdf' },
+                        { name: 'tags', label: 'Tags', type: 'tags', placeholder: 'Add tags...' }
+                    ],
+                    submitText: 'Upload Document'
+                }).then(data => {
+                    // Simulate file size for demo
+                    data.file_size = Math.floor(Math.random() * 5000000) + 10000;
+
+                    DB.create(DB.COLLECTIONS.DOCUMENTS, data);
+                    Utils.showToast('Document uploaded successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }).catch(() => {});
+            },
+
+            viewDocument: function(id) {
+                const doc = DB.get(DB.COLLECTIONS.DOCUMENTS, id);
+                if (!doc) return;
+
+                const contact = doc.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, doc.contact_id) : null;
+                const project = doc.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, doc.project_id) : null;
+
+                const types = {
+                    contract: 'Contract',
+                    invoice: 'Invoice',
+                    proposal: 'Proposal',
+                    receipt: 'Receipt',
+                    other: 'Other'
+                };
+
+                const content = `
+                    <div class="glass-medium" style="padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: white; margin-bottom: 1rem;">${doc.name}</h4>
+                        ${doc.description ? `<p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">${doc.description}</p>` : ''}
+                        <div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+                            <strong>Type:</strong> ${types[doc.type] || 'Other'}
+                        </div>
+                        ${doc.file_type ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><strong>Format:</strong> ${doc.file_type.toUpperCase()}</div>` : ''}
+                        ${doc.file_size ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><strong>Size:</strong> ${this.formatFileSize(doc.file_size)}</div>` : ''}
+                        ${contact ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><strong>Contact:</strong> ${contact.name}</div>` : ''}
+                        ${project ? `<div style="color: rgba(255,255,255,0.6); margin-bottom: 8px;"><strong>Project:</strong> ${project.name}</div>` : ''}
+                        ${doc.tags && doc.tags.length > 0 ? `
+                            <div style="margin-top: 12px;">
+                                ${doc.tags.map(tag => `<span class="cell-badge" style="background: rgba(102, 126, 234, 0.2); color: #667eea; margin-right: 4px;">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div style="color: rgba(255,255,255,0.5); margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px;">
+                            Uploaded ${Utils.formatRelativeTime(doc.created_at)}
+                        </div>
+                    </div>
+                `;
+
+                const buttons = [
+                    {
+                        text: 'Edit',
+                        class: 'btn-secondary',
+                        onClick: (modal) => {
+                            modal.close();
+                            this.editDocument(id);
+                        }
+                    },
+                    {
+                        text: 'Close',
+                        class: 'btn-primary',
+                        onClick: (modal) => modal.close()
+                    }
+                ];
+
+                if (doc.file_url) {
+                    buttons.unshift({
+                        text: 'Download',
+                        class: 'btn-success',
+                        onClick: () => {
+                            window.open(doc.file_url, '_blank');
+                            Utils.showToast('Opening document...', 'info');
+                        }
+                    });
+                }
+
+                Modals.custom({
+                    title: 'Document Details',
+                    content: content,
+                    size: 'lg',
+                    buttons: buttons
+                });
+            },
+
+            editDocument: function(id) {
+                const doc = DB.get(DB.COLLECTIONS.DOCUMENTS, id);
+                if (!doc) return;
+
+                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+
+                Modals.form({
+                    title: 'Edit Document',
+                    icon: 'fas fa-edit',
+                    size: 'lg',
+                    fields: [
+                        { name: 'name', label: 'Document Name', type: 'text', required: true, value: doc.name },
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 2, value: doc.description },
+                        { name: 'type', label: 'Document Type', type: 'select', required: true, value: doc.type, options: [
+                            { value: 'contract', label: 'Contract' },
+                            { value: 'invoice', label: 'Invoice' },
+                            { value: 'proposal', label: 'Proposal' },
+                            { value: 'receipt', label: 'Receipt' },
+                            { value: 'other', label: 'Other' }
+                        ]},
+                        { name: 'contact_id', label: 'Related Contact', type: 'select', value: doc.contact_id, options: contacts.map(c => ({ value: c.id, label: c.name })) },
+                        { name: 'project_id', label: 'Related Project', type: 'select', value: doc.project_id, options: projects.map(p => ({ value: p.id, label: p.name })) },
+                        { name: 'file_type', label: 'File Type', type: 'select', value: doc.file_type, options: [
+                            { value: 'pdf', label: 'PDF' },
+                            { value: 'docx', label: 'Word Document' },
+                            { value: 'xlsx', label: 'Excel Spreadsheet' },
+                            { value: 'txt', label: 'Text File' },
+                            { value: 'image', label: 'Image' }
+                        ]},
+                        { name: 'file_url', label: 'File URL', type: 'text', value: doc.file_url },
+                        { name: 'tags', label: 'Tags', type: 'tags', value: doc.tags }
+                    ],
+                    submitText: 'Update Document'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.DOCUMENTS, id, data);
+                    Utils.showToast('Document updated successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }).catch(() => {});
+            },
+
+            downloadDocument: function(id) {
+                const doc = DB.get(DB.COLLECTIONS.DOCUMENTS, id);
+                if (!doc) return;
+
+                if (doc.file_url) {
+                    window.open(doc.file_url, '_blank');
+                    Utils.showToast('Opening document...', 'info');
+                } else {
+                    Utils.showToast('No file URL available', 'warning');
+                }
+            },
+
+            deleteDocument: async function(id) {
+                const doc = DB.get(DB.COLLECTIONS.DOCUMENTS, id);
+                if (!doc) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete document "${doc.name}"?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.DOCUMENTS, id);
+                    Utils.showToast('Document deleted successfully!', 'success');
+                    this.loadStats();
+                    this.loadTable();
+                }
+            },
+
+            formatFileSize: function(bytes) {
+                if (!bytes) return '-';
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+        };
+
+        $(document).ready(() => DocumentsPage.init());
+    </script>
+</body>
+</html>

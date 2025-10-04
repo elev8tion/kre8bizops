@@ -1,0 +1,261 @@
+/**
+ * Modern Glassmorphic Card Styles
+ * Based on the Discord button design - applied to all cards throughout the app
+ */
+
+/* Base card style - apply this class to any card element */
+.modern-card {
+    position: relative;
+    padding: 1rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    background: linear-gradient(to bottom right, rgba(55, 48, 163, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    cursor: default;
+    overflow: hidden;
+}
+
+/* HOVER EFFECTS DISABLED GLOBALLY */
+.modern-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    transform: none;
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.modern-card:active {
+    transform: none;
+}
+
+/* No-hover modifier - disables all hover effects */
+.modern-card.no-hover {
+    cursor: default;
+}
+
+.modern-card.no-hover:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    transform: none;
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.modern-card.no-hover:hover .modern-card-shine {
+    transform: translateX(-100%);
+}
+
+.modern-card.no-hover:hover .modern-card-glow {
+    opacity: 0;
+}
+
+.modern-card.no-hover:active {
+    transform: none;
+}
+
+/* Shine effect overlay - add this as a child div */
+.modern-card-shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent, rgba(129, 140, 248, 0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-card:hover .modern-card-shine {
+    transform: translateX(-100%);
+}
+
+/* Glow overlay - add this as a child div */
+.modern-card-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background: linear-gradient(to right, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.2), rgba(99, 102, 241, 0.1));
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.modern-card:hover .modern-card-glow {
+    opacity: 0;
+}
+
+/* Icon container */
+.modern-card-icon {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.3), rgba(79, 70, 229, 0.1)) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modern-card:hover .modern-card-icon,
+.modern-stat-card:hover .modern-card-icon {
+    background: linear-gradient(to bottom right, rgba(129, 140, 248, 0.4), rgba(99, 102, 241, 0.2)) !important;
+}
+
+.modern-card-icon i,
+.modern-card-icon svg {
+    color: rgb(129, 140, 248);
+    fill: rgb(129, 140, 248);
+    transition: all 0.3s;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
+
+.modern-card:hover .modern-card-icon i,
+.modern-card:hover .modern-card-icon svg {
+    color: rgb(165, 180, 252);
+    fill: rgb(165, 180, 252);
+    transform: scale(1.1);
+}
+
+/* Text styles */
+.modern-card-title {
+    color: rgb(129, 140, 248);
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: color 0.3s;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.modern-card:hover .modern-card-title {
+    color: rgb(165, 180, 252);
+}
+
+.modern-card-subtitle {
+    color: rgba(165, 180, 252, 0.6);
+    font-size: 0.875rem;
+    transition: color 0.3s;
+}
+
+.modern-card:hover .modern-card-subtitle {
+    color: rgba(199, 210, 254, 0.8);
+}
+
+.modern-card-value {
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+/* Arrow/chevron */
+.modern-card-arrow {
+    opacity: 0.4;
+    transition: all 0.3s;
+}
+
+.modern-card:hover .modern-card-arrow {
+    opacity: 1;
+    transform: translateX(0.25rem);
+}
+
+/* Stat card variation */
+.modern-stat-card {
+    position: relative;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    background: linear-gradient(to bottom right, rgba(55, 48, 163, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    min-height: 140px;
+    cursor: pointer;
+}
+
+.modern-stat-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    transform: translateY(-0.25rem) scale(1.02);
+    border-color: rgba(129, 140, 248, 0.6);
+}
+
+.modern-stat-card:active {
+    transform: scale(0.95);
+}
+
+/* List item card */
+.modern-list-item {
+    position: relative;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: linear-gradient(to bottom right, rgba(55, 48, 163, 0.3), rgba(0, 0, 0, 0.5));
+    transition: all 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.modern-list-item:hover {
+    background: linear-gradient(to bottom right, rgba(55, 48, 163, 0.4), rgba(0, 0, 0, 0.6));
+    border-color: rgba(129, 140, 248, 0.4);
+    transform: translateX(0.25rem);
+}
+
+/* Content wrapper to ensure it sits above effects */
+.modern-card-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* Color variations */
+.modern-card-purple {
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.modern-card-purple:hover {
+    border-color: rgba(129, 140, 248, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.modern-card-blue {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.modern-card-blue:hover {
+    border-color: rgba(96, 165, 250, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.modern-card-green {
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.modern-card-green:hover {
+    border-color: rgba(74, 222, 128, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(34, 197, 94, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.modern-card-orange {
+    border-color: rgba(249, 115, 22, 0.3);
+}
+
+.modern-card-orange:hover {
+    border-color: rgba(251, 146, 60, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(249, 115, 22, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.modern-card-pink {
+    border-color: rgba(236, 72, 153, 0.3);
+}
+
+.modern-card-pink:hover {
+    border-color: rgba(244, 114, 182, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(236, 72, 153, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.modern-card-red {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.modern-card-red:hover {
+    border-color: rgba(248, 113, 113, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}

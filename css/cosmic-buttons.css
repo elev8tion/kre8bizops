@@ -1,0 +1,495 @@
+/* ============================================
+   COSMIC BUTTONS - Pure CSS Button Library
+   Converted from React/styled-components
+   Compatible with jQuery and vanilla JS
+   ============================================ */
+
+/* === LOGOUT BUTTON (Expandable) === */
+.cosmic-btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(255, 65, 65);
+}
+
+.cosmic-btn-logout .sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cosmic-btn-logout .sign svg {
+  width: 17px;
+}
+
+.cosmic-btn-logout .sign svg path {
+  fill: white;
+}
+
+.cosmic-btn-logout .text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+
+.cosmic-btn-logout:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+
+.cosmic-btn-logout:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+
+.cosmic-btn-logout:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+
+.cosmic-btn-logout:active {
+  transform: translate(2px, 2px);
+}
+
+/* Usage:
+<button class="cosmic-btn-logout">
+  <div class="sign">
+    <svg viewBox="0 0 512 512">
+      <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+    </svg>
+  </div>
+  <div class="text">Logout</div>
+</button>
+*/
+
+
+/* === DELETE BUTTON (Animated Text Reveal) === */
+.cosmic-btn-delete {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+
+.cosmic-btn-delete .svgIcon {
+  width: 12px;
+  transition-duration: 0.3s;
+}
+
+.cosmic-btn-delete .svgIcon path {
+  fill: white;
+}
+
+.cosmic-btn-delete:hover {
+  width: 140px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(255, 69, 69);
+  align-items: center;
+}
+
+.cosmic-btn-delete:hover .svgIcon {
+  width: 50px;
+  transition-duration: 0.3s;
+  transform: translateY(60%);
+}
+
+.cosmic-btn-delete::before {
+  position: absolute;
+  top: -20px;
+  content: "Delete";
+  color: white;
+  transition-duration: 0.3s;
+  font-size: 2px;
+}
+
+.cosmic-btn-delete:hover::before {
+  font-size: 13px;
+  opacity: 1;
+  transform: translateY(30px);
+  transition-duration: 0.3s;
+}
+
+/* Usage:
+<button class="cosmic-btn-delete">
+  <svg viewBox="0 0 448 512" class="svgIcon">
+    <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
+  </svg>
+</button>
+*/
+
+
+/* === BLOB BUTTON (Animated Background) === */
+.cosmic-btn-blob {
+  width: 10em;
+  height: 3em;
+  background-color: rgba(232, 232, 232, 0.063);
+  color: #e8e8e8;
+  border: 1.2px solid rgba(232, 232, 232, 0.439);
+  border-radius: 15px;
+  transition: all 0.5s ease;
+  position: relative;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.cosmic-btn-blob:hover {
+  border: 1.2px solid #4073ff;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.cosmic-btn-blob .text {
+  margin-top: 10px;
+}
+
+.cosmic-btn-blob .svg {
+  filter: blur(20px);
+  z-index: -1;
+  opacity: 0.7;
+  width: 6em;
+  animation: cosmic-blob-anim 3s infinite;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60px);
+}
+
+@keyframes cosmic-blob-anim {
+  0% {
+    transform: translate(-50%, -60px);
+  }
+  50% {
+    transform: translate(-50%, -35px);
+  }
+  100% {
+    transform: translate(-50%, -60px);
+  }
+}
+
+/* Usage:
+<button class="cosmic-btn-blob">
+  <p class="text">Button</p>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="svg">
+    <path class="path" transform="translate(100 100)" d="M56.8,-23.9C61.7,-3.2,45.7,18.8,26.5,31.7C7.2,44.6,-15.2,48.2,-35.5,36.5C-55.8,24.7,-73.9,-2.6,-67.6,-25.2C-61.3,-47.7,-30.6,-65.6,-2.4,-64.8C25.9,-64.1,51.8,-44.7,56.8,-23.9Z" fill="#4073ff"></path>
+  </svg>
+</button>
+*/
+
+
+/* === BOOKMARK/SAVE BUTTON (Gradient Icon Expand) === */
+.cosmic-btn-bookmark {
+  width: 100px;
+  height: 40px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.349);
+  background-color: rgb(12, 12, 12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+}
+
+.cosmic-btn-bookmark .IconContainer {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(to bottom, rgb(255, 136, 255), rgb(172, 70, 255));
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  transition-duration: 0.3s;
+}
+
+.cosmic-btn-bookmark .icon {
+  border-radius: 1px;
+}
+
+.cosmic-btn-bookmark .text {
+  height: 100%;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1;
+  transition-duration: 0.3s;
+  font-size: 1.04em;
+  margin: 0;
+}
+
+.cosmic-btn-bookmark:hover .IconContainer {
+  width: 90px;
+  transition-duration: 0.3s;
+}
+
+.cosmic-btn-bookmark:hover .text {
+  transform: translate(10px);
+  width: 0;
+  font-size: 0;
+  transition-duration: 0.3s;
+}
+
+.cosmic-btn-bookmark:active {
+  transform: scale(0.95);
+  transition-duration: 0.3s;
+}
+
+/* Usage:
+<button class="cosmic-btn-bookmark">
+  <span class="IconContainer">
+    <svg viewBox="0 0 384 512" height="0.9em" class="icon">
+      <path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"></path>
+    </svg>
+  </span>
+  <p class="text">Save</p>
+</button>
+*/
+
+
+/* === GRADIENT BUTTON (Double Border with Glow) === */
+.cosmic-btn-gradient,
+.btn-primary {
+  position: relative;
+  min-width: 131px;
+  height: 51px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  background: linear-gradient(
+    to bottom right,
+    #2e8eff 0%,
+    rgba(46, 142, 255, 0) 30%
+  );
+  background-color: rgba(46, 142, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  overflow: visible;
+}
+
+.cosmic-btn-gradient:hover,
+.cosmic-btn-gradient:focus,
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: rgba(46, 142, 255, 0.7) !important;
+  box-shadow: 0 0 10px rgba(46, 142, 255, 0.5);
+  outline: none;
+  border-color: transparent !important;
+}
+
+.cosmic-btn-gradient .btn-inner,
+.btn-primary .btn-inner {
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border-radius: 13px;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 600;
+  padding: 0 15px;
+}
+
+.cosmic-btn-gradient svg,
+.btn-primary svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+  flex-shrink: 0;
+}
+
+.cosmic-btn-gradient:active,
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.cosmic-btn-gradient:disabled,
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Size variations */
+.cosmic-btn-gradient.btn-sm,
+.btn-primary.btn-sm {
+  min-width: 100px;
+  height: 38px;
+  font-size: 0.875rem;
+}
+
+.cosmic-btn-gradient.btn-lg,
+.btn-primary.btn-lg {
+  min-width: 160px;
+  height: 60px;
+  font-size: 1.125rem;
+}
+
+.cosmic-btn-gradient.btn-block,
+.btn-primary.btn-block {
+  width: 100%;
+  display: flex;
+}
+
+/* Icon-only button */
+.cosmic-btn-gradient.btn-icon,
+.btn-primary.btn-icon {
+  min-width: 51px;
+  width: 51px;
+}
+
+.cosmic-btn-gradient.btn-icon .btn-inner,
+.btn-primary.btn-icon .btn-inner {
+  padding: 0;
+}
+
+/* Usage:
+<button class="btn-primary">
+  <div class="btn-inner">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+    </svg>
+    <span>Click Me</span>
+  </div>
+</button>
+
+<!-- Or simple text -->
+<button class="btn-primary">
+  <div class="btn-inner">Click Me</div>
+</button>
+*/
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Reset button defaults for all cosmic buttons */
+.cosmic-btn-logout,
+.cosmic-btn-delete,
+.cosmic-btn-blob,
+.cosmic-btn-bookmark,
+.cosmic-btn-gradient {
+  font-family: inherit;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text selection on buttons */
+.cosmic-btn-logout *,
+.cosmic-btn-delete *,
+.cosmic-btn-blob *,
+.cosmic-btn-bookmark *,
+.cosmic-btn-gradient * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Focus states for accessibility */
+.cosmic-btn-logout:focus,
+.cosmic-btn-delete:focus,
+.cosmic-btn-blob:focus,
+.cosmic-btn-bookmark:focus,
+.cosmic-btn-gradient:focus {
+  outline: 2px solid rgba(64, 115, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.cosmic-btn-logout:disabled,
+.cosmic-btn-delete:disabled,
+.cosmic-btn-blob:disabled,
+.cosmic-btn-bookmark:disabled,
+.cosmic-btn-gradient:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+/* ============================================
+   JQUERY INTEGRATION EXAMPLES
+   ============================================ */
+
+/*
+// Logout button with confirmation
+$('.cosmic-btn-logout').on('click', function() {
+  if (confirm('Are you sure you want to logout?')) {
+    // Perform logout action
+    window.location.href = '/logout';
+  }
+});
+
+// Delete button with item removal
+$('.cosmic-btn-delete').on('click', function() {
+  const item = $(this).closest('.item');
+  if (confirm('Delete this item?')) {
+    item.fadeOut(300, function() {
+      $(this).remove();
+    });
+  }
+});
+
+// Blob button as submit
+$('.cosmic-btn-blob').on('click', function(e) {
+  e.preventDefault();
+  $(this).find('.text').text('Loading...');
+  // Perform async action
+  setTimeout(() => {
+    $(this).find('.text').text('Success!');
+  }, 2000);
+});
+
+// Bookmark button toggle state
+$('.cosmic-btn-bookmark').on('click', function() {
+  const $icon = $(this).find('.IconContainer');
+  if ($(this).hasClass('saved')) {
+    $(this).removeClass('saved');
+    $(this).find('.text').text('Save');
+    $icon.css('background', 'linear-gradient(to bottom, rgb(255, 136, 255), rgb(172, 70, 255))');
+  } else {
+    $(this).addClass('saved');
+    $(this).find('.text').text('Saved');
+    $icon.css('background', 'linear-gradient(to bottom, rgb(136, 255, 136), rgb(70, 255, 70))');
+  }
+});
+*/

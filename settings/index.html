@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Settings - ELEV8TION</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/theme-and-custom.css" rel="stylesheet"/>
+    <link href="../css/cosmic-design-system.css" rel="stylesheet"/>
+    <link href="../css/cosmic-tokens.css" rel="stylesheet"/>
+    <link href="../css/cosmic-utilities.css" rel="stylesheet"/>
+    <link href="../css/cosmic-animations.css" rel="stylesheet"/>
+    <link href="../css/cosmic-buttons.css" rel="stylesheet"/>
+    <link href="../css/cosmic-forms.css" rel="stylesheet"/>
+    <link href="../css/cosmic-cards.css" rel="stylesheet"/>
+    <link href="../css/cosmic-fix.css" rel="stylesheet"/>
+    <!-- Modern Card Styles -->
+    <link href="../css/modern-cards.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="min-h-screen w-full bg-black relative">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
+
+        <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
+            <div class="container-fluid">
+
+                <div class="modern-card mb-4" style="padding: 2rem; border-radius: 24px;">
+                    <div class="modern-card-shine"></div>
+                    <div class="modern-card-glow"></div>
+                    <div class="modern-card-content">
+                <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <h1 class="h2 mb-2" class="modern-card-title" style="font-size: 1.75rem;">
+                                <i class="fas fa-cog mr-2" style="color: #667eea;"></i>
+                                Settings
+                            </h1>
+                            <p class="mb-0" class="modern-card-subtitle">
+                                Configure your application preferences and business information
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Business Profile -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-building mr-2" style="color: #667eea;"></i>
+                                Business Profile
+                            </h5>
+                            <form id="business-profile-form">
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Business Name</label>
+                                    <input type="text" class="form-control" id="business-name" placeholder="Your Business Name">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Email</label>
+                                    <input type="email" class="form-control" id="business-email" placeholder="contact@business.com">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Phone</label>
+                                    <input type="tel" class="form-control" id="business-phone" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Address</label>
+                                    <textarea class="form-control" id="business-address" rows="2" placeholder="123 Business St, City, State 12345"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Website</label>
+                                    <input type="url" class="form-control" id="business-website" placeholder="https://yourbusiness.com">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-2"></i>Save Business Profile
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Preferences -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-user-cog mr-2" style="color: #667eea;"></i>
+                                User Preferences
+                            </h5>
+                            <form id="preferences-form">
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Currency</label>
+                                    <select class="form-control" id="pref-currency">
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                        <option value="CAD">CAD - Canadian Dollar</option>
+                                        <option value="AUD">AUD - Australian Dollar</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Date Format</label>
+                                    <select class="form-control" id="pref-date-format">
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Time Format</label>
+                                    <select class="form-control" id="pref-time-format">
+                                        <option value="12h">12-hour (AM/PM)</option>
+                                        <option value="24h">24-hour</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Items Per Page</label>
+                                    <select class="form-control" id="pref-items-per-page">
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-2"></i>Save Preferences
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Settings -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-file-invoice mr-2" style="color: #667eea;"></i>
+                                Invoice Settings
+                            </h5>
+                            <form id="invoice-settings-form">
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Invoice Prefix</label>
+                                    <input type="text" class="form-control" id="invoice-prefix" placeholder="INV-">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Next Invoice Number</label>
+                                    <input type="number" class="form-control" id="invoice-next-number" min="1" value="1000">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Default Tax Rate (%)</label>
+                                    <input type="number" class="form-control" id="invoice-tax-rate" min="0" max="100" step="0.1" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Payment Terms (days)</label>
+                                    <input type="number" class="form-control" id="invoice-payment-terms" min="0" value="30">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: rgba(255,255,255,0.8);">Invoice Notes (Footer)</label>
+                                    <textarea class="form-control" id="invoice-notes" rows="3" placeholder="Thank you for your business!"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-2"></i>Save Invoice Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Categories Management -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-tags mr-2" style="color: #667eea;"></i>
+                                Categories
+                            </h5>
+                            <div class="mb-3">
+                                <button class="btn btn-sm btn-primary" onclick="SettingsPage.addCategory()">
+                                    <i class="fas fa-plus mr-1"></i>Add Category
+                                </button>
+                            </div>
+                            <div id="categories-list" style="max-height: 400px; overflow-y: auto;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Storage Usage -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-hdd mr-2" style="color: #667eea;"></i>
+                                Storage Usage
+                            </h5>
+                            <div id="storage-usage-display"></div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="modern-card" style="padding: 2rem; border-radius: 16px;">
+                            <h5 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-database mr-2" style="color: #667eea;"></i>
+                                Data Management
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="modern-card" style="padding: 1.5rem; border-radius: 12px; text-align: center;">
+                                        <i class="fas fa-download mb-3" style="color: #667eea; font-size: 32px;"></i>
+                                        <h6 style="color: white; margin-bottom: 12px;">Export Data</h6>
+                                        <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 15px;">Download all your data as JSON</p>
+                                        <button class="btn btn-sm btn-success" onclick="SettingsPage.exportData()">
+                                            <i class="fas fa-download mr-2"></i>Export All Data
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="modern-card" style="padding: 1.5rem; border-radius: 12px; text-align: center;">
+                                        <i class="fas fa-upload mb-3" style="color: #50b5ff; font-size: 32px;"></i>
+                                        <h6 style="color: white; margin-bottom: 12px;">Import Data</h6>
+                                        <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 15px;">Import data from JSON file</p>
+                                        <button class="btn btn-sm btn-info" onclick="SettingsPage.importData()">
+                                            <i class="fas fa-upload mr-2"></i>Import Data
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="modern-card" style="padding: 1.5rem; border-radius: 12px; text-align: center;">
+                                        <i class="fas fa-trash-alt mb-3" style="color: #fc5a5a; font-size: 32px;"></i>
+                                        <h6 style="color: white; margin-bottom: 12px;">Clear All Data</h6>
+                                        <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 15px;">Delete all data permanently</p>
+                                        <button class="btn btn-sm btn-danger" onclick="SettingsPage.clearAllData()">
+                                            <i class="fas fa-exclamation-triangle mr-2"></i>Clear All
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/components/modals.js"></script>
+    <script src="../js/components/tables.js"></script>
+    <script src="../js/components/forms.js"></script>
+    <script src="../js/enhancements.js"></script>
+    <script src="../js/validation.js"></script>
+
+    <!-- Gradient Button Wrapper -->
+    <script src="../js/gradient-button-wrapper.js"></script>
+
+    <script>
+        const SettingsPage = {
+            init: function() {
+                if (!localStorage.getItem('isLoggedIn')) {
+                    window.location.href = '../index-local.html';
+                    return;
+                }
+
+                this.loadBusinessProfile();
+                this.loadPreferences();
+                this.loadInvoiceSettings();
+                this.loadCategories();
+                this.loadStorageUsage();
+                this.bindEvents();
+            },
+
+            loadStorageUsage: function() {
+                $('#storage-usage-display').html(Enhancements.displayStorageUsage());
+            },
+
+            bindEvents: function() {
+                $('#business-profile-form').on('submit', (e) => {
+                    e.preventDefault();
+                    this.saveBusinessProfile();
+                });
+
+                $('#preferences-form').on('submit', (e) => {
+                    e.preventDefault();
+                    this.savePreferences();
+                });
+
+                $('#invoice-settings-form').on('submit', (e) => {
+                    e.preventDefault();
+                    this.saveInvoiceSettings();
+                });
+            },
+
+            loadBusinessProfile: function() {
+                const profile = DB.getUserProfile();
+                $('#business-name').val(profile.business_name || '');
+                $('#business-email').val(profile.business_email || '');
+                $('#business-phone').val(profile.business_phone || '');
+                $('#business-address').val(profile.business_address || '');
+                $('#business-website').val(profile.business_website || '');
+            },
+
+            saveBusinessProfile: function() {
+                const data = {
+                    business_name: $('#business-name').val(),
+                    business_email: $('#business-email').val(),
+                    business_phone: $('#business-phone').val(),
+                    business_address: $('#business-address').val(),
+                    business_website: $('#business-website').val()
+                };
+
+                DB.updateUserProfile(data);
+                Utils.showToast('Business profile saved successfully!', 'success');
+            },
+
+            loadPreferences: function() {
+                const prefs = DB.getPreferences();
+                $('#pref-currency').val(prefs.currency || 'USD');
+                $('#pref-date-format').val(prefs.date_format || 'MM/DD/YYYY');
+                $('#pref-time-format').val(prefs.time_format || '12h');
+                $('#pref-items-per-page').val(prefs.items_per_page || '15');
+            },
+
+            savePreferences: function() {
+                const data = {
+                    currency: $('#pref-currency').val(),
+                    date_format: $('#pref-date-format').val(),
+                    time_format: $('#pref-time-format').val(),
+                    items_per_page: parseInt($('#pref-items-per-page').val())
+                };
+
+                DB.updatePreferences(data);
+                Utils.showToast('Preferences saved successfully!', 'success');
+            },
+
+            loadInvoiceSettings: function() {
+                const prefs = DB.getPreferences();
+                $('#invoice-prefix').val(prefs.invoice_prefix || 'INV-');
+                $('#invoice-next-number').val(prefs.invoice_next_number || 1000);
+                $('#invoice-tax-rate').val(prefs.invoice_tax_rate || 0);
+                $('#invoice-payment-terms').val(prefs.invoice_payment_terms || 30);
+                $('#invoice-notes').val(prefs.invoice_notes || '');
+            },
+
+            saveInvoiceSettings: function() {
+                const data = {
+                    invoice_prefix: $('#invoice-prefix').val(),
+                    invoice_next_number: parseInt($('#invoice-next-number').val()),
+                    invoice_tax_rate: parseFloat($('#invoice-tax-rate').val()),
+                    invoice_payment_terms: parseInt($('#invoice-payment-terms').val()),
+                    invoice_notes: $('#invoice-notes').val()
+                };
+
+                DB.updatePreferences(data);
+                Utils.showToast('Invoice settings saved successfully!', 'success');
+            },
+
+            loadCategories: function() {
+                const categories = DB.getAll(DB.COLLECTIONS.CATEGORIES);
+
+                if (categories.length === 0) {
+                    $('#categories-list').html('<div style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No categories. Click "Add Category" to create one.</div>');
+                    return;
+                }
+
+                const html = categories.map(cat => `
+                    <div class="d-flex justify-content-between align-items-center mb-3" style="padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #667eea;">
+                        <div>
+                            <div style="color: white; font-weight: 500;">${cat.name}</div>
+                            <div style="color: rgba(255,255,255,0.5); font-size: 12px;">Type: ${cat.type === 'expense' ? 'Expense' : 'Income'}</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-secondary" onclick="SettingsPage.editCategory('${cat.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="SettingsPage.deleteCategory('${cat.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                $('#categories-list').html(html);
+            },
+
+            addCategory: function() {
+                Modals.form({
+                    title: 'New Category',
+                    icon: 'fas fa-tag',
+                    size: 'md',
+                    fields: [
+                        { name: 'name', label: 'Category Name', type: 'text', required: true, placeholder: 'Office Supplies' },
+                        { name: 'type', label: 'Type', type: 'select', required: true, value: 'expense', options: [
+                            { value: 'expense', label: 'Expense' },
+                            { value: 'income', label: 'Income' }
+                        ]},
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 2 }
+                    ],
+                    submitText: 'Create Category'
+                }).then(data => {
+                    DB.create(DB.COLLECTIONS.CATEGORIES, data);
+                    Utils.showToast('Category created successfully!', 'success');
+                    this.loadCategories();
+                }).catch(() => {});
+            },
+
+            editCategory: function(id) {
+                const category = DB.get(DB.COLLECTIONS.CATEGORIES, id);
+                if (!category) return;
+
+                Modals.form({
+                    title: 'Edit Category',
+                    icon: 'fas fa-edit',
+                    size: 'md',
+                    fields: [
+                        { name: 'name', label: 'Category Name', type: 'text', required: true, value: category.name },
+                        { name: 'type', label: 'Type', type: 'select', required: true, value: category.type, options: [
+                            { value: 'expense', label: 'Expense' },
+                            { value: 'income', label: 'Income' }
+                        ]},
+                        { name: 'description', label: 'Description', type: 'textarea', rows: 2, value: category.description }
+                    ],
+                    submitText: 'Update Category'
+                }).then(data => {
+                    DB.update(DB.COLLECTIONS.CATEGORIES, id, data);
+                    Utils.showToast('Category updated successfully!', 'success');
+                    this.loadCategories();
+                }).catch(() => {});
+            },
+
+            deleteCategory: async function(id) {
+                const category = DB.get(DB.COLLECTIONS.CATEGORIES, id);
+                if (!category) return;
+
+                const confirmed = await Utils.confirmDelete(`Are you sure you want to delete category "${category.name}"?`);
+
+                if (confirmed) {
+                    DB.delete(DB.COLLECTIONS.CATEGORIES, id);
+                    Utils.showToast('Category deleted successfully!', 'success');
+                    this.loadCategories();
+                }
+            },
+
+            exportData: function() {
+                const allData = {};
+                Object.values(DB.COLLECTIONS).forEach(collection => {
+                    allData[collection] = DB.getAll(collection);
+                });
+
+                allData.user_profile = DB.getUserProfile();
+                allData.preferences = DB.getPreferences();
+
+                Utils.downloadJson(allData, `elev8tion-backup-${new Date().toISOString().split('T')[0]}.json`);
+                Utils.showToast('Data exported successfully!', 'success');
+            },
+
+            importData: function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'application/json';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const data = JSON.parse(event.target.result);
+
+                            // Import collections
+                            Object.values(DB.COLLECTIONS).forEach(collection => {
+                                if (data[collection]) {
+                                    localStorage.setItem(collection, JSON.stringify(data[collection]));
+                                }
+                            });
+
+                            // Import profile and preferences
+                            if (data.user_profile) {
+                                localStorage.setItem(DB.COLLECTIONS.USER_PROFILE, JSON.stringify(data.user_profile));
+                            }
+                            if (data.preferences) {
+                                localStorage.setItem(DB.COLLECTIONS.PREFERENCES, JSON.stringify(data.preferences));
+                            }
+
+                            Utils.showToast('Data imported successfully! Reloading page...', 'success');
+                            setTimeout(() => location.reload(), 1500);
+                        } catch (error) {
+                            Utils.showToast('Error importing data. Invalid file format.', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                };
+                input.click();
+            },
+
+            clearAllData: async function() {
+                const confirmed = await Modals.confirm({
+                    title: 'Clear All Data',
+                    message: 'Are you absolutely sure you want to delete ALL data? This action cannot be undone!',
+                    confirmText: 'Yes, Delete Everything',
+                    confirmClass: 'btn-danger'
+                });
+
+                if (confirmed) {
+                    // Clear all collections
+                    Object.values(DB.COLLECTIONS).forEach(collection => {
+                        localStorage.removeItem(collection);
+                    });
+
+                    Utils.showToast('All data cleared! Logging out...', 'success');
+                    setTimeout(() => {
+                        localStorage.removeItem('isLoggedIn');
+                        window.location.href = '../index-local.html';
+                    }, 1500);
+                }
+            }
+        };
+
+        $(document).ready(() => SettingsPage.init());
+    </script>
+</body>
+</html>

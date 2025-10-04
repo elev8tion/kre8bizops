@@ -1,0 +1,525 @@
+{
+  "contacts": [
+    {
+      "id": "1728001234567-abc123",
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@techcorp.com",
+      "phone": "(555) 123-4567",
+      "company": "TechCorp Solutions",
+      "position": "CEO",
+      "type": "client",
+      "status": "active",
+      "tags": ["VIP", "High Value"],
+      "notes": "Key decision maker for enterprise deals. Prefers morning meetings.",
+      "address": "123 Tech Street, San Francisco, CA 94105",
+      "createdAt": "2025-09-03T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234568-def456",
+      "name": "Michael Chen",
+      "email": "mchen@innovate.io",
+      "phone": "(555) 234-5678",
+      "company": "Innovate.io",
+      "position": "CTO",
+      "type": "lead",
+      "status": "active",
+      "tags": ["Hot Lead", "Follow-up"],
+      "notes": "Interested in our premium package. Schedule demo next week.",
+      "address": "456 Innovation Ave, Austin, TX 78701",
+      "createdAt": "2025-09-18T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234569-ghi789",
+      "name": "Emily Rodriguez",
+      "email": "emily.r@designstudio.com",
+      "phone": "(555) 345-6789",
+      "company": "Creative Design Studio",
+      "position": "Creative Director",
+      "type": "client",
+      "status": "active",
+      "tags": ["VIP"],
+      "notes": "Long-term client. Annual contract renewal in 3 months.",
+      "address": "789 Design Blvd, New York, NY 10001",
+      "createdAt": "2025-08-04T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234570-jkl012",
+      "name": "David Thompson",
+      "email": "dthompson@startup.co",
+      "phone": "(555) 456-7890",
+      "company": "Startup Ventures Co",
+      "position": "Founder",
+      "type": "lead",
+      "status": "active",
+      "tags": ["Hot Lead", "Urgent"],
+      "notes": "Fast-growing startup. Budget approved for Q2.",
+      "address": "321 Venture Lane, Seattle, WA 98101",
+      "createdAt": "2025-09-23T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234571-mno345",
+      "name": "Lisa Anderson",
+      "email": "l.anderson@global-corp.com",
+      "phone": "(555) 567-8901",
+      "company": "Global Corp International",
+      "position": "VP Operations",
+      "type": "client",
+      "status": "active",
+      "tags": ["High Value"],
+      "notes": "Manages multiple departments. Potential for expansion.",
+      "address": "654 Global Plaza, Chicago, IL 60601",
+      "createdAt": "2025-08-19T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1728001234572-pqr678",
+      "name": "Website Redesign - TechCorp",
+      "description": "Complete overhaul of corporate website with modern design and improved UX",
+      "client": "TechCorp Solutions",
+      "status": "active",
+      "startDate": "2025-09-01",
+      "endDate": "2025-11-30",
+      "budget": 45000,
+      "tags": ["Development", "High Value"],
+      "progress": 65,
+      "createdAt": "2025-09-03T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234573-stu901",
+      "name": "Mobile App Development - Innovate",
+      "description": "iOS and Android app for customer engagement",
+      "client": "Innovate.io",
+      "status": "planning",
+      "startDate": "2025-10-15",
+      "endDate": "2026-03-15",
+      "budget": 120000,
+      "tags": ["Development", "VIP"],
+      "progress": 15,
+      "createdAt": "2025-09-18T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234574-vwx234",
+      "name": "Marketing Campaign Q4",
+      "description": "Comprehensive digital marketing campaign across all channels",
+      "client": "Creative Design Studio",
+      "status": "active",
+      "startDate": "2025-09-20",
+      "endDate": "2025-12-31",
+      "budget": 30000,
+      "tags": ["Marketing", "Urgent"],
+      "progress": 45,
+      "createdAt": "2025-09-13T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234575-yz567",
+      "name": "CRM Integration - Startup Ventures",
+      "description": "Custom CRM integration with existing tools",
+      "client": "Startup Ventures Co",
+      "status": "on_hold",
+      "startDate": "2025-08-01",
+      "endDate": "2025-10-15",
+      "budget": 25000,
+      "tags": ["Development"],
+      "progress": 30,
+      "createdAt": "2025-08-04T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234576-abc890",
+      "name": "Brand Identity - Global Corp",
+      "description": "Complete brand refresh including logo, colors, and guidelines",
+      "client": "Global Corp International",
+      "status": "completed",
+      "startDate": "2025-06-01",
+      "endDate": "2025-09-15",
+      "budget": 55000,
+      "tags": ["Marketing", "High Value"],
+      "progress": 100,
+      "createdAt": "2025-07-05T00:00:00.000Z",
+      "updatedAt": "2025-09-18T00:00:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "1728001234577-def123",
+      "title": "Design Homepage Mockup",
+      "description": "Create initial design concepts for TechCorp homepage",
+      "project": "Website Redesign - TechCorp",
+      "assignedTo": "Design Team",
+      "priority": "high",
+      "status": "in_progress",
+      "dueDate": "2025-10-10",
+      "tags": ["Design", "Urgent"],
+      "createdAt": "2025-09-28T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234578-ghi456",
+      "title": "Client Meeting Preparation",
+      "description": "Prepare presentation slides and demo for Innovate.io",
+      "project": "Mobile App Development - Innovate",
+      "assignedTo": "Sales Team",
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2025-10-02",
+      "tags": ["Sales", "Urgent"],
+      "createdAt": "2025-09-23T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234579-jkl789",
+      "title": "Social Media Content Calendar",
+      "description": "Plan Q4 content calendar for all platforms",
+      "project": "Marketing Campaign Q4",
+      "assignedTo": "Marketing Team",
+      "priority": "medium",
+      "status": "in_progress",
+      "dueDate": "2025-10-03",
+      "tags": ["Marketing"],
+      "createdAt": "2025-09-26T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234580-mno012",
+      "title": "API Documentation",
+      "description": "Complete technical documentation for CRM API endpoints",
+      "project": "CRM Integration - Startup Ventures",
+      "assignedTo": "Dev Team",
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2025-09-26",
+      "tags": ["Development"],
+      "createdAt": "2025-09-19T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234581-pqr345",
+      "title": "Final Brand Guidelines",
+      "description": "Deliver final brand guidelines document to client",
+      "project": "Brand Identity - Global Corp",
+      "assignedTo": "Design Team",
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2025-09-10",
+      "completedDate": "2025-09-10",
+      "tags": ["Marketing", "High Value"],
+      "createdAt": "2025-09-13T00:00:00.000Z",
+      "updatedAt": "2025-09-13T00:00:00.000Z"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "1728001234582-stu678",
+      "invoiceNumber": "INV-2025-001",
+      "client": "TechCorp Solutions",
+      "project": "Website Redesign - TechCorp",
+      "issueDate": "2025-09-15",
+      "dueDate": "2025-10-15",
+      "status": "sent",
+      "items": [
+        {
+          "description": "Design Phase - Homepage",
+          "quantity": 1,
+          "rate": 8000,
+          "amount": 8000
+        },
+        {
+          "description": "Development Phase - Initial Setup",
+          "quantity": 1,
+          "rate": 7000,
+          "amount": 7000
+        }
+      ],
+      "subtotal": 15000,
+      "tax": 1200,
+      "total": 16200,
+      "notes": "Payment terms: Net 30",
+      "createdAt": "2025-09-15T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234583-vwx901",
+      "invoiceNumber": "INV-2025-002",
+      "client": "Creative Design Studio",
+      "project": "Marketing Campaign Q4",
+      "issueDate": "2025-09-01",
+      "dueDate": "2025-09-20",
+      "status": "overdue",
+      "items": [
+        {
+          "description": "Social Media Management - September",
+          "quantity": 1,
+          "rate": 5000,
+          "amount": 5000
+        },
+        {
+          "description": "Content Creation",
+          "quantity": 20,
+          "rate": 150,
+          "amount": 3000
+        }
+      ],
+      "subtotal": 8000,
+      "tax": 640,
+      "total": 8640,
+      "notes": "Follow-up needed",
+      "createdAt": "2025-09-01T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234584-yz234",
+      "invoiceNumber": "INV-2025-003",
+      "client": "Global Corp International",
+      "project": "Brand Identity - Global Corp",
+      "issueDate": "2025-09-10",
+      "dueDate": "2025-09-25",
+      "status": "paid",
+      "paidDate": "2025-09-22",
+      "items": [
+        {
+          "description": "Brand Strategy & Research",
+          "quantity": 1,
+          "rate": 12000,
+          "amount": 12000
+        },
+        {
+          "description": "Logo Design & Variations",
+          "quantity": 1,
+          "rate": 8000,
+          "amount": 8000
+        },
+        {
+          "description": "Brand Guidelines Document",
+          "quantity": 1,
+          "rate": 5000,
+          "amount": 5000
+        }
+      ],
+      "subtotal": 25000,
+      "tax": 2000,
+      "total": 27000,
+      "notes": "Paid via wire transfer",
+      "createdAt": "2025-09-10T00:00:00.000Z",
+      "updatedAt": "2025-09-22T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234585-abc567",
+      "invoiceNumber": "INV-2025-004",
+      "client": "Innovate.io",
+      "project": "Mobile App Development - Innovate",
+      "issueDate": "2025-09-25",
+      "dueDate": "2025-10-25",
+      "status": "draft",
+      "items": [
+        {
+          "description": "Project Planning & Discovery",
+          "quantity": 1,
+          "rate": 15000,
+          "amount": 15000
+        }
+      ],
+      "subtotal": 15000,
+      "tax": 1200,
+      "total": 16200,
+      "notes": "Draft - pending approval",
+      "createdAt": "2025-09-25T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234586-def890",
+      "invoiceNumber": "INV-2025-005",
+      "client": "Startup Ventures Co",
+      "project": "CRM Integration - Startup Ventures",
+      "issueDate": "2025-08-20",
+      "dueDate": "2025-09-20",
+      "status": "overdue",
+      "items": [
+        {
+          "description": "CRM Setup & Configuration",
+          "quantity": 1,
+          "rate": 6000,
+          "amount": 6000
+        },
+        {
+          "description": "Data Migration Services",
+          "quantity": 1,
+          "rate": 4000,
+          "amount": 4000
+        }
+      ],
+      "subtotal": 10000,
+      "tax": 800,
+      "total": 10800,
+      "notes": "Multiple follow-up attempts made",
+      "createdAt": "2025-08-20T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    }
+  ],
+  "deals": [
+    {
+      "id": "1728001234587-ghi123",
+      "title": "Enterprise Package - TechCorp",
+      "company": "TechCorp Solutions",
+      "contact": "Sarah Johnson",
+      "value": 150000,
+      "stage": "proposal",
+      "probability": 75,
+      "expectedCloseDate": "2025-11-15",
+      "description": "Annual enterprise package with premium support",
+      "tags": ["VIP", "High Value"],
+      "createdAt": "2025-09-08T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234588-jkl456",
+      "title": "Mobile App Suite - Innovate",
+      "company": "Innovate.io",
+      "contact": "Michael Chen",
+      "value": 120000,
+      "stage": "qualification",
+      "probability": 60,
+      "expectedCloseDate": "2025-10-30",
+      "description": "Full mobile app development with maintenance",
+      "tags": ["Hot Lead", "Development"],
+      "createdAt": "2025-09-21T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234589-mno789",
+      "title": "Marketing Retainer - Creative Studio",
+      "company": "Creative Design Studio",
+      "contact": "Emily Rodriguez",
+      "value": 36000,
+      "stage": "negotiation",
+      "probability": 85,
+      "expectedCloseDate": "2025-10-05",
+      "description": "Annual marketing retainer agreement",
+      "tags": ["Marketing", "VIP"],
+      "createdAt": "2025-09-15T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234590-pqr012",
+      "title": "Consulting Services - Startup Ventures",
+      "company": "Startup Ventures Co",
+      "contact": "David Thompson",
+      "value": 50000,
+      "stage": "discovery",
+      "probability": 40,
+      "expectedCloseDate": "2025-12-01",
+      "description": "Strategic consulting and implementation",
+      "tags": ["Hot Lead"],
+      "createdAt": "2025-09-25T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234591-stu345",
+      "title": "Brand Extension - Global Corp",
+      "company": "Global Corp International",
+      "contact": "Lisa Anderson",
+      "value": 85000,
+      "stage": "closed_won",
+      "probability": 100,
+      "closeDate": "2025-09-20",
+      "description": "Brand extension for new product line",
+      "tags": ["High Value", "Marketing"],
+      "createdAt": "2025-08-24T00:00:00.000Z",
+      "updatedAt": "2025-09-20T00:00:00.000Z"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "1728001234592-vwx678",
+      "description": "Adobe Creative Cloud Subscription",
+      "amount": 599.88,
+      "category": "Software",
+      "date": "2025-09-01",
+      "vendor": "Adobe Inc.",
+      "paymentMethod": "Credit Card",
+      "billable": false,
+      "status": "paid",
+      "tags": ["Recurring", "Design"],
+      "createdAt": "2025-09-01T00:00:00.000Z",
+      "updatedAt": "2025-09-01T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234593-yz901",
+      "description": "Client Dinner - TechCorp Meeting",
+      "amount": 287.50,
+      "category": "Meals & Entertainment",
+      "date": "2025-09-15",
+      "vendor": "The Capital Grille",
+      "paymentMethod": "Company Card",
+      "billable": true,
+      "project": "Website Redesign - TechCorp",
+      "status": "paid",
+      "tags": ["Client Meeting"],
+      "createdAt": "2025-09-15T00:00:00.000Z",
+      "updatedAt": "2025-09-15T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234594-abc234",
+      "description": "Stock Photos & Assets",
+      "amount": 450.00,
+      "category": "Marketing",
+      "date": "2025-09-20",
+      "vendor": "Shutterstock",
+      "paymentMethod": "Credit Card",
+      "billable": true,
+      "project": "Marketing Campaign Q4",
+      "status": "paid",
+      "tags": ["Marketing", "Design"],
+      "createdAt": "2025-09-20T00:00:00.000Z",
+      "updatedAt": "2025-09-20T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234595-def567",
+      "description": "Cloud Hosting Services - AWS",
+      "amount": 1247.32,
+      "category": "Infrastructure",
+      "date": "2025-09-25",
+      "vendor": "Amazon Web Services",
+      "paymentMethod": "ACH",
+      "billable": false,
+      "status": "paid",
+      "tags": ["Recurring", "Development"],
+      "createdAt": "2025-09-25T00:00:00.000Z",
+      "updatedAt": "2025-09-25T00:00:00.000Z"
+    },
+    {
+      "id": "1728001234596-ghi890",
+      "description": "Conference Registration - WebSummit",
+      "amount": 1899.00,
+      "category": "Professional Development",
+      "date": "2025-09-28",
+      "vendor": "WebSummit",
+      "paymentMethod": "Credit Card",
+      "billable": false,
+      "status": "pending",
+      "tags": ["Training"],
+      "createdAt": "2025-09-28T00:00:00.000Z",
+      "updatedAt": "2025-10-03T00:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "businessName": "ELEV8TION Agency",
+    "businessEmail": "contact@elev8tion.agency",
+    "businessPhone": "(555) 000-0000",
+    "businessAddress": "100 Business Blvd, Suite 200, San Francisco, CA 94105",
+    "currency": "USD",
+    "dateFormat": "MM/DD/YYYY",
+    "timezone": "America/Los_Angeles",
+    "taxRate": 8,
+    "invoicePrefix": "INV-",
+    "theme": "light"
+  }
+}

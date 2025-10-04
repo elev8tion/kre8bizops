@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Mock Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background: #667eea;
+            color: white;
+        }
+        button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 20px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #f0f0f0;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Mock Data to ELEV8TION</h1>
+    <button onclick="addData()">Click to Add Mock Data</button>
+    <div id="status"></div>
+
+    <script src="js/db.js"></script>
+    <script>
+        function addData() {
+            const status = document.getElementById('status');
+            status.innerHTML = 'Adding data...';
+
+            try {
+                // Clear existing data
+                localStorage.clear();
+
+                // Add 5 contacts
+                DB.contacts.create({
+                    name: 'Sarah Johnson',
+                    email: 'sarah.johnson@techcorp.com',
+                    phone: '(555) 123-4567',
+                    company: 'TechCorp Solutions',
+                    position: 'CEO',
+                    type: 'client',
+                    status: 'active'
+                });
+
+                DB.contacts.create({
+                    name: 'Michael Chen',
+                    email: 'mchen@innovate.io',
+                    phone: '(555) 234-5678',
+                    company: 'Innovate.io',
+                    position: 'CTO',
+                    type: 'lead',
+                    status: 'active'
+                });
+
+                DB.contacts.create({
+                    name: 'Emily Rodriguez',
+                    email: 'emily.r@designstudio.com',
+                    phone: '(555) 345-6789',
+                    company: 'Creative Design Studio',
+                    position: 'Creative Director',
+                    type: 'client',
+                    status: 'active'
+                });
+
+                DB.contacts.create({
+                    name: 'David Thompson',
+                    email: 'dthompson@startup.co',
+                    phone: '(555) 456-7890',
+                    company: 'Startup Ventures Co',
+                    position: 'Founder',
+                    type: 'lead',
+                    status: 'active'
+                });
+
+                DB.contacts.create({
+                    name: 'Lisa Anderson',
+                    email: 'l.anderson@global-corp.com',
+                    phone: '(555) 567-8901',
+                    company: 'Global Corp International',
+                    position: 'VP Operations',
+                    type: 'client',
+                    status: 'active'
+                });
+
+                // Add 5 projects
+                DB.projects.create({
+                    name: 'Website Redesign - TechCorp',
+                    description: 'Complete website overhaul',
+                    client: 'TechCorp Solutions',
+                    status: 'active',
+                    startDate: '2025-09-01',
+                    endDate: '2025-11-30',
+                    budget: 45000,
+                    progress: 65
+                });
+
+                DB.projects.create({
+                    name: 'Mobile App Development',
+                    description: 'iOS and Android app',
+                    client: 'Innovate.io',
+                    status: 'planning',
+                    startDate: '2025-10-15',
+                    endDate: '2026-03-15',
+                    budget: 120000,
+                    progress: 15
+                });
+
+                DB.projects.create({
+                    name: 'Marketing Campaign Q4',
+                    description: 'Digital marketing',
+                    client: 'Creative Design Studio',
+                    status: 'active',
+                    startDate: '2025-09-20',
+                    endDate: '2025-12-31',
+                    budget: 30000,
+                    progress: 45
+                });
+
+                DB.projects.create({
+                    name: 'CRM Integration',
+                    description: 'Custom CRM',
+                    client: 'Startup Ventures Co',
+                    status: 'on_hold',
+                    startDate: '2025-08-01',
+                    endDate: '2025-10-15',
+                    budget: 25000,
+                    progress: 30
+                });
+
+                DB.projects.create({
+                    name: 'Brand Identity',
+                    description: 'Brand refresh',
+                    client: 'Global Corp International',
+                    status: 'completed',
+                    startDate: '2025-06-01',
+                    endDate: '2025-09-15',
+                    budget: 55000,
+                    progress: 100
+                });
+
+                // Add 5 tasks
+                DB.tasks.create({
+                    title: 'Design Homepage Mockup',
+                    description: 'Create designs',
+                    project: 'Website Redesign - TechCorp',
+                    assignedTo: 'Design Team',
+                    priority: 'high',
+                    status: 'in_progress',
+                    dueDate: '2025-10-10'
+                });
+
+                DB.tasks.create({
+                    title: 'Client Meeting Prep',
+                    description: 'Prepare slides',
+                    project: 'Mobile App Development',
+                    assignedTo: 'Sales',
+                    priority: 'high',
+                    status: 'pending',
+                    dueDate: '2025-10-01'
+                });
+
+                DB.tasks.create({
+                    title: 'Social Media Calendar',
+                    description: 'Plan Q4',
+                    project: 'Marketing Campaign Q4',
+                    assignedTo: 'Marketing',
+                    priority: 'medium',
+                    status: 'in_progress',
+                    dueDate: '2025-10-03'
+                });
+
+                DB.tasks.create({
+                    title: 'API Documentation',
+                    description: 'Complete docs',
+                    project: 'CRM Integration',
+                    assignedTo: 'Dev',
+                    priority: 'low',
+                    status: 'pending',
+                    dueDate: '2025-09-26'
+                });
+
+                DB.tasks.create({
+                    title: 'Brand Guidelines',
+                    description: 'Final delivery',
+                    project: 'Brand Identity',
+                    assignedTo: 'Design',
+                    priority: 'medium',
+                    status: 'completed',
+                    dueDate: '2025-09-10',
+                    completedDate: '2025-09-10'
+                });
+
+                // Add 5 invoices
+                DB.invoices.create({
+                    invoiceNumber: 'INV-2025-001',
+                    client: 'TechCorp Solutions',
+                    project: 'Website Redesign - TechCorp',
+                    issueDate: '2025-09-15',
+                    dueDate: '2025-10-15',
+                    status: 'sent',
+                    items: [{description: 'Design Phase', quantity: 1, rate: 8000, amount: 8000}],
+                    subtotal: 8000,
+                    tax: 640,
+                    total: 8640
+                });
+
+                DB.invoices.create({
+                    invoiceNumber: 'INV-2025-002',
+                    client: 'Creative Design Studio',
+                    project: 'Marketing Campaign Q4',
+                    issueDate: '2025-09-01',
+                    dueDate: '2025-09-20',
+                    status: 'overdue',
+                    items: [{description: 'Marketing Services', quantity: 1, rate: 5000, amount: 5000}],
+                    subtotal: 5000,
+                    tax: 400,
+                    total: 5400
+                });
+
+                DB.invoices.create({
+                    invoiceNumber: 'INV-2025-003',
+                    client: 'Global Corp International',
+                    project: 'Brand Identity',
+                    issueDate: '2025-09-10',
+                    dueDate: '2025-09-25',
+                    status: 'paid',
+                    paidDate: '2025-09-22',
+                    items: [{description: 'Branding Services', quantity: 1, rate: 25000, amount: 25000}],
+                    subtotal: 25000,
+                    tax: 2000,
+                    total: 27000
+                });
+
+                DB.invoices.create({
+                    invoiceNumber: 'INV-2025-004',
+                    client: 'Innovate.io',
+                    project: 'Mobile App Development',
+                    issueDate: '2025-09-25',
+                    dueDate: '2025-10-25',
+                    status: 'draft',
+                    items: [{description: 'Project Planning', quantity: 1, rate: 15000, amount: 15000}],
+                    subtotal: 15000,
+                    tax: 1200,
+                    total: 16200
+                });
+
+                DB.invoices.create({
+                    invoiceNumber: 'INV-2025-005',
+                    client: 'Startup Ventures Co',
+                    project: 'CRM Integration',
+                    issueDate: '2025-08-20',
+                    dueDate: '2025-09-20',
+                    status: 'overdue',
+                    items: [{description: 'CRM Setup', quantity: 1, rate: 10000, amount: 10000}],
+                    subtotal: 10000,
+                    tax: 800,
+                    total: 10800
+                });
+
+                status.innerHTML = '✅ Success! Mock data added.<br><br><a href="dashboard.html" style="color: white; font-size: 20px; text-decoration: underline;">Go to Dashboard</a>';
+
+            } catch (error) {
+                status.innerHTML = '❌ Error: ' + error.message;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
