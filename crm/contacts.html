@@ -68,6 +68,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/custom.js"></script>
     <script src="../js/db.js"></script>
+    <script src="../js/data-layer.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/navigation.js"></script>
     <script src="../js/components/modals.js"></script>
@@ -104,8 +105,8 @@
                 this.loadTable();
             },
 
-            loadTable: function() {
-                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+            loadTable: async function() {
+                const contacts = await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS);
 
                 this.table = DataTable.create('contacts-table-container', {
                     title: 'All Contacts',
@@ -215,15 +216,15 @@
                         { name: 'notes', label: 'Notes', type: 'textarea', rows: 3 }
                     ],
                     submitText: 'Create Contact'
-                }).then(data => {
-                    DB.create(DB.COLLECTIONS.CONTACTS, data);
+                }).then(async (data) => {
+                    await DataLayer.save(DataLayer.COLLECTIONS.CONTACTS, data);
                     Utils.showToast('Contact created successfully!', 'success');
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.CONTACTS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS));
                 }).catch(() => {});
             },
 
-            viewContact: function(id) {
-                const contact = DB.getContactWithHistory(id);
+            viewContact: async function(id) {
+                const contact = await DataLayer.getContactWithHistory(id);
                 if (!contact) return;
 
                 const content = `
@@ -296,8 +297,8 @@
                 });
             },
 
-            editContact: function(id) {
-                const contact = DB.get(DB.COLLECTIONS.CONTACTS, id);
+            editContact: async function(id) {
+                const contact = await DataLayer.get(DataLayer.COLLECTIONS.CONTACTS, id);
                 if (!contact) return;
 
                 Modals.form({
@@ -315,28 +316,28 @@
                         { name: 'notes', label: 'Notes', type: 'textarea', rows: 3, value: contact.notes }
                     ],
                     submitText: 'Update Contact'
-                }).then(data => {
-                    DB.update(DB.COLLECTIONS.CONTACTS, id, data);
+                }).then(async (data) => {
+                    await DataLayer.save(DataLayer.COLLECTIONS.CONTACTS, { ...data, id });
                     Utils.showToast('Contact updated successfully!', 'success');
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.CONTACTS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS));
                 }).catch(() => {});
             },
 
             deleteContact: async function(id) {
-                const contact = DB.get(DB.COLLECTIONS.CONTACTS, id);
+                const contact = await DataLayer.get(DataLayer.COLLECTIONS.CONTACTS, id);
                 if (!contact) return;
 
                 const confirmed = await Utils.confirmDelete(`Are you sure you want to delete ${contact.name}? This action cannot be undone.`);
 
                 if (confirmed) {
-                    DB.delete(DB.COLLECTIONS.CONTACTS, id);
+                    await DataLayer.delete(DataLayer.COLLECTIONS.CONTACTS, id);
                     Utils.showToast('Contact deleted successfully!', 'success');
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.CONTACTS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS));
                 }
             },
 
-            exportContacts: function() {
-                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+            exportContacts: async function() {
+                const contacts = await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS);
                 Utils.downloadJson(contacts, `contacts-export-${new Date().toISOString().split('T')[0]}.json`);
                 Utils.showToast('Contacts exported successfully!', 'success');
             }

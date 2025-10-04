@@ -106,6 +106,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/custom.js"></script>
     <script src="../js/db.js"></script>
+    <script src="../js/data-layer.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/navigation.js"></script>
     <script src="../js/components/modals.js"></script>
@@ -127,7 +128,7 @@
             },
 
             loadStats: function() {
-                const tasks = DB.getAll(DB.COLLECTIONS.TASKS);
+                const tasks = await DataLayer.getAll(DataLayer.COLLECTIONS.TASKS);
                 const stats = {
                     todo: tasks.filter(t => t.status === 'todo').length,
                     in_progress: tasks.filter(t => t.status === 'in_progress').length,
@@ -142,7 +143,7 @@
             },
 
             loadTable: function() {
-                const tasks = DB.getAll(DB.COLLECTIONS.TASKS);
+                const tasks = await DataLayer.getAll(DataLayer.COLLECTIONS.TASKS);
 
                 this.table = DataTable.create('tasks-table-container', {
                     title: 'All Tasks',
@@ -163,7 +164,7 @@
                             label: 'Task',
                             sortable: true,
                             render: (value, row) => {
-                                const project = row.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, row.project_id) : null;
+                                const project = row.project_id ? await DataLayer.get(DataLayer.COLLECTIONS.PROJECTS, row.project_id) : null;
                                 return `
                                     <div>
                                         <div style="color: ${row.completed ? 'rgba(255,255,255,0.5)' : 'white'}; font-weight: 500; ${row.completed ? 'text-decoration: line-through;' : ''}">${value}</div>
@@ -269,7 +270,7 @@
             },
 
             newTask: function() {
-                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const projects = await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS);
 
                 Modals.form({
                     title: 'New Task',
@@ -296,7 +297,7 @@
                     submitText: 'Create Task'
                 }).then(data => {
                     data.completed = data.status === 'done';
-                    DB.create(DB.COLLECTIONS.TASKS, data);
+                    await DataLayer.save(DataLayer.COLLECTIONS.TASKS, data);
                     Utils.showToast('Task created successfully!', 'success');
                     this.loadStats();
                     this.loadTable();
@@ -304,10 +305,10 @@
             },
 
             editTask: function(id) {
-                const task = DB.get(DB.COLLECTIONS.TASKS, id);
+                const task = await DataLayer.get(DataLayer.COLLECTIONS.TASKS, id);
                 if (!task) return;
 
-                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const projects = await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS);
 
                 Modals.form({
                     title: 'Edit Task',
@@ -334,7 +335,7 @@
                     submitText: 'Update Task'
                 }).then(data => {
                     data.completed = data.status === 'done';
-                    DB.update(DB.COLLECTIONS.TASKS, id, data);
+                    await DataLayer.save(DataLayer.COLLECTIONS.TASKS, id, data);
                     Utils.showToast('Task updated successfully!', 'success');
                     this.loadStats();
                     this.loadTable();
@@ -348,20 +349,20 @@
                     completed_at: completed ? new Date().toISOString() : null
                 };
 
-                DB.update(DB.COLLECTIONS.TASKS, id, updates);
+                await DataLayer.save(DataLayer.COLLECTIONS.TASKS, id, updates);
                 Utils.showToast(completed ? 'Task marked as complete!' : 'Task marked as incomplete', 'success');
                 this.loadStats();
                 this.loadTable();
             },
 
             deleteTask: async function(id) {
-                const task = DB.get(DB.COLLECTIONS.TASKS, id);
+                const task = await DataLayer.get(DataLayer.COLLECTIONS.TASKS, id);
                 if (!task) return;
 
                 const confirmed = await Utils.confirmDelete(`Are you sure you want to delete task "${task.title}"?`);
 
                 if (confirmed) {
-                    DB.delete(DB.COLLECTIONS.TASKS, id);
+                    await DataLayer.delete(DataLayer.COLLECTIONS.TASKS, id);
                     Utils.showToast('Task deleted successfully!', 'success');
                     this.loadStats();
                     this.loadTable();

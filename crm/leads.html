@@ -106,6 +106,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/custom.js"></script>
     <script src="../js/db.js"></script>
+    <script src="../js/data-layer.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/navigation.js"></script>
     <script src="../js/components/modals.js"></script>
@@ -127,7 +128,7 @@
             },
 
             loadStats: function() {
-                const leads = DB.getAll(DB.COLLECTIONS.LEADS);
+                const leads = await DataLayer.getAll(DataLayer.COLLECTIONS.LEADS);
                 const stats = {
                     new: leads.filter(l => l.stage === 'new').length,
                     contacted: leads.filter(l => l.stage === 'contacted').length,
@@ -142,7 +143,7 @@
             },
 
             loadTable: function() {
-                const leads = DB.getAll(DB.COLLECTIONS.LEADS);
+                const leads = await DataLayer.getAll(DataLayer.COLLECTIONS.LEADS);
 
                 this.table = DataTable.create('leads-table-container', {
                     title: 'All Leads',
@@ -269,15 +270,15 @@
                     submitText: 'Create Lead'
                 }).then(data => {
                     data.contact_id = null;
-                    DB.create(DB.COLLECTIONS.LEADS, data);
+                    await DataLayer.save(DataLayer.COLLECTIONS.LEADS, data);
                     Utils.showToast('Lead created successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.LEADS));
                 }).catch(() => {});
             },
 
             editLead: function(id) {
-                const lead = DB.get(DB.COLLECTIONS.LEADS, id);
+                const lead = await DataLayer.get(DataLayer.COLLECTIONS.LEADS, id);
                 if (!lead) return;
 
                 Modals.form({
@@ -308,15 +309,15 @@
                     ],
                     submitText: 'Update Lead'
                 }).then(data => {
-                    DB.update(DB.COLLECTIONS.LEADS, id, data);
+                    await DataLayer.save(DataLayer.COLLECTIONS.LEADS, id, data);
                     Utils.showToast('Lead updated successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.LEADS));
                 }).catch(() => {});
             },
 
             convertLead: async function(id) {
-                const lead = DB.get(DB.COLLECTIONS.LEADS, id);
+                const lead = await DataLayer.get(DataLayer.COLLECTIONS.LEADS, id);
                 if (!lead) return;
 
                 const confirmed = await Modals.confirm({
@@ -328,7 +329,7 @@
 
                 if (confirmed) {
                     // Create contact from lead
-                    const contact = DB.create(DB.COLLECTIONS.CONTACTS, {
+                    const contact = await DataLayer.save(DataLayer.COLLECTIONS.CONTACTS, {
                         name: lead.name,
                         email: lead.email,
                         phone: lead.phone,
@@ -338,27 +339,27 @@
                     });
 
                     // Update lead with contact reference
-                    DB.update(DB.COLLECTIONS.LEADS, id, {
+                    await DataLayer.save(DataLayer.COLLECTIONS.LEADS, id, {
                         contact_id: contact.id
                     });
 
                     Utils.showToast('Lead converted to contact successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.LEADS));
                 }
             },
 
             deleteLead: async function(id) {
-                const lead = DB.get(DB.COLLECTIONS.LEADS, id);
+                const lead = await DataLayer.get(DataLayer.COLLECTIONS.LEADS, id);
                 if (!lead) return;
 
                 const confirmed = await Utils.confirmDelete(`Are you sure you want to delete lead ${lead.name}?`);
 
                 if (confirmed) {
-                    DB.delete(DB.COLLECTIONS.LEADS, id);
+                    await DataLayer.delete(DataLayer.COLLECTIONS.LEADS, id);
                     Utils.showToast('Lead deleted successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.LEADS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.LEADS));
                 }
             }
         };

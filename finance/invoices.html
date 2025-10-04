@@ -106,6 +106,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/custom.js"></script>
     <script src="../js/db.js"></script>
+    <script src="../js/data-layer.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/navigation.js"></script>
     <script src="../js/components/modals.js"></script>
@@ -127,7 +128,7 @@
             },
 
             loadStats: function() {
-                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const invoices = await DataLayer.getAll(DataLayer.COLLECTIONS.INVOICES);
                 const now = new Date();
 
                 const stats = {
@@ -144,7 +145,7 @@
             },
 
             loadTable: function() {
-                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const invoices = await DataLayer.getAll(DataLayer.COLLECTIONS.INVOICES);
 
                 this.table = DataTable.create('invoices-table-container', {
                     title: 'All Invoices',
@@ -156,7 +157,7 @@
                             label: 'Invoice #',
                             sortable: true,
                             render: (value, row) => {
-                                const contact = row.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, row.contact_id) : null;
+                                const contact = row.contact_id ? await DataLayer.get(DataLayer.COLLECTIONS.CONTACTS, row.contact_id) : null;
                                 return `
                                     <div>
                                         <div style="color: white; font-weight: 600;">#${value}</div>
@@ -268,8 +269,8 @@
             },
 
             newInvoice: function() {
-                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
-                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const contacts = await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS);
+                const projects = await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS);
 
                 Modals.form({
                     title: 'New Invoice',
@@ -366,10 +367,10 @@
                                 };
 
                                 if (invoiceData.id) {
-                                    DB.update(DB.COLLECTIONS.INVOICES, invoiceData.id, finalData);
+                                    await DataLayer.save(DataLayer.COLLECTIONS.INVOICES, invoiceData.id, finalData);
                                     Utils.showToast('Invoice updated successfully!', 'success');
                                 } else {
-                                    DB.create(DB.COLLECTIONS.INVOICES, finalData);
+                                    await DataLayer.save(DataLayer.COLLECTIONS.INVOICES, finalData);
                                     Utils.showToast('Invoice created successfully!', 'success');
                                 }
 
@@ -468,11 +469,11 @@
             },
 
             viewInvoice: function(id) {
-                const invoice = DB.get(DB.COLLECTIONS.INVOICES, id);
+                const invoice = await DataLayer.get(DataLayer.COLLECTIONS.INVOICES, id);
                 if (!invoice) return;
 
-                const contact = invoice.contact_id ? DB.get(DB.COLLECTIONS.CONTACTS, invoice.contact_id) : null;
-                const project = invoice.project_id ? DB.get(DB.COLLECTIONS.PROJECTS, invoice.project_id) : null;
+                const contact = invoice.contact_id ? await DataLayer.get(DataLayer.COLLECTIONS.CONTACTS, invoice.contact_id) : null;
+                const project = invoice.project_id ? await DataLayer.get(DataLayer.COLLECTIONS.PROJECTS, invoice.project_id) : null;
 
                 const lineItemsHtml = (invoice.items || []).map(item => `
                     <tr>
@@ -554,11 +555,11 @@
             },
 
             editInvoice: function(id) {
-                const invoice = DB.get(DB.COLLECTIONS.INVOICES, id);
+                const invoice = await DataLayer.get(DataLayer.COLLECTIONS.INVOICES, id);
                 if (!invoice) return;
 
-                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
-                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const contacts = await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS);
+                const projects = await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS);
 
                 Modals.form({
                     title: 'Edit Invoice',
@@ -589,13 +590,13 @@
             },
 
             deleteInvoice: async function(id) {
-                const invoice = DB.get(DB.COLLECTIONS.INVOICES, id);
+                const invoice = await DataLayer.get(DataLayer.COLLECTIONS.INVOICES, id);
                 if (!invoice) return;
 
                 const confirmed = await Utils.confirmDelete(`Are you sure you want to delete invoice #${invoice.invoice_number}?`);
 
                 if (confirmed) {
-                    DB.delete(DB.COLLECTIONS.INVOICES, id);
+                    await DataLayer.delete(DataLayer.COLLECTIONS.INVOICES, id);
                     Utils.showToast('Invoice deleted successfully!', 'success');
                     this.loadStats();
                     this.loadTable();
@@ -603,7 +604,7 @@
             },
 
             exportInvoices: function() {
-                const invoices = DB.getAll(DB.COLLECTIONS.INVOICES);
+                const invoices = await DataLayer.getAll(DataLayer.COLLECTIONS.INVOICES);
                 Utils.downloadJson(invoices, `invoices-export-${new Date().toISOString().split('T')[0]}.json`);
                 Utils.showToast('Invoices exported successfully!', 'success');
             }

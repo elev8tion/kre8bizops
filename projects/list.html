@@ -106,6 +106,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/custom.js"></script>
     <script src="../js/db.js"></script>
+    <script src="../js/data-layer.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/navigation.js"></script>
     <script src="../js/components/modals.js"></script>
@@ -127,7 +128,7 @@
             },
 
             loadStats: function() {
-                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const projects = await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS);
                 const stats = {
                     planning: projects.filter(p => p.status === 'planning').length,
                     active: projects.filter(p => p.status === 'active').length,
@@ -142,7 +143,7 @@
             },
 
             loadTable: function() {
-                const projects = DB.getAll(DB.COLLECTIONS.PROJECTS);
+                const projects = await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS);
 
                 this.table = DataTable.create('projects-table-container', {
                     title: 'All Projects',
@@ -154,7 +155,7 @@
                             label: 'Project Name',
                             sortable: true,
                             render: (value, row) => {
-                                const client = row.client_id ? DB.get(DB.COLLECTIONS.CONTACTS, row.client_id) : null;
+                                const client = row.client_id ? await DataLayer.get(DataLayer.COLLECTIONS.CONTACTS, row.client_id) : null;
                                 const tasks = DB.getProjectTasks(row.id);
                                 const completedTasks = tasks.filter(t => t.completed).length;
 
@@ -240,7 +241,7 @@
             },
 
             newProject: function() {
-                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const contacts = await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS);
 
                 Modals.form({
                     title: 'New Project',
@@ -271,10 +272,10 @@
                     ],
                     submitText: 'Create Project'
                 }).then(data => {
-                    DB.create(DB.COLLECTIONS.PROJECTS, data);
+                    await DataLayer.save(DataLayer.COLLECTIONS.PROJECTS, data);
                     Utils.showToast('Project created successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.PROJECTS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS));
                 }).catch(() => {});
             },
 
@@ -282,7 +283,7 @@
                 const project = DB.getProjectWithTasks(id);
                 if (!project) return;
 
-                const client = project.client_id ? DB.get(DB.COLLECTIONS.CONTACTS, project.client_id) : null;
+                const client = project.client_id ? await DataLayer.get(DataLayer.COLLECTIONS.CONTACTS, project.client_id) : null;
                 const completedTasks = project.tasks.filter(t => t.completed).length;
                 const progress = project.tasks.length > 0 ? Math.round((completedTasks / project.tasks.length) * 100) : 0;
 
@@ -360,10 +361,10 @@
             },
 
             editProject: function(id) {
-                const project = DB.get(DB.COLLECTIONS.PROJECTS, id);
+                const project = await DataLayer.get(DataLayer.COLLECTIONS.PROJECTS, id);
                 if (!project) return;
 
-                const contacts = DB.getAll(DB.COLLECTIONS.CONTACTS);
+                const contacts = await DataLayer.getAll(DataLayer.COLLECTIONS.CONTACTS);
 
                 Modals.form({
                     title: 'Edit Project',
@@ -394,15 +395,15 @@
                     ],
                     submitText: 'Update Project'
                 }).then(data => {
-                    DB.update(DB.COLLECTIONS.PROJECTS, id, data);
+                    await DataLayer.save(DataLayer.COLLECTIONS.PROJECTS, id, data);
                     Utils.showToast('Project updated successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.PROJECTS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS));
                 }).catch(() => {});
             },
 
             deleteProject: async function(id) {
-                const project = DB.get(DB.COLLECTIONS.PROJECTS, id);
+                const project = await DataLayer.get(DataLayer.COLLECTIONS.PROJECTS, id);
                 if (!project) return;
 
                 const tasks = DB.getProjectTasks(id);
@@ -413,10 +414,10 @@
                 const confirmed = await Utils.confirmDelete(warningMsg);
 
                 if (confirmed) {
-                    DB.delete(DB.COLLECTIONS.PROJECTS, id);
+                    await DataLayer.delete(DataLayer.COLLECTIONS.PROJECTS, id);
                     Utils.showToast('Project deleted successfully!', 'success');
                     this.loadStats();
-                    this.table.setData(DB.getAll(DB.COLLECTIONS.PROJECTS));
+                    this.table.setData(await DataLayer.getAll(DataLayer.COLLECTIONS.PROJECTS));
                 }
             }
         };
