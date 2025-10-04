@@ -12,11 +12,8 @@ const Dashboard = (function() {
      * Initialize dashboard
      */
     function init() {
-        // Check authentication
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = 'index-local.html';
-            return;
-        }
+        // Auto-login disabled for single user
+        localStorage.setItem('isLoggedIn', 'true');
 
         // Set current date
         $('#current-date').text(Utils.formatDate(new Date(), 'MMMM DD, YYYY'));

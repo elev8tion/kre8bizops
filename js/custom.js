@@ -9,6 +9,9 @@
 
     // Initialize on document ready
     $(document).ready(function() {
+        // AUTO-LOGIN FOR SINGLE USER (BYPASS AUTHENTICATION)
+        localStorage.setItem('isLoggedIn', 'true');
+
         // ORIGINAL FUNCTIONALITY - DO NOT REMOVE
         initializeTheme();
         initializeFormHandling();
@@ -147,48 +150,48 @@
         const savedCosmicTheme = localStorage.getItem('cosmicTheme') || 'cosmic-dark';
         applyCosmicTheme(savedCosmicTheme);
 
-        // Create theme toggle button
-        const $themeToggle = $('<button>')
-            .attr('type', 'button')
-            .addClass('cosmic-theme-toggle')
-            .html('<i class="fas fa-palette"></i>')
-            .css({
-                position: 'fixed',
-                top: '20px',
-                right: '20px',
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-                border: 'none',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                fontSize: '20px',
-                cursor: 'pointer',
-                zIndex: '9999',
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-                transition: 'all 0.3s ease'
-            })
-            .on('click', function() {
-                cycleCosmicTheme();
-                $(this).addClass('cosmic-spin');
-                setTimeout(function() {
-                    $themeToggle.removeClass('cosmic-spin');
-                }, 600);
-            })
-            .on('mouseenter', function() {
-                $(this).css({
-                    transform: 'scale(1.1)',
-                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)'
-                });
-            })
-            .on('mouseleave', function() {
-                $(this).css({
-                    transform: 'scale(1)',
-                    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
-                });
-            });
+        // THEME TOGGLE DISABLED - Single theme only
+        // const $themeToggle = $('<button>')
+        //     .attr('type', 'button')
+        //     .addClass('cosmic-theme-toggle')
+        //     .html('<i class="fas fa-palette"></i>')
+        //     .css({
+        //         position: 'fixed',
+        //         top: '20px',
+        //         right: '20px',
+        //         width: '50px',
+        //         height: '50px',
+        //         borderRadius: '50%',
+        //         border: 'none',
+        //         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        //         color: 'white',
+        //         fontSize: '20px',
+        //         cursor: 'pointer',
+        //         zIndex: '9999',
+        //         boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+        //         transition: 'all 0.3s ease'
+        //     })
+        //     .on('click', function() {
+        //         cycleCosmicTheme();
+        //         $(this).addClass('cosmic-spin');
+        //         setTimeout(function() {
+        //             $themeToggle.removeClass('cosmic-spin');
+        //         }, 600);
+        //     })
+        //     .on('mouseenter', function() {
+        //         $(this).css({
+        //             transform: 'scale(1.1)',
+        //             boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)'
+        //         });
+        //     })
+        //     .on('mouseleave', function() {
+        //         $(this).css({
+        //             transform: 'scale(1)',
+        //             boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+        //         });
+        //     });
 
-        $('body').append($themeToggle);
+        // $('body').append($themeToggle);
 
         // Add cosmic spin animation style
         if (!$('#cosmic-animations').length) {
