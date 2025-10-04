@@ -435,7 +435,7 @@ const Utils = (function() {
                 });
 
             const $modal = $('<div>')
-                .addClass('glass-medium')
+                .addClass('modern-card')
                 .css({
                     padding: '30px',
                     borderRadius: '15px',

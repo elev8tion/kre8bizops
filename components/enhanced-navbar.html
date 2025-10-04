@@ -5,14 +5,14 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    padding: 1rem 2rem;
-    background: rgba(15, 14, 23, 0.95);
+    padding: 0.5rem 2rem;
+    background: transparent;
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,0.05);
 ">
     <div class="container-fluid">
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="../index-local.html" style="gap: 12px;">
+        <a class="navbar-brand d-flex align-items-center" href="../dashboard.html" style="gap: 12px;">
             <div style="
                 width: 40px;
                 height: 40px;
@@ -52,7 +52,7 @@
             <!-- Main Navigation Links -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index-local.html">
+                    <a class="nav-link" href="../dashboard.html">
                         <i class="fas fa-home mr-1"></i>Dashboard
                     </a>
                 </li>
@@ -284,7 +284,7 @@ $(document).ready(function() {
 function logout() {
     if (confirm('Are you sure you want to logout?')) {
         localStorage.removeItem('isLoggedIn');
-        window.location.href = '../index-local.html';
+        window.location.href = '../dashboard.html';
     }
 }
 

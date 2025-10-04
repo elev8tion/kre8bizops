@@ -18,12 +18,14 @@
     <link href="../css/cosmic-cards.css" rel="stylesheet"/>
     <link href="../css/cosmic-fix.css" rel="stylesheet"/>
     <!-- Modern Card Styles -->
-    <link href="../css/modern-cards.css" rel="stylesheet"/>
+    <link href="../css/modern-cards.css?v=3" rel="stylesheet"/>
 </head>
 <body>
     <div class="min-h-screen w-full bg-black relative">
         <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
 
+        <!-- Enhanced Navbar -->
+        <div id="navbar-container"></div>
         <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
             <div class="container-fluid">
 
@@ -377,5 +379,13 @@
     <!-- Gradient Button Wrapper -->
     <script src="../js/gradient-button-wrapper.js"></script>
     <script src="../js/integrate-enhancements.js"></script>
+    <!-- Load Navbar -->
+    <script>
+        fetch('../components/enhanced-navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            });
+    </script>
 </body>
 </html>

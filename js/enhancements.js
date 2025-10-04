@@ -120,7 +120,7 @@ const Enhancements = (function() {
         if (!$dropdown.length) {
             $dropdown = $('<div>')
                 .attr('id', 'search-results-dropdown')
-                .addClass('glass-medium')
+                .addClass('modern-card')
                 .css({
                     position: 'absolute',
                     top: '60px',
@@ -656,7 +656,7 @@ const Enhancements = (function() {
             if (!$toolbar.length) {
                 const toolbar = $('<div>')
                     .attr('id', 'bulk-actions-toolbar')
-                    .addClass('glass-medium')
+                    .addClass('modern-card')
                     .css({
                         position: 'fixed',
                         bottom: '20px',

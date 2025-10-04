@@ -98,6 +98,7 @@ const Navigation = (function() {
      * Render sidebar HTML
      */
     function renderSidebar() {
+
         const userProfile = DB.get(DB.COLLECTIONS.USER_PROFILE);
         const stats = DB.getDashboardStats();
 
@@ -106,12 +107,21 @@ const Navigation = (function() {
             <aside id="sidebar" class="cosmic-sidebar">
                 <!-- Brand -->
                 <div class="sidebar-brand">
-                    <div class="brand-logo">
-                        ${userProfile.logo_base64 ?
-                            `<img src="${userProfile.logo_base64}" alt="${userProfile.business_name}">` :
-                            `<i class="fas fa-rocket"></i>`
-                        }
-                    </div>
+                    <div class="brand-logo" style="
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 10px;
+                        background: linear-gradient(to bottom right, rgba(55, 48, 163, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
+                        border: 2px solid rgba(99, 102, 241, 0.3);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: white;
+                        letter-spacing: -0.5px;
+                    ">KC</div>
                     <div class="brand-text">
                         <h4>${userProfile.business_name || 'ELEV8TION'}</h4>
                         <p>Business Hub</p>
@@ -574,7 +584,7 @@ const Navigation = (function() {
     function logout() {
         if (confirm('Are you sure you want to logout?')) {
             localStorage.removeItem('isLoggedIn');
-            window.location.href = buildPath('index-local.html');
+            window.location.href = buildPath('dashboard.html');
         }
     }
 

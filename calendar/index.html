@@ -23,7 +23,7 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 1px;
-            background: rgba(255,255,255,0.05);
+            background: transparent;
             border-radius: 12px;
             overflow: hidden;
         }
@@ -98,12 +98,14 @@
         }
     </style>
     <!-- Modern Card Styles -->
-    <link href="../css/modern-cards.css" rel="stylesheet"/>
+    <link href="../css/modern-cards.css?v=3" rel="stylesheet"/>
 </head>
 <body>
     <div class="min-h-screen w-full bg-black relative">
         <div class="absolute inset-0 z-0" style="background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 40%), linear-gradient(120deg, #0f0e17 0%, #1a1b26 100%)"></div>
 
+        <!-- Enhanced Navbar -->
+        <div id="navbar-container"></div>
         <main id="main-content" class="position-relative" style="min-height: 100vh; padding: 2rem;">
             <div class="container-fluid">
 
@@ -139,12 +141,12 @@
                 </div>
 
                 <!-- Current Month Display -->
-                <div class="glass-medium mb-4" style="padding: 1.5rem; border-radius: 16px;">
+                <div class="modern-card mb-4" style="padding: 1.5rem; border-radius: 16px;">
                     <h3 style="color: white; text-align: center; margin: 0;" id="current-month"></h3>
                 </div>
 
                 <!-- Calendar Grid -->
-                <div id="calendar-container" class="glass-medium no-hover mb-4" style="padding: 1.5rem; border-radius: 16px; transition: none !important; transform: none !important;">
+                <div id="calendar-container" class="modern-card no-hover mb-4" style="padding: 1.5rem; border-radius: 16px; transition: none !important; transform: none !important;">
                     <div class="calendar-grid" id="calendar-grid">
                         <!-- Calendar will be rendered here -->
                     </div>
@@ -693,5 +695,13 @@
     <!-- Gradient Button Wrapper -->
     <script src="../js/gradient-button-wrapper.js"></script>
     <script src="../js/integrate-enhancements.js"></script>
+    <!-- Load Navbar -->
+    <script>
+        fetch('../components/enhanced-navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            });
+    </script>
 </body>
 </html>
